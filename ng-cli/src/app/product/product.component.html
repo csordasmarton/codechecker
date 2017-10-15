@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <div id="products">
+    <a class="item" *ngFor="let product of products"
+      [routerLink]="[product.endpoint]">
+      <div class="avatar"></div>
+      <div class="meta">
+        <div class="name">
+          {{ product.displayedName_b64 | atou }}
+        </div>
+        <div class="description">
+          {{ product.description_b64 | atou }}
+        </div>
+      </div>
+    </a>
+  </div>
+</div>

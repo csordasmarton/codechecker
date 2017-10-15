@@ -1,0 +1,8 @@
+<div class="container-fluid">
+  <div id="reports">
+    <a class="item" *ngFor="let report of reports"
+      [routerLink]="[report.reportId]">
+      <div>{{report.bugHash}}</div>
+    </a>
+  </div>
+</div>

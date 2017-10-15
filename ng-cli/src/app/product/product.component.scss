@@ -1,0 +1,44 @@
+#products {
+  .item {
+    display: table;
+    width: 100%;
+    box-shadow: 0 0 5px 0 rgba(46, 40, 64, 0.5);    
+    margin-bottom: 10px;
+
+    &:hover .meta .name {
+      color: #0077AF;
+    }
+
+    .avatar {
+      display: table-cell;
+      width: 10px;
+      background-color: #0077af;
+
+      .label {
+        font-size: 18px;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        vertical-align: middle;
+        color: white;
+        font-weight: 600;
+        font-family: Helvetica, Arial, sans-serif;
+        display: table-cell;
+      }
+    }
+
+    .meta {
+      display: inline-block;
+      padding: 5px;
+
+      .name {
+        color: #4C4C4C;
+        font-weight: bold;
+      }
+
+      .description {
+        color: #717179;
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+<div class="container-fluid">
+  <div id="runs">
+    <a class="item" *ngFor="let run of runs"
+      [routerLink]="[run.name]">
+      <div>{{run.name}}</div>
+    </a>
+  </div>
+</div>
