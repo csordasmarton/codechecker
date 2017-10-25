@@ -11,10 +11,10 @@ export class ProductService {
     let transport = Thrift.TBufferedTransport;
     let protocol = Thrift.TJSONProtocol;
     let connection = Thrift.createXHRConnection(
-    'localhost', 8001, {
+    SERVER_HOST, SERVER_PORT, {
       transport: transport,
       protocol: protocol,
-      path: '/Default/v' + '6.1' + '/Products' // TODO: read from config
+      path: '/v' + API_VERSION + '/Products'
     });
 
     this.client = Thrift.createXHRClient(ccProductService, connection);

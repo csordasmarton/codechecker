@@ -16,10 +16,11 @@ export class DbService {
       let transport = Thrift.TBufferedTransport;
       let protocol = Thrift.TJSONProtocol;
       let connection = Thrift.createXHRConnection(
-      'localhost', 8001, {
+      SERVER_HOST, SERVER_PORT, {
         transport: transport,
         protocol: protocol,
-        path: '/' + params['product'] + '/v6.1/CodeCheckerService' // TODO: read from config
+        path: '/' + params['product'] +
+              '/v' + API_VERSION + '/CodeCheckerService'
       });
       that.client = Thrift.createXHRClient(ccDbService, connection);
     });

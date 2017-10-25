@@ -6,6 +6,11 @@ var helpers = require('./helpers');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
+const METADATA = webpackMerge(commonConfig.metadata, {
+  'SERVER_HOST': null,
+  'SERVER_PORT': 80
+});
+
 module.exports = webpackMerge(commonConfig, {
   devtool: 'source-map',
 
@@ -25,9 +30,9 @@ module.exports = webpackMerge(commonConfig, {
     }),
     new ExtractTextPlugin('[name].[hash].css'),
     new webpack.DefinePlugin({
-      'process.env': {
-        'ENV': JSON.stringify(ENV)
-      }
+      'SERVER_HOST': METADATA.SERVER_HOST,
+      'SERVER_PORT': METADATA.SERVER_PORT,
+      'ENV': JSON.stringify(ENV),
     }),
     new webpack.LoaderOptionsPlugin({
       htmlLoader: {

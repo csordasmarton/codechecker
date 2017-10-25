@@ -4,6 +4,12 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 
+const METADATA = {
+  'SERVER_HOST': null,
+  'SERVER_PORT': 80,
+  'API_VERSION': JSON.stringify('6.1')
+};
+
 module.exports = {
   entry: {
     'polyfills': './src/polyfills.ts',
@@ -74,6 +80,10 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      'API_VERSION': METADATA.API_VERSION
+    }),
+
     // Workaround for angular/angular#11580
     new webpack.ContextReplacementPlugin(
       // The (\\|\/) piece accounts for path separators in *nix and Windows
