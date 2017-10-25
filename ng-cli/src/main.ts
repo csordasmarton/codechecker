@@ -8,7 +8,8 @@ import 'popper.js';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import './styles.css'
+import './assets/fonts/codechecker.scss';
+import './styles.css';
 
 if (process.env.ENV === 'production') {
   enableProdMode();

@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'codechecker';
+  src: url('./codechecker.eot');
+  src: url('./codechecker.eot#iefix') format('embedded-opentype'),
+    url('./codechecker.ttf') format('truetype'),
+    url('./codechecker.woff') format('woff'),
+    url('./codechecker.svg#codechecker') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.cc-icon {
+  font-family: 'codechecker', Sans-Serif !important;
+  speak: none;
+  position: relative;
+  display: inline-block;
+  font-style: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+
+  &.tag:before {
+    content: "\e020";
+  }
+}

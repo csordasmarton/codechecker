@@ -41,8 +41,8 @@ module.exports = {
         loader: 'html-loader'
       },
       {
-        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-        loader: 'file-loader?name=assets/[name].[hash].[ext]'
+        test: /\.(png|jpe?g|gif)$/,
+        loader: 'file-loader?name=assets/[name].[ext]'
       },
       /*
       * Bootstrap 4 loader
@@ -56,11 +56,11 @@ module.exports = {
       */
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+        loader: "url-loader?limit=10000&mimetype=application/font-woff?name=assets/fonts/[name].[ext]"
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "file-loader"
+        loader: "file-loader?name=assets/fonts/[name].[ext]"
       },
       {
         test: /\.scss$/,
