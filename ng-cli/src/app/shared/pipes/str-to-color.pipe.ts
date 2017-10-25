@@ -1,0 +1,20 @@
+import { Pipe, PipeTransform } from '@angular/core';
+
+/*
+ * Creates a hexadecimal color from a string.
+ * Example:
+ *   {{ 'apple' | strToColor }}
+ *   returns: #8B835A
+*/
+@Pipe({name: 'strToColor'})
+export class StrToColorPipe implements PipeTransform {
+  transform(str: string): string {
+    let hash:number = 0;
+    for (let i:number = 0; i < str.length; i++)
+       hash = str.charCodeAt(i) + ((hash << 5) - hash);
+
+    let c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
+
+    return '#' + '00000'.substring(0, 6 - c.length) + c;
+  }
+}
