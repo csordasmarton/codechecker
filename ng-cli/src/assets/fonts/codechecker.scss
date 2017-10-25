@@ -11,7 +11,6 @@
 
 .cc-icon {
   font-family: 'codechecker', Sans-Serif !important;
-  speak: none;
   position: relative;
   display: inline-block;
   font-style: normal;
@@ -24,5 +23,17 @@
 
   &.tag:before {
     content: "\e020";
+  }
+
+  &.bug:before {
+    content: "\e001";
+  }
+
+  &.date:before {
+    content: "\e009"; // TODO: replace this with a better date icon
+  }
+
+  &.duration:before {
+    content: "\e024"; // TODO: replace this with a better date icon
   }
 }

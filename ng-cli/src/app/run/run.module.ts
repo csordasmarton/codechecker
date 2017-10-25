@@ -7,12 +7,14 @@ import {
 import { BrowserModule }  from '@angular/platform-browser';
 
 import { RunListComponent } from './run-list.component';
+import { SharedModule } from '../shared/shared.module';
 import { DbService } from '../shared';
 
 @NgModule({
   imports: [
     BrowserModule,
-    RouterModule
+    RouterModule,
+    SharedModule
   ],
   declarations: [
     RunListComponent

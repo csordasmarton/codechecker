@@ -1,8 +1,27 @@
 <div class="container-fluid">
-  <div id="runs">
-    <a class="item" *ngFor="let run of runs"
-      [routerLink]="[run.name]">
-      <div>{{run.name}}</div>
-    </a>
-  </div>
+  <ul id="runs">
+    <li class="item" *ngFor="let run of runs">
+      <a [routerLink]="[run.name]" class="name">{{run.name}}</a>
+      <span class="version-tag"
+        *ngIf="run.versionTag"
+        [style.background-color]="run.name | strToColor">
+        <i class="cc-icon tag" ></i>
+        <span class="name">{{run.versionTag}}</span>
+      </span>
+      <ul class="meta">
+        <li class="item">
+          <i class="cc-icon bug"></i>
+          <span class="num-of-bugs">{{run.resultCount}}</span>
+        </li>
+        <li class="item">
+          <i class="cc-icon date"></i>
+          <span class="date">{{run.runDate | date:'yMMMdjms'}}</span>
+        </li>
+        <li class="item">
+          <i class="cc-icon duration"></i>
+          <span class="duration">{{run.duration | duration}}</span>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>

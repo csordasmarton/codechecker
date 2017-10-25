@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { DbService } from '../shared';
 
+import './run-list.component.scss';
+
 @Component({
     selector: 'run-list',
     templateUrl: './run-list.component.html',
