@@ -35,6 +35,8 @@
     "rxjs": "^5.1.0",
     "systemjs": "0.19.39",
     "thrift": "^0.9.3",
+    "codemirror": "^5.31.0",
+    "jsplumb": "2.5.7",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -46,6 +48,8 @@
     "@types/angular-route": "^1.3.2",
     "@types/angular-sanitize": "^1.3.3",
     "@types/node": "^8.0.33",
+    "@types/codemirror": "^0.0.50",
+    "@types/jsplumb": "^1.3.31",
     "angular2-template-loader": "^0.6.0",
     "awesome-typescript-loader": "^3.0.4",
     "bootstrap-loader": "^2.2.0",

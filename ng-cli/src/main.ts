@@ -5,6 +5,9 @@ import { AppModule } from './app/app.module';
 
 import 'popper.js';
 
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/clike/clike.js';
+
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

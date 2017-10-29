@@ -34,6 +34,15 @@ export class DbService {
     this.client.getRunData(runFilter, cb);
   }
 
+  public getSourceFileData(
+    fileId: number,
+    fileContent: boolean,
+    encoding: any,
+    cb: (err: string, sourceFile : any) => void
+  ) {
+    this.client.getSourceFileData(fileId, fileContent, encoding, cb);
+  }
+
   public getRunResults(cb: (err: string, reports: any[]) => void) {
     var reportFilter = new reportServerTypes.ReportFilter();
 
