@@ -36,4 +36,80 @@
   &.duration:before {
     content: "\e024"; // TODO: replace this with a better date icon
   }
+
+  /* Severity icons */
+
+  &[class*="severity-"] {
+    line-height: normal;
+    text-transform: capitalize;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+  }
+
+  &.severity-low {
+    background-color: #669603;
+    &:before {
+      content : 'L';
+    }
+  }
+
+  &.severity-unspecified {
+    background-color: #666666;
+    &:before {
+      content : 'U';
+    }
+  }
+
+  &.severity-style {
+    background-color: #9932cc;
+    &:before {
+      content : 'S';
+    }
+  }
+
+  &.severity-medium {
+    background-color: #a9d323;
+    color: black;
+    &:before {
+      content : 'M';
+    }
+  }
+
+  &.severity-high {
+    background-color: #ffa800;
+    &:before {
+      content : 'H';
+    }
+  }
+
+  &.severity-critical {
+    background-color: #e92625;
+    &:before {
+      content : 'C';
+    }
+  }
+
+  /* Detection status icons */
+
+  &.detection-status-new::before {
+    content: "\e01f";
+    color: #ec7672;
+
+  }
+
+  &.detection-status-unresolved::before {
+    content: "\e001";
+    color: #007ea7;
+  }
+
+  &.detection-status-resolved::before {
+    content: "\e01d";
+    color: #669603;
+  }
+
+  &.detection-status-reopened::before {
+    content: "\e009";
+    color: #ff0000;
+  }
 }

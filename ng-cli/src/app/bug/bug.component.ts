@@ -37,7 +37,7 @@ export class BugComponent implements OnInit {
     this.dbService.getSourceFileData(1, true, null,
     (err: any, sourceFile : any) => {
       that.setContent(sourceFile);
-    });    
+    });
   }
 
   public setContent(sourceFile: any) {

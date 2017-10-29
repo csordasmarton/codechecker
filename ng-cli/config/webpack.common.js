@@ -21,7 +21,8 @@ module.exports = {
     extensions: ['.ts', '.js', '.scss'],
     alias: {
       thrift: 'thrift/lib/nodejs/lib/thrift/browser.js',
-      api: helpers.root('api/gen-nodejs/')
+      api: helpers.root('api/gen-nodejs/'),
+      shared: 'src/app/shared/'
     }
   },
 

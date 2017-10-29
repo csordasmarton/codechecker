@@ -48,11 +48,18 @@ export class DbService {
 
     var res = this.client.getRunResults(
       null,
-      ccDbService.MAX_QUERY_SIZE,
+      5, /*ccDbService.MAX_QUERY_SIZE,*/
       0,
       null,
       null,
       null,
       cb);
+  }
+
+  public getReportDetails(
+    reportId: number,
+    cb: (err: string, reportDetails: any[]) => void
+  ) {
+    this.client.getReportDetails(reportId, cb);
   }
 }

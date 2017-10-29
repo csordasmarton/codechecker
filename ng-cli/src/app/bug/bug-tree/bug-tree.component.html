@@ -1,0 +1,29 @@
+<tree-root #bugTree id="bug-tree" [nodes]="nodes" [options]="options">
+  <ng-template #treeNodeWrapperTemplate let-node let-index="index">
+    <div class="node-wrapper" [style.padding-left]="node.getNodePadding()">
+      <tree-node-expander [node]="node"></tree-node-expander>
+      <div class="tree-node-expander">
+        <span
+          *ngIf="node.hasChildren"
+          [class.toggle-children-wrapper-expanded]="node.isExpanded"
+          [class.toggle-children-wrapper-collapsed]="node.isCollapsed"
+          class="toggle-children-wrapper"
+          (click)="node.mouseAction('expanderClick', $event)">
+
+          <i *ngIf="node.data.icon" class="cc-icon {{node.data.icon}}"></i>
+        </span>
+        <span *ngIf="!node.hasChildren">
+          <i *ngIf="node.data.icon" class="cc-icon {{node.data.icon}}"></i>
+        </span>
+      </div>
+      <div class="node-content-wrapper"
+        [class.node-content-wrapper-active]="node.isActive"
+        [class.node-content-wrapper-focused]="node.isFocused"
+        (click)="node.mouseAction('click', $event)"
+        (dblclick)="node.mouseAction('dblClick', $event)">
+    
+        <div [innerHTML]="node.displayField"></div>
+      </div>
+    </div>
+  </ng-template>
+</tree-root>

@@ -6,3 +6,7 @@ html {
 body {
   padding-top: 4.5rem;
 }
+
+html,body,.bug-wrapper {
+  height:100%;
+}

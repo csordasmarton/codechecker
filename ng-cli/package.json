@@ -28,6 +28,7 @@
     "@angular/tsc-wrapped": "~4.3.1",
     "@angular/upgrade": "~4.3.1",
     "angular-in-memory-web-api": "~0.4.0",
+    "angular-tree-component": "^5.1.2",
     "bootstrap": "^4.0.0-alpha.6",
     "popper.js": "^1.11.0",
     "core-js": "^2.4.1",
