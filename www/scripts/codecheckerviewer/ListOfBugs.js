@@ -9,6 +9,7 @@ define([
   'dojo/dom-construct',
   'dojo/Deferred',
   'dojo/data/ObjectStore',
+  'dojo/data/ItemFileWriteStore',
   'dojo/store/api/Store',
   'dojo/store/util/QueryResults',
   'dojo/topic',
@@ -16,13 +17,15 @@ define([
   'dijit/layout/TabContainer',
   'dijit/Tooltip',
   'dojox/grid/DataGrid',
+  'dojox/grid/LazyTreeGrid',
+  'dijit/tree/ForestStoreModel',
   'codechecker/BugViewer',
   'codechecker/BugFilterView',
   'codechecker/RunHistory',
   'codechecker/hashHelper',
   'codechecker/util'],
-function (declare, dom, Deferred, ObjectStore, Store, QueryResults, topic,
-  BorderContainer, TabContainer, Tooltip, DataGrid, BugViewer, BugFilterView,
+function (declare, dom, Deferred, ObjectStore, ItemFileWriteStore, Store, QueryResults, topic,
+  BorderContainer, TabContainer, Tooltip, DataGrid, LazyTreeGrid, ForestStoreModel, BugViewer, BugFilterView,
   RunHistory, hashHelper, util) {
 
   function getRunData(runIds, runNames) {
@@ -124,50 +127,44 @@ function (declare, dom, Deferred, ObjectStore, Store, QueryResults, topic,
     },
 
     getIdentity : function (reportData) {
-      return reportData.reportId;
+      return reportData.id;
     },
 
     query : function (query, options) {
       var that = this;
       var deferred = new Deferred();
 
-      var runResultParam = createRunResultFilterParameter(query.reportFilters);
+      // Lazy tree grid automatically calls this function without report filter.
+      if (!query.reportFilter) {
+        deferred.reject("");
+        return deferred;
+      }
+
+      console.log(query.reportFilter);
+      var runResultParam = createRunResultFilterParameter(query.reportFilter);
 
       CC_SERVICE.getRunResults(
         runResultParam.runIds,
         CC_OBJECTS.MAX_QUERY_SIZE,
         options.start,
         options.sort ? options.sort.map(this._toSortMode) : null,
-        query.reportFilters,
+        query.reportFilter,
         runResultParam.cmpData,
         function (reportDataList) {
           if (reportDataList instanceof RequestFailed)
             deferred.reject('Failed to get reports: ' + reportDataList.message);
           else {
-            deferred.resolve(that._formatItems(reportDataList));
-            filterHook(query.reportFilters, false);
+            var items = query.formatter
+              ? query.formatter(reportDataList)
+              : reportDataList;
+
+            console.log(query);
+            deferred.resolve(items);
+            filterHook(query.reportFilter, false);
           }
         });
 
       return deferred;
-    },
-
-    _formatItems : function (reportDataList) {
-      reportDataList.forEach(function (reportData) {
-        if (reportData.line)
-          reportData.checkedFile = reportData.checkedFile +
-            ' @ Line ' + reportData.line;
-
-        //--- Review status ---//
-
-        var review = reportData.reviewData;
-        reportData.reviewStatus = review.status;
-        reportData.reviewComment = review.author && review.comment
-          ? review.comment
-          : review.author ? '-' : '';
-      });
-
-      return reportDataList;
     },
 
     _toSortMode : function (sort) {
@@ -309,15 +306,105 @@ function (declare, dom, Deferred, ObjectStore, Store, QueryResults, topic,
     }
   });
 
+  var ListOfBugsTreeGrid = declare(LazyTreeGrid, {
+    constructor : function () {
+      var that = this;
+
+      this.structure = [
+        { name : 'File', field : 'checkedFile', cellClasses : 'link compact', width : '100%' },
+        { name : 'Message', field : 'checkerMsg', width : '100%' },
+        { name : 'Checker name', field : 'checkerId', cellClasses : 'link', width : '50%' },
+        { name : 'Severity', field : 'severity', cellClasses : 'severity', width : '15%', formatter : severityFormatter },
+        { name : 'Review status', field : 'reviewStatus', cellClasses : 'review-status', width : '15%', formatter : reviewStatusFormatter },
+        { name : 'Review comment', cellClasses : 'review-comment-message compact', field : 'reviewComment', width : '50%' },
+        { name : 'Detection status', field : 'detectionStatus', cellClasses : 'detection-status', width : '15%', formatter : detectionStatusFormatter }
+      ];
+
+      this.store = new ObjectStore({ objectStore : new BugStore() });
+
+      this.treeModel = ForestStoreModel({
+        store: this.store,
+        getChildren : function (parentItem, onComplete, onError) {
+          var prevQuery = that.get('query');
+          var query = dojo.clone(prevQuery);
+
+          query.reportFilter.reportHash = [ parentItem.bugHash ];
+          query.reportFilter.isUnique = false;
+          query.formatter = function (reportDataList) {
+            return reportDataList.map(function (reportData) {
+              reportData.id = reportData.reportId;
+
+              //--- Review status ---//
+
+              var review = reportData.reviewData;
+              reportData.reviewStatus = review.status;
+              reportData.reviewComment = review.author && review.comment
+                ? review.comment
+                : review.author ? '-' : '';
+
+              return reportData;
+            });
+          }
+
+          this.store.fetch({
+            query : query,
+            onComplete: onComplete,
+            onError: onError
+          });
+
+          that.set('query', prevQuery);
+        },
+        mayHaveChildren : function (item) {
+          return item.hasChildren;
+        }
+      });
+
+      this._lastSelectedRow = 0;
+    },
+
+    refreshGrid : function (reportFilter) {
+      this.setQuery({
+        reportFilter : reportFilter,
+        formatter : function (reportDataList) {
+          return reportDataList.map(function (reportData) {
+            reportData.id = reportData.bugHash;
+
+            if (reportFilter.isUnique)
+              reportData.checkedFile = reportData.bugHash;
+            else if (reportData.line)
+              reportData.checkedFile = reportData.checkedFile +
+                ' @ Line ' + reportData.line;
+
+            reportData.hasChildren = reportFilter.isUnique;
+
+            console.log(reportData.hasChildren);
+            //--- Review status ---//
+
+            var review = reportData.reviewData;
+            reportData.reviewStatus = review.status;
+            reportData.reviewComment = review.author && review.comment
+              ? review.comment
+              : review.author ? '-' : '';
+
+            return reportData;
+          });
+        }
+      });
+
+    },
+
+    scrollToLastSelected : function () {
+      this.scrollToRow(this._lastSelectedRow);
+    },
+  });
+
   return declare(TabContainer, {
     constructor : function (args) {
       dojo.safeMixin(this, args);
 
       var that = this;
 
-      //--- Grid ---//
-
-      this._grid = new ListOfBugsGrid({
+      this._grid = new ListOfBugsTreeGrid({
         region : 'center',
         runData : this.runData,
         baseline : this.baseline,

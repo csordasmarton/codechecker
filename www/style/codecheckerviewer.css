@@ -97,7 +97,8 @@ html, body {
   cursor: pointer;
 }
 
-.compact {
+.compact,
+.dojoxGridTreeModel .compact > div {
   text-align: left;
   overflow: hidden;
   white-space: nowrap;
@@ -106,7 +107,8 @@ html, body {
 }
 
 /* (via http://stackoverflow.com/a/27961022/1428773) */
-.compact:before {
+.compact:before,
+.dojoxGridTreeModel .compact > div:before {
   content: '\200e';
 }
 
@@ -1231,4 +1233,8 @@ span[class*="severity-"] {
   font-size: 0.5em;
   background-color: #484848;
   color: white;
+}
+
+.dojoxGridNoChildren .dojoxGridExpando {
+  display: none;
 }
