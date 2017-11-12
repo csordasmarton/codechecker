@@ -5,13 +5,11 @@ import * as CodeMirror from 'codemirror';
 
 import { DbService } from '../shared';
 
-
-import './bug.component.scss';
-
 @Component({
   selector: 'bug-page',
   templateUrl: './bug.component.html',
-  providers: [ DbService ]
+  providers: [ DbService ],
+  styleUrls: ['./bug.component.scss']
 })
 export class BugComponent implements OnInit, OnDestroy {
   sub: any;

@@ -3,11 +3,10 @@ import { Component} from '@angular/core';
 
 import { ProductService } from '../shared';
 
-import './product.component.scss'
-
 @Component({
   selector: 'product-page',
-  templateUrl: './product.component.html'
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.scss']
 })
 export class ProductComponent {
   products : any[];

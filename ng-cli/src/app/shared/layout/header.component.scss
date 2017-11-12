@@ -1,0 +1,26 @@
+#header {
+  height: 50px;
+  z-index: 1000;
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  font-size: 14px;
+  -webkit-font-smoothing: initial;
+  -moz-osx-font-smoothing: auto;
+  transition: background-color 0.1s ease-out;
+  -webkit-transition: background-color 0.1s ease-out;
+  -ms-transition: background-color 0.1s ease-out;
+  -moz-transition: background-color 0.1s ease-out;
+  -o-transition: background-color 0.1s ease-out;
+}
+
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-toggler {
+  color: #fff;
+}
+
+.navbar-brand {
+  padding: 0px;
+}
+.navbar-brand > img {
+  height: 45px;
+}

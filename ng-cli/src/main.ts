@@ -14,7 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'angular-tree-component/dist/angular-tree-component.css';
 
 import './assets/fonts/codechecker.scss';
-import './styles.css';
+import './styles.scss';
 
 if (process.env.ENV === 'production') {
   enableProdMode();

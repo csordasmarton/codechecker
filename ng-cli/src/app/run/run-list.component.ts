@@ -3,12 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { DbService } from '../shared';
 
-import './run-list.component.scss';
-
 @Component({
     selector: 'run-list',
     templateUrl: './run-list.component.html',
-    providers: [ DbService ]
+    providers: [ DbService ],
+    styleUrls: ['./run-list.component.scss']
 })
 export class RunListComponent implements OnInit {
   runs : any[];

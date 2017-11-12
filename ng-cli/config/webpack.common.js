@@ -65,7 +65,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+        loaders: ['to-string-loader', 'style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       },
       {
         test: /\.css$/,
