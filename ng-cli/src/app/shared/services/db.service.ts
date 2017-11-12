@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 let Thrift = require('thrift');
@@ -6,13 +6,14 @@ let ccDbService = require('api/codeCheckerDBAccess');
 let reportServerTypes = require('api/report_server_types');
 
 @Injectable()
-export class DbService {
-  private client : any;
+export class DbService implements OnDestroy {
+  private sub: any;
+  private client: any;
 
   constructor(private route: ActivatedRoute) {
     var that = this;
 
-    route.params.subscribe(function (params) {
+    this.sub = this.route.parent.params.subscribe(params => {
       let transport = Thrift.TBufferedTransport;
       let protocol = Thrift.TJSONProtocol;
       let connection = Thrift.createXHRConnection(
@@ -24,6 +25,10 @@ export class DbService {
       });
       that.client = Thrift.createXHRClient(ccDbService, connection);
     });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   public getPackageVerison(cb: (err: string, version: string) => void) {

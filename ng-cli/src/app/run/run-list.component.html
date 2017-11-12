@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <ul id="runs">
     <li class="item" *ngFor="let run of runs">
-      <a [routerLink]="[run.name]" class="name">{{run.name}}</a>
+      <a [routerLink]="['../reports']" [queryParams]="{run: run.name}"class="name">{{run.name}}</a>
       <span class="version-tag"
         *ngIf="run.versionTag"
         [style.background-color]="run.name | strToColor">

@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <ul id="reports">
     <li *ngFor="let report of reports">
-      <a [routerLink]="[report.bugHash]" class="item">
+      <a [routerLink]="['../bug']" [queryParams]="{hash: report.bugHash}" queryParamsHandling="merge" class="item">
         <div>{{report.bugHash}}</div>
       </a>
     </li>

@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { BugModule } from './bug/bug.module';
-import { HomeModule } from './home/home.module';
 import { ProductModule } from './product/product.module';
 import { ReportModule } from './report/report.module';
 import { RunModule } from './run/run.module';
@@ -22,7 +21,6 @@ import { ROUTES } from './app.routes';
   imports: [
     BrowserModule,
     BugModule,
-    HomeModule,
     ProductModule,
     ReportModule,
     RunModule,
