@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 
-import { AtouPipe, DurationPipe, StrToColorPipe } from '../shared';
+import { AtouPipe, DurationPipe, StrToColorPipe, SubMenuComponent } from '../shared';
 
 @NgModule({
   exports: [
     AtouPipe,
     DurationPipe,
-    StrToColorPipe
+    StrToColorPipe,
+    SubMenuComponent
   ],
   declarations: [
     AtouPipe,
     DurationPipe,
-    StrToColorPipe
+    StrToColorPipe,
+    SubMenuComponent
   ]
 })
 export class SharedModule {}
