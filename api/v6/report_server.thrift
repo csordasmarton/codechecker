@@ -109,6 +109,12 @@ struct ReportDetails {
   2: BugPath       executionPath
 }
 
+struct LabelData {
+  1: i64     id    // Unique id of the label.
+  2: string  name  // Name of the label.
+  3: string  color // Color of the label (eg.: #ff0000).
+}
+
 struct RunData {
   1: i64                       runId,        // Unique id of the run.
   2: string                    runDate,      // Date of the run last updated.
@@ -117,7 +123,8 @@ struct RunData {
   5: i64                       resultCount,  // Number of results in the run.
   6: string                    runCmd,       // The used check command.
   7: map<DetectionStatus, i32> detectionStatusCount, // Number of reports with a particular detection status.
-  8: string                    versionTag    // Version tag of the latest run.
+  8: string                    versionTag,   // Version tag of the latest run.
+  9: list<LabelData>           labels        // labels of the run
 }
 typedef list<RunData> RunDataList
 
@@ -409,6 +416,31 @@ service codeCheckerDBAccess {
                                       2: ReportFilter reportFilter,
                                       3: CompareData  cmpData)
                                       throws (1: shared.RequestFailed requestError),
+
+  list<LabelData> getLabels()
+                            throws(1: shared.RequestFailed requestError),
+
+  bool newLabel(1: LabelData label)
+                throws(1: shared.RequestFailed requestError),
+
+    // remove a label
+  bool removeLabel(1: i64 labelId)
+                   throws(1: shared.RequestFailed requestError),
+
+  bool updateLabel(1: i64 reportId)
+                   throws(1: shared.RequestFailed requestError),
+
+  list<LabelData> getReportLabels()
+                                 throws(1: shared.RequestFailed requestError),
+
+  // add new label for a report
+  bool addLabelToReport(1: i64 reportId,
+                        2: i64 labelId)
+                        throws(1: shared.RequestFailed requestError),
+
+  bool removeLabelFromReport(1: i64 reportId,
+                             2: i64 labelId)
+                             throws(1: shared.RequestFailed requestError),
 
   //============================================
   // Analysis result storage related API calls.

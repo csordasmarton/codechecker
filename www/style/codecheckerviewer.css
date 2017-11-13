@@ -125,7 +125,7 @@ html, body {
   font-family: monospace;
 }
 
-.del-btn, .diff-btn {
+.del-btn, .diff-btn, .labels-btn {
   float: right;
 }
 
@@ -1279,4 +1279,54 @@ span[class*="severity-"] {
 /* Removes orange border from focus */
 .dijitTooltipBelow {
   outline: none;
+}
+
+.label-wrapper {
+  padding: 4px 0px;
+  display: inline-block;
+}
+
+.label {
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.labels {
+  position: relative;
+}
+
+.edit-label-btn {
+  /*position: absolute;
+  top: 0;
+  right: 0;*/
+}
+
+.edit-label-btn.dijitButton .dijitButtonNode {
+  background-color: white;
+  border: 0px;
+  box-shadow: none;
+}
+
+.edit-label-btn .edit {
+  padding: 0px;
+}
+
+.select-menu-item {
+  display: block;
+  padding: 8px;
+  margin: 2px;
+  overflow: hidden;
+  color: inherit;
+  cursor: pointer;
+  border-bottom: 1px solid #eaecef;
+}
+
+.color-box {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  border: 1px solid grey;
+  cursor: pointer;
+  vertical-align: middle;
+  margin: 5px;
 }

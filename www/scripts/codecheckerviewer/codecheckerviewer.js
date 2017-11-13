@@ -14,11 +14,13 @@ define([
   'codechecker/CheckerStatistics',
   'codechecker/hashHelper',
   'codechecker/HeaderPane',
+  'codechecker/Labels',
   'codechecker/ListOfBugs',
   'codechecker/ListOfRuns',
   'codechecker/util'],
 function (declare, topic, Dialog, Button, BorderContainer, TabContainer,
-  CheckerStatistics, hashHelper, HeaderPane, ListOfBugs, ListOfRuns, util) {
+  CheckerStatistics, hashHelper, HeaderPane, Labels, ListOfBugs, ListOfRuns,
+  util) {
 
   var runDataList = null;
 
@@ -47,6 +49,9 @@ function (declare, topic, Dialog, Button, BorderContainer, TabContainer,
         return;
       case 'statistics':
         topic.publish('tab/checkerStatistics');
+        return;
+      case 'labels':
+        topic.publish('tab/labels');
         return;
       case 'userguide':
         topic.publish('tab/userguide');
@@ -226,6 +231,28 @@ function (declare, topic, Dialog, Button, BorderContainer, TabContainer,
       }
 
       runsTab.selectChild(runIdToTab[tabId]);
+    });
+
+    var that = this;
+
+    topic.subscribe('tab/labels', function () {
+      if (!that.labels) {
+        that.labels = new Labels({
+          title : 'Labels',
+          closable : true,
+          onClose : function () {
+            delete that.labels;
+            return true;
+          },
+          onShow : function () {
+            hashHelper.resetStateValues({ 'tab' : 'labels' });
+          }
+        });
+        runsTab.addChild(that.labels);
+      }
+
+      hashHelper.resetStateValues({ 'tab' : 'labels' });
+      runsTab.selectChild(that.labels);
     });
 
     var docDialog = new Dialog();

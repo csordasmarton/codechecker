@@ -593,6 +593,9 @@ class ThriftRequestHandler(object):
                 if reportCount is None:
                     reportCount = 0
 
+                labels = [LabelData(label.id, label.name, label.color)
+                          for label in instance.labels]
+
                 results.append(RunData(instance.id,
                                        str(instance.date),
                                        instance.name,
@@ -600,7 +603,8 @@ class ThriftRequestHandler(object):
                                        reportCount,
                                        instance.command,
                                        status_sum[instance.id],
-                                       version_tag))
+                                       version_tag,
+                                       labels))
             return results
 
         except sqlalchemy.exc.SQLAlchemyError as alchemy_ex:
@@ -1941,3 +1945,97 @@ class ThriftRequestHandler(object):
         shutil.rmtree(zip_dir)
 
         return run_id
+
+    @timeit
+    def getLabels(self):
+        self.__require_access()
+        results = []
+        session = self.__Session()
+        try:
+            labels = session.query(Label) \
+                .order_by(Label.name) \
+                .all()
+
+            for label in labels:
+                results.append(LabelData(
+                    label.id,
+                    label.name,
+                    label.color))
+
+        except sqlalchemy.exc.SQLAlchemyError as alchemy_ex:
+            msg = str(alchemy_ex)
+            LOG.error(msg)
+            raise shared.ttypes.RequestFailed(shared.ttypes.ErrorCode.DATABASE,
+                                              msg)
+        finally:
+            session.close()
+            return results
+
+    @timeit
+    def newLabel(self, label_data):
+        """
+            Add new label with the given color
+        """
+        self.__require_access()
+        session = self.__Session()
+        try:
+            if len(label_data.name.strip()) == 0:
+                msg = "Label name can not be empty!"
+                LOG.error(msg)
+                raise shared.ttypes.RequestFailed(
+                    shared.ttypes.ErrorCode.IOERROR,
+                    msg)
+
+            label = Label(label_data.name,
+                          label_data.color)
+
+            session.add(label)
+            session.commit()
+
+            return True
+        except sqlalchemy.exc.SQLAlchemyError as alchemy_ex:
+            msg = str(alchemy_ex)
+            LOG.error(msg)
+            raise shared.ttypes.RequestFailed(shared.ttypes.ErrorCode.DATABASE,
+                                              msg)
+
+        except Exception as ex:
+            msg = str(ex)
+            LOG.error(msg)
+            raise shared.ttypes.RequestFailed(shared.ttypes.ErrorCode.IOERROR,
+                                              msg)
+        finally:
+            session.close()
+
+    @timeit
+    def removeLabel(self, label_id):
+        """
+            Remove label by the given id.
+        """
+        self.__require_access()
+        session = self.__Session()
+        try:
+            label = session.query(Label).get(label_id)
+            if label:
+                session.delete(label)
+                session.commit()
+                return True
+            else:
+                msg = 'Label id ' + str(label_id) + \
+                      ' was not found in the database.'
+                LOG.error(msg)
+                raise shared.ttypes.RequestFailed(
+                    shared.ttypes.ErrorCode.DATABASE, msg)
+        except sqlalchemy.exc.SQLAlchemyError as alchemy_ex:
+            msg = str(alchemy_ex)
+            LOG.error(msg)
+            raise shared.ttypes.RequestFailed(shared.ttypes.ErrorCode.DATABASE,
+                                              msg)
+
+        except Exception as ex:
+            msg = str(ex)
+            LOG.error(msg)
+            raise shared.ttypes.RequestFailed(shared.ttypes.ErrorCode.IOERROR,
+                                              msg)
+        finally:
+            session.close()

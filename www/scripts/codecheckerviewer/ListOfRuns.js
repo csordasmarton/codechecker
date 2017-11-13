@@ -10,15 +10,20 @@ define([
   'dojo/data/ItemFileWriteStore',
   'dojo/topic',
   'dijit/Dialog',
+  'dijit/popup',
+  'dijit/TooltipDialog',
   'dijit/form/Button',
+  'dijit/form/CheckBox',
   'dijit/form/RadioButton',
   'dijit/form/TextBox',
   'dijit/layout/BorderContainer',
   'dijit/layout/ContentPane',
   'dojox/grid/DataGrid',
+  'codechecker/Labels',
   'codechecker/util'],
-function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
-  RadioButton, TextBox, BorderContainer, ContentPane, DataGrid, util) {
+function (declare, dom, ItemFileWriteStore, topic, Dialog, popup, TooltipDialog,
+  Button, CheckBox, RadioButton, TextBox, BorderContainer, ContentPane,
+  DataGrid, Labels, util) {
 
   /**
    * This function helps to format a data grid cell with two radio buttons.
@@ -69,6 +74,98 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
     return versionTag ? versionTag.outerHTML : '';
   }
 
+  function createDomLabel(label) {
+    return '<span class="label-wrapper">'
+      + '<span class="label" style="background-color:' + label.color
+      + ';color: ' + util.invertColor(label.color, true) + '">'
+      + label.name + '</span></span>';
+  }
+
+  function labelFormatter(args) {
+    var labels = args.runData.labels;
+
+    var wrapper = new ContentPane({ class : 'labels'});
+
+    var content = '<i class="customIcon tag"></i>';
+
+    if (!labels.length)
+      content += 'No tags';
+    else
+      content += labels.map(function (label) {
+        return createDomLabel(label);
+      }).join('');
+
+    dom.create('span', { innerHTML : content }, wrapper.domNode);
+
+    var editButton = new Button({
+      class : 'edit-label-btn',
+      showLabel: false,
+      iconClass : 'customIcon edit',
+      onClick : function (evt) {
+        var tooltipLabels = CC_SERVICE.getLabels();
+
+        var selectMenuList = dom.create('div', { class : 'select-menu-list' });
+
+        tooltipLabels.forEach(function (label) {
+          var item =  dom.create('div', {
+            class : 'select-menu-item'
+          }, selectMenuList);
+
+          var checkedInd = labels.findIndex(function (l) {
+            return l.id === label.id;
+          });
+
+          var checkbox = new CheckBox({
+            checked : checkedInd !== -1,
+            onChange : function (checked) {
+              if (checked) {
+                // TODO: add new label to the actual report
+                console.log('add new label');
+              } else {
+                // TODO: remove label from the actual report
+                console.log('remove label');
+                labels.splice(checkedInd, 1);
+              }
+            }
+          });
+
+          dom.place(checkbox.domNode, item);
+          var label = dom.create('label', {
+            for : checkbox.get('id'),
+            innerHTML : createDomLabel(label)
+          }, item);
+        });
+
+        var dialog = new TooltipDialog({
+          content : selectMenuList,
+          onBlur : function () {
+            popup.close(this);
+
+            var listOfRuns = args.listOfRuns;
+            listOfRuns.updateRow(evt.rowIndex);
+
+            this.destroyRecursive();
+          }
+        });
+
+        //--- Open up the tooltip ---//
+
+        popup.open({
+          popup : dialog,
+          around : this.domNode
+        });
+
+        // We need to the focus inside the setTimeout because clicking on a
+        // button inside the dojo DataGrid will call the onBlur function of the
+        // TooltipDialog immediately.
+        setTimeout(function () { dialog.focus(); }, 0);
+      }
+    });
+    wrapper.addChild(editButton);
+
+    return wrapper;
+  }
+
   var ListOfRunsGrid = declare(DataGrid, {
     constructor : function () {
       this.store = new ItemFileWriteStore({
@@ -84,6 +181,7 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
         { name : 'Check command', field : 'checkcmd', styles : 'text-align: center;' },
         { name : 'Detection status', field : 'detectionstatus', styles : 'text-align: center;', width : '30%' },
         { name : 'Version tag', field : 'versionTag', formatter : versionTagFormatter },
+        { name : 'Labels', field : 'labels', width : '30%', formatter : labelFormatter},
         { name : 'Delete', field : 'del', styles : 'text-align: center;', type : 'dojox.grid.cells.Bool', editable : true }
       ];
 
@@ -171,6 +269,7 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
      */
     _addRunData : function (runData) {
       var currItemDate = runData.runDate.split(/[\s\.]+/);
+
       this.store.newItem({
         id           : runData.runId,
         runid        : runData.runId,
@@ -184,7 +283,8 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
         checkcmd     : '<span class="link">Show</span>',
         del          : false,
         diff         : { 'runData' : runData, 'listOfRunsGrid' : this },
-        detectionstatus : prettifyStatus(runData.detectionStatusCount)
+        detectionstatus : prettifyStatus(runData.detectionStatusCount),
+        labels       : { runData : runData, listOfRuns : this }
       });
     },
 
@@ -241,6 +341,16 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
         }
       });
 
+      //--- Labels Button ---//
+
+      this._labelBtn = new Button({
+        label    : 'Labels',
+        class    : 'labels-btn',
+        onClick  : function () {
+          topic.publish('tab/labels');
+        }
+      });
+
       //--- Diff Button ---//
 
       this._diffBtn = new Button({
@@ -285,6 +395,7 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
       if (this.get('showDelete'))
         this.addChild(this._deleteBtn);
       this.addChild(this._diffBtn);
+      this.addChild(this._labelBtn);
     },
 
     addToDeleteList : function (runId) {

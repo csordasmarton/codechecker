@@ -42,6 +42,18 @@ class DBVersion(Base):
         self.minor = minor
 
 
+run_label = Table('run_labels', Base.metadata,
+                  Column('run_id', Integer,
+                         ForeignKey('runs.id', deferrable=True,
+                                    initially="DEFERRED", ondelete='CASCADE'),
+                         primary_key=True),
+                  Column('label_id', Integer,
+                         ForeignKey('labels.id', deferrable=True,
+                                    initially="DEFERRED", ondelete='CASCADE'),
+                         primary_key=True)
+                  )
+
+
 class Run(Base):
     __tablename__ = 'runs'
 
@@ -58,6 +70,8 @@ class Run(Base):
     can_delete = Column(Boolean, nullable=False, server_default=true(),
                         default=True)
 
+    labels = relationship('Label', secondary=run_label, backref='runs')
+
     def __init__(self, name, version, command):
         self.date, self.name, self.version, self.command = \
             datetime.now(), name, version, command
@@ -66,6 +80,18 @@ class Run(Base):
     def mark_finished(self):
         if self.duration == -1:
             self.duration = ceil((datetime.now() - self.date).total_seconds())
+
+
+class Label(Base):
+    __tablename__ = 'labels'
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    name = Column(String, nullable=False)
+    color = Column(String)
+
+    def __init__(self, name, color):
+        self.name = name
+        self.color = color
 
 
 class RunHistory(Base):
