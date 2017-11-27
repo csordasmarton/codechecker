@@ -542,8 +542,7 @@ class ThriftRequestHandler(object):
                     if run_filter.exactMatch:
                         q = q.filter(Run.name.in_(run_filter.names))
                     else:
-                        OR = [Run.name.ilike('%{0}%'.format(
-                                  util.escape_like(name)), escape='*') for
+                        OR = [Run.name.ilike(conv(name)) for
                               name in run_filter.names]
                         q = q.filter(or_(*OR))
 

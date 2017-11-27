@@ -1228,7 +1228,7 @@ span[class*="severity-"] {
 
 .checker-statistics-filter {
   display: block;
-  overflow: hidden;
+  overflow: initial;
 }
 
 .checker-statistics-list {
@@ -1279,4 +1279,85 @@ span[class*="severity-"] {
 /* Removes orange border from focus */
 .dijitTooltipBelow {
   outline: none;
+}
+
+/* Searchable multi select */
+.dijitContentPane.checker-statistics-filter,
+.dijitContentPane.searchable-multi-select {
+  padding: 0;
+  overflow: initial;
+}
+
+.searchable-multi-select .select-menu-filter-wrapper {
+  display: inline-block;
+  position: relative;
+  width: 250px;
+  margin-right: 10px;
+}
+
+.searchable-multi-select .filter-item {
+  padding: 5px;
+}
+
+.searchable-multi-select .filter-item .dijitCheckBox {
+  margin-right: 5px;
+}
+
+.searchable-multi-select .filter-item:hover {
+  color: #357ea7;
+  background-color: #edf2f7;
+  cursor: pointer;
+}
+
+.searchable-multi-select .select-menu-filter {
+  display: inline-block;
+  margin: 0 5px 0 0;
+}
+
+.searchable-multi-select .filter-items {
+  position: absolute;
+  top: 100%;
+  z-index: 1010;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-top: 0;
+  background: #fff;
+  -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  overflow: auto;
+}
+
+.searchable-multi-select .selected-items {
+  display: inline-block;
+}
+
+.searchable-multi-select .selected-item {
+  position: relative;
+  margin: 3px 5px 3px 0;
+  padding: 3px 0px 3px 5px;
+  border: 1px solid #4c7ea7;
+  max-width: 100px;
+  border-radius: 3px;
+  background-color: #e0e9f2;
+  color: #000000;
+  line-height: 13px;
+  cursor: default;
+  display: inline-block;
+}
+
+.searchable-multi-select .selected-item .compact{
+  max-width: 80%;
+  display: inline-block;
+  direction: ltr;
+  vertical-align: middle;
+}
+
+.searchable-multi-select .remove {
+  cursor: pointer;
+}
+
+.searchable-multi-select .remove::before {
+  content: "\e01e";
+  color: #cb2431;
 }

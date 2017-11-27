@@ -17,9 +17,11 @@ define([
   'dojox/widget/Standby',
   'dijit/layout/ContentPane',
   'codechecker/hashHelper',
+  'codechecker/SearchableMultiSelect',
   'codechecker/util'],
 function (declare, ItemFileWriteStore, Deferred, all, Memory, Observable,
-  topic, CheckedMultiSelect, DataGrid, Standby, ContentPane, hashHelper, util) {
+  topic, CheckedMultiSelect, DataGrid, Standby, ContentPane, hashHelper,
+  SearchableMultiSelect, util) {
 
   function severityFormatter(severity) {
     var severity = util.severityFromCodeToString(severity);
@@ -91,6 +93,29 @@ function (declare, ItemFileWriteStore, Deferred, all, Memory, Observable,
 
     postCreate : function () {
       this.addChild(this._runFilter);
+
+      this._filter = new SearchableMultiSelect({
+        label : "Get statistics only for runs...",
+        getItems : function (searchStr) {
+          var deferred = new Deferred();
+          var runFilter = new CC_OBJECTS.RunFilter();
+          if (searchStr)
+            runFilter.names = ['*' + searchStr + '*'];
+
+          CC_SERVICE.getRunData(runFilter, function (runs) {
+            deferred.resolve(runs.map(function (run) {
+              return {
+                id : run.runId,
+                label : run.name,
+                value : run.runId
+              };
+            }));
+          });
+
+          return deferred;
+        }
+      });
+      this.addChild(this._filter);
 
       var state = hashHelper.getValues();
       if (state.tab === 'statistics' && state.run)
