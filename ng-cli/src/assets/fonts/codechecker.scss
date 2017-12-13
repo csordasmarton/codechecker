@@ -37,6 +37,18 @@
     content: "\e024"; // TODO: replace this with a better date icon
   }
 
+  &.remove::before {
+    content: "\e01e";
+  }
+
+  &.clean::before {
+    content: "\e013";
+  }
+
+  &.option::before {
+    content: "\e01c";
+  }
+
   /* Severity icons */
 
   &[class*="severity-"] {
@@ -95,7 +107,6 @@
   &.detection-status-new::before {
     content: "\e01f";
     color: #ec7672;
-
   }
 
   &.detection-status-unresolved::before {
@@ -111,5 +122,27 @@
   &.detection-status-reopened::before {
     content: "\e009";
     color: #ff0000;
+  }
+
+  /* Review status icons */
+
+  &.review-status-unreviewed::before {
+    content: "\e017";
+    color: #4b9fd5;
+  }
+
+  &.review-status-confirmed-bug::before {
+    content: "\e019";
+    color: #e92625;
+  }
+
+  &.review-status-false-positive::before {
+    content: "\e01a";
+    color: grey;
+  }
+
+  &.review-status-intentional::before {
+    content: "\e018";
+    color: #669603;
   }
 }

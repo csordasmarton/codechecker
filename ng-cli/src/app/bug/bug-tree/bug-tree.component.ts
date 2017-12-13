@@ -63,7 +63,8 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
       that.nodes.push(node);
     });
 
-    this.dbService.getRunResults((err : string, reports: any[]) => {
+    this.dbService.getRunResults(null, null, null, null, null, null,
+    (err : string, reports: any[]) => {
       reports.forEach(function (report) {
         that.addReport(report);
       });

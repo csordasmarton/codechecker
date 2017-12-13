@@ -1,0 +1,15 @@
+#report-filters {
+  width: 300px;
+
+  .options {
+    position: absolute;
+    top: 0;
+    right: 5px;
+
+    .cc-icon {
+      &.clean, &.option {
+        color: #878d96;
+      }
+    }
+  }
+}

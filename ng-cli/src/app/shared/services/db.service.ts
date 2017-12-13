@@ -48,17 +48,17 @@ export class DbService implements OnDestroy {
     this.client.getSourceFileData(fileId, fileContent, encoding, cb);
   }
 
-  public getRunResults(cb: (err: string, reports: any[]) => void) {
-    var reportFilter = new reportServerTypes.ReportFilter();
-
-    var res = this.client.getRunResults(
-      null,
-      5, /*ccDbService.MAX_QUERY_SIZE,*/
-      0,
-      null,
-      null,
-      null,
-      cb);
+  public getRunResults(
+    runIds: number[],
+    limit: number,
+    offset: number,
+    sortType: any[],
+    reportFilter: any,
+    cmpData: any,
+    cb: (err: string, reports: any[]) => void
+  ) {
+    this.client.getRunResults(runIds, limit, offset, sortType, reportFilter,
+      cmpData, cb);
   }
 
   public getReportDetails(
@@ -66,5 +66,95 @@ export class DbService implements OnDestroy {
     cb: (err: string, reportDetails: any[]) => void
   ) {
     this.client.getReportDetails(reportId, cb);
+  }
+
+  public getSeverityCounts(
+    runIds: number[],
+    reportFilter: any,
+    cmpData: any,
+    cb: (err: string, severityMap: any) => void
+  ){
+    this.client.getSeverityCounts(runIds, reportFilter, cmpData, cb);
+  }
+
+  public getDetectionStatusCounts(
+    runIds: number[],
+    reportFilter: any,
+    cmpData: any,
+    cb: (err: string, detectionStatusMap: any) => void
+  ){
+    this.client.getDetectionStatusCounts(runIds, reportFilter, cmpData, cb);
+  }
+
+  public getReviewStatusCounts(
+    runIds: number[],
+    reportFilter: any,
+    cmpData: any,
+    cb: (err: string, reviewStatusMap: any) => void
+  ){
+    this.client.getReviewStatusCounts(runIds, reportFilter, cmpData, cb);
+  }
+
+  public getCheckerMsgCounts(
+    runIds: number[],
+    reportFilter: any,
+    cmpData: any,
+    limit: number,
+    offset: number,
+    cb: (err: string, fileMap: any) => void
+  ){
+    this.client.getCheckerMsgCounts(runIds, reportFilter, cmpData, limit,
+      offset, cb);
+  }
+
+  public getCheckerCounts(
+    runIds: number[],
+    reportFilter: any,
+    cmpData: any,
+    limit: number,
+    offset: number,
+    cb: (err: string, fileMap: any) => void
+  ){
+    this.client.getCheckerCounts(runIds, reportFilter, cmpData, limit,
+      offset, cb);
+  }
+
+  public getFileCounts(
+    runIds: number[],
+    reportFilter: any,
+    cmpData: any,
+    limit: number,
+    offset: number,
+    cb: (err: string, fileMap: any) => void
+  ){
+    this.client.getFileCounts(runIds, reportFilter, cmpData, limit, offset, cb);
+  }
+
+  public getRunResultCount(
+    runIds: number[],
+    reportFilter: any,
+    cmpData: any,
+    cb: (err: string, reportCount: any) => void
+  ){
+    this.client.getRunResultCount(runIds, reportFilter, cmpData, cb);
+  }
+
+  public getRunReportCounts(
+    runIds: number[],
+    reportFilter: any,
+    limit: number,
+    offset: number,
+    cb: (err: string, reportCount: any) => void
+  ){
+    this.client.getRunReportCounts(runIds, reportFilter, limit, offset, cb);
+  }
+
+  public getRunHistoryTagCounts(
+    runIds: number[],
+    reportFilter: any,
+    cmpData: any,
+    cb: (err: string, reportCount: any) => void
+  ){
+    this.client.getRunHistoryTagCounts(runIds, reportFilter, cmpData, cb);
   }
 }

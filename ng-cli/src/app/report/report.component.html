@@ -1,8 +1,9 @@
 <div class="container-fluid">
+  <report-filter></report-filter>
   <ul id="reports">
     <li *ngFor="let report of reports">
       <a [routerLink]="['../bug']" [queryParams]="{hash: report.bugHash}" queryParamsHandling="merge" class="item">
-        <div>{{report.bugHash}}</div>
+        <div>{{report.bugHash}}, {{report.severity}}</div>
       </a>
     </li>
   </ul>

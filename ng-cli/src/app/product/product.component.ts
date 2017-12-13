@@ -14,7 +14,8 @@ export class ProductComponent {
   constructor(private productService: ProductService) {
     var that = this;
 
-    productService.getClient().getProducts('', '', (err: any, products : any[]) => {
+    console.log('GET PRODUCTS');
+    productService.getProducts(null, null, (err: any, products : any[]) => {
       that.products = products;
       console.log(products);
     });

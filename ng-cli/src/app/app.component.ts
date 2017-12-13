@@ -6,18 +6,4 @@ import { ProductService } from './shared';
   selector: 'my-app',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
-  version: string;
-
-  constructor(private productService: ProductService) {
-    var that = this;
-
-    productService.getClient().getPackageVersion((err: any, version : string) => {
-      that.version = version;
-    });
-
-    productService.getClient().getProducts('', '', (err: any, products : any[]) => {
-      /* console.log(products); */
-    });
-  }
-}
+export class AppComponent {}

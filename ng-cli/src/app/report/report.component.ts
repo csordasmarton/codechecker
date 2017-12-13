@@ -1,26 +1,41 @@
-import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core'
 
 import { DbService } from '../shared';
+import { Filter } from './filter/Filter';
+import { SharedService } from './shared.service'
 
 @Component({
     selector: 'report',
     templateUrl: './report.component.html',
     providers: [ DbService ]
 })
-export class ReportComponent implements OnInit {
-  reports: any[];
+export class ReportComponent implements OnInit, OnDestroy, Filter {
+  private reports: any[];
+  private limit: number = 5;
 
   constructor(
-    private route: ActivatedRoute,
-    private dbService: DbService
-  ) {}
+    private dbService: DbService,
+    private shared: SharedService
+  ) {
+    shared.register(this);
+  }
 
   public ngOnInit() {
-    var that = this;
+    this.shared.init();
+  }
 
-    this.dbService.getRunResults((err : string, reports: any[]) => {
-      that.reports = reports;
+  public ngOnDestroy() {
+    this.shared.destory();
+  }
+
+  public initByUrl() {}
+  public getUrlValues() { return {}; }
+  public clear() {}
+
+  public notify() {
+    this.dbService.getRunResults(this.shared.runIds, this.limit, 0, null,
+    this.shared.reportFilter, null, (err : string, reports: any[]) => {
+      this.reports = reports;
     });
   }
 }

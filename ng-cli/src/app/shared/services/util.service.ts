@@ -7,16 +7,47 @@ export class UtilService {
   /**
    * Converts a Thrift API severity id to human readable string.
    *
-   * @param {String|Number} severityCode Thrift API Severity id
+   * @param {String|Number} severity Thrift API Severity id
    * @return Human readable severity string.
    */
-  severityFromCodeToString(severityCode: any): string {
-    if (severityCode === 'all')
-      return 'All';
+  severityFromCodeToString(severity: any): string {
+    switch (parseInt(severity)) {
+      case reportServerTypes.Severity.UNSPECIFIED:
+        return 'Unspecified';
+      case reportServerTypes.Severity.STYLE:
+        return 'Style';
+      case reportServerTypes.Severity.LOW:
+        return 'Low';
+      case reportServerTypes.Severity.MEDIUM:
+        return 'Medium';
+      case reportServerTypes.Severity.HIGH:
+        return 'High';
+      case reportServerTypes.Severity.CRITICAL:
+        return 'Critical';
+      default:
+        console.warn('Non existing severity status code: ', severity);
+        return 'N/A';
+    }
+  }
 
-    for (var key in reportServerTypes.Severity)
-      if (reportServerTypes.Severity[key] === parseInt(severityCode))
-        return key;
+  severityFromStringToCode(severity: string) {
+    switch (severity.toLowerCase()) {
+      case 'unspecified':
+        return reportServerTypes.Severity.UNSPECIFIED;
+      case 'style':
+        return reportServerTypes.Severity.STYLE;
+      case 'low':
+        return reportServerTypes.Severity.LOW;
+      case 'medium':
+        return reportServerTypes.Severity.MEDIUM;
+      case 'high':
+        return reportServerTypes.Severity.HIGH;
+      case 'critical':
+        return reportServerTypes.Severity.CRITICAL;
+      default:
+        console.warn('Non existing severity: ', severity);
+        return -1;
+    }
   }
 
   /**
@@ -25,7 +56,7 @@ export class UtilService {
    * @param {String|Number} reviewCode Thrift API DetectionStatus id.
    * @return Human readable review status string.
    */
-  public detectionStatusFromCodeToString(detectionStatus: any): string {
+  detectionStatusFromCodeToString(detectionStatus: any): string {
     switch (parseInt(detectionStatus)) {
       case reportServerTypes.DetectionStatus.NEW:
         return 'New';
@@ -41,13 +72,29 @@ export class UtilService {
     }
   }
 
+  detectionStatusFromStringToCode(status: string) {
+    switch (status.toLowerCase()) {
+      case 'new':
+        return reportServerTypes.DetectionStatus.NEW;
+      case 'resolved':
+        return reportServerTypes.DetectionStatus.RESOLVED;
+      case 'unresolved':
+        return reportServerTypes.DetectionStatus.UNRESOLVED;
+      case 'reopened':
+        return reportServerTypes.DetectionStatus.REOPENED;
+      default:
+        console.warn('Non existing detection status: ', status);
+        return -1;
+    }
+  }
+
   /**
    * Converts a Thrift API review status id to human readable string.
    *
    * @param {String|Number} reviewCode Thrift API ReviewStatus id.
    * @return Human readable review status string.
    */
-  public reviewStatusFromCodeToString(reviewCode: any): string {
+  reviewStatusFromCodeToString(reviewCode: any): string {
     switch (parseInt(reviewCode)) {
       case reportServerTypes.ReviewStatus.UNREVIEWED:
         return 'Unreviewed';
@@ -60,6 +107,22 @@ export class UtilService {
       default:
         console.warn('Non existing review status code: ', reviewCode);
         return 'N/A';
+    }
+  }
+
+  reviewStatusFromStringToCode(status: string) {
+    switch (status.toLowerCase()) {
+      case 'unreviewed':
+        return reportServerTypes.ReviewStatus.UNREVIEWED;
+      case 'confirmed bug':
+        return reportServerTypes.ReviewStatus.CONFIRMED;
+      case 'false positive':
+        return reportServerTypes.ReviewStatus.FALSE_POSITIVE;
+      case 'intentional':
+        return reportServerTypes.ReviewStatus.INTENTIONAL;
+      default:
+        console.warn('Non existing review status: ', status);
+        return -1;
     }
   }
 }

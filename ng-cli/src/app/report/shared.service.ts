@@ -1,0 +1,90 @@
+import { Location } from '@angular/common';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+let reportServerTypes = require('api/report_server_types');
+
+import { Filter } from './filter/Filter';
+
+/**
+ * Common service to pass data between filters.
+ */
+@Injectable()
+export class SharedService {
+  runIds: number[];
+  reportFilter: any = new reportServerTypes.ReportFilter();
+  cmpData: any = null;
+
+  private filters: Filter[] = [];
+
+  // Subscribes
+  private subLocation: any;
+
+  constructor(
+    private location: Location,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  init() {
+    let queryParam = this.route.snapshot.queryParams;
+    this.initByUrl(queryParam);
+
+    this.subLocation = this.location.subscribe(value => {
+      setTimeout(() => {
+        let queryParam = this.route.snapshot.queryParams;
+        this.initByUrl(queryParam);
+      }, 0);
+    });
+  }
+
+  initByUrl(queryParam: any) {
+    Promise.all(this.filters.map(filter => {
+      return filter.initByUrl(queryParam); // TODO: implement this.
+    })).then(res => {
+      this.notifyAll();
+    });
+  }
+
+  destory() {
+    //console.log(this.subLocation);
+    //this.subLocation.destory();
+  }
+
+  // Register filter modules on notifications.
+  register(filter: any) {
+    this.filters.push(filter)
+  }
+
+  // Notify all filter module on filter change.
+  notifyAll() {
+    this.filters.forEach(filter => {
+      filter.notify(); // TODO: create an interface, and all class has to be implement this.
+    });
+  }
+
+  clearAll() {
+    this.filters.forEach(filter => {
+      filter.clear();
+    });
+    this.updateUrl();
+  }
+
+  /**
+   * Updates URL query parameters by keeping non-filter
+   * parameters and updating filter parameters with
+   * the actual url values.
+   */
+  updateUrl() {
+    let urlValues = { ...this.route.snapshot.queryParams };
+    this.filters.forEach(filter => {
+      let values = filter.getUrlValues();
+      Object.assign(urlValues, values);
+    });
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: urlValues
+    });
+  }
+}

@@ -1,0 +1,36 @@
+<div class="report-filter {{id}}">
+  <div class="header">
+    <div class="title">{{title}}</div>
+    <div class="options" [popover]="myPopover" popoverPlacement="auto">
+      <i class="cc-icon clean"></i>
+      <i class="cc-icon option"></i>
+    </div>
+    <popover-content #myPopover
+      [closeOnClickOutside]="true"
+      placement="left-top">
+      <div class="filter-options">
+        <ul class="items">
+          <li *ngFor="let item of items"
+            class="item"
+            [ngClass]="{ 'selected' : item.selected }"
+            (click)="onTooltipItemClick(item)">
+            <i class="cc-icon {{ item.icon }}"></i>
+            <span>{{ item.label }} - {{ item.count }} - {{item.selected}}</span>
+          </li>
+        </ul>
+      </div>
+    </popover-content>
+  </div>
+  <div class="selected-items">
+    <ul>
+      <li *ngIf="!(selectedItems | keys).length" class="no-item">No items</li>
+      <li *ngFor="let key of (selectedItems | keys)"
+          class="item" (click)="onSelectedItemClick(key)">
+        <i class="cc-icon {{selectedItems[key]?.icon}}" *ngIf="selectedItems[key]?.icon"></i>
+        <span class="label" title="{{key}}">{{key}}</span>
+        <span class="count">{{selectedItems[key]?.count}}</span>
+        <span class="cc-icon remove"></span>
+      </li>
+    </ul>
+  </div>
+</div>

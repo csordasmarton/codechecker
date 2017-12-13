@@ -1,0 +1,85 @@
+#report-filters .report-filter {
+  position: relative;
+
+  .title {
+    font-weight: bold; 
+  }
+
+  .filter-options {
+    width: 300px;
+    .item {
+      &.selected {
+        color: #292b2c;
+        border: 1px solid #cee0e6;
+        position: relative;
+        margin: 2px;
+        background-color: #f1fbff;
+      }
+    }
+  }
+
+  .selected-items {
+    ul {
+      padding: 0px;
+    }
+
+    .no-item {
+      padding: 5px 0px 5px 10px;
+      list-style: none;
+    }
+
+    .item {
+      display: block;
+      padding: 5px 0px 5px 10px;
+      overflow: hidden;
+      color: #292b2c;
+      border: 1px solid #cee0e6;
+      position: relative;
+      margin: 2px;
+      background-color: #f1fbff;
+      cursor: pointer;
+
+      .label {
+        max-width: 80%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        direction: ltr;
+      }
+
+      .count {
+        min-width: 16px;
+        height: 16px;
+        color: #878d96;
+        padding: 5px 5px 5px 10px;
+        position: absolute;
+        right: 0;
+        top: 0px;
+        text-align: center;
+      }
+
+      .remove {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        padding: 5px 5px 5px 10px;
+        margin: 0px;
+        visibility: hidden;
+        cursor: pointer;
+        text-align: center;
+        color: #cb2431;
+      }
+
+      // TODO
+  /*     &:hover{
+        .remove {
+          visibility: visible;
+          background-color: #d6eaf1;
+        }
+        .count {
+          display: none;
+        }
+      } */
+    }
+  }
+}

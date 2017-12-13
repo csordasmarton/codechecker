@@ -1,4 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   ActivatedRouteSnapshot,
   RouterModule,
@@ -6,15 +7,50 @@ import {
 } from '@angular/router';
 import { BrowserModule }  from '@angular/platform-browser';
 
+import { PopoverModule } from 'ngx-popover';
+
 import { ReportComponent } from './report.component';
+import { SharedModule } from '../shared/shared.module';
+import { SharedService } from './shared.service';
+
+import {
+  ClearAllReportsComponent,
+  CheckerMessageFilterComponent,
+  CheckerNameFilterComponent,
+  DetectionStatusFilterComponent,
+  FileFilterComponent,
+  ReportCountComponent,
+  ReportFilterComponent,
+  ReviewStatusFilterComponent,
+  RunFilterComponent,
+  RunTagFilterComponent,
+  SeverityFilterComponent,
+  UniqueReportsFilterComponent
+} from './filter';
 
 @NgModule({
   imports: [
     BrowserModule,
-    RouterModule
+    FormsModule,
+    RouterModule,
+    SharedModule,
+    PopoverModule
   ],
   declarations: [
-    ReportComponent
-  ]
+    ClearAllReportsComponent,
+    CheckerMessageFilterComponent,
+    CheckerNameFilterComponent,
+    DetectionStatusFilterComponent,
+    ReportCountComponent,
+    FileFilterComponent,
+    ReportComponent,
+    ReportFilterComponent,
+    ReviewStatusFilterComponent,
+    RunFilterComponent,
+    RunTagFilterComponent,
+    SeverityFilterComponent,
+    UniqueReportsFilterComponent
+  ],
+  providers: [ SharedService ]
 })
 export class ReportModule {}

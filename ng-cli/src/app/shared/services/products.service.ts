@@ -23,4 +23,12 @@ export class ProductService {
   public getClient() {
     return this.client;
   }
+
+  public getProducts(
+    productEndpointFilter: string,
+    productNameFilter: string,
+    cb: (err: string, products : any[]) => void
+  ) {
+    this.client.getProducts(productEndpointFilter, productNameFilter, cb);
+  }
 }
