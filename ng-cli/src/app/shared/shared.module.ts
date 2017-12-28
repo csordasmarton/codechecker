@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import {
   AtouPipe,
   DurationPipe,
+  FillHeightDirective,
   KeysPipe,
   SeverityToStringPipe,
   StrToColorPipe,
@@ -13,6 +14,7 @@ import {
   exports: [
     AtouPipe,
     DurationPipe,
+    FillHeightDirective,
     KeysPipe,
     SeverityToStringPipe,
     StrToColorPipe,
@@ -21,6 +23,7 @@ import {
   declarations: [
     AtouPipe,
     DurationPipe,
+    FillHeightDirective,
     KeysPipe,
     SeverityToStringPipe,
     StrToColorPipe,

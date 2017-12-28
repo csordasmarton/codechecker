@@ -61,6 +61,13 @@ export class DbService implements OnDestroy {
       cmpData, cb);
   }
 
+  getReport(
+    reportId: number,
+    cb: (err: string, reportData: any) => void
+  ) {
+    this.client.getReport(reportId, cb);
+  }
+
   public getReportDetails(
     reportId: number,
     cb: (err: string, reportDetails: any[]) => void

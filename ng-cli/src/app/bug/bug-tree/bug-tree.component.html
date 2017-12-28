@@ -1,4 +1,4 @@
-<tree-root #bugTree id="bug-tree" [nodes]="nodes" [options]="options">
+<tree-root #bugTree id="bug-tree" fill-height [nodes]="nodes" [options]="options">
   <ng-template #treeNodeWrapperTemplate let-node let-index="index">
     <div class="node-wrapper" [style.padding-left]="node.getNodePadding()">
       <tree-node-expander [node]="node"></tree-node-expander>
