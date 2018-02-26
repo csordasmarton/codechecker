@@ -72,6 +72,7 @@ enum SortType {
   BUG_PATH_LENGTH,
 }
 
+typedef map<DetectionStatus, i64> DetectionStatusCounts
 
 struct SourceFileData {
   1: i64             fileId,
@@ -398,6 +399,11 @@ service codeCheckerDBAccess {
                                                2: ReportFilter reportFilter,
                                                3: CompareData  cmpData)
                                                throws (1: shared.RequestFailed requestError),
+
+  // If the run id list is empty the metrics will be counted
+  // for all of the runs
+  map<i64, DetectionStatusCounts> getRunDetectionStatusCounts(1: list<i64>    runIds)
+                                                              throws (1: shared.RequestFailed requestError),
 
   // If the run id list is empty the metrics will be counted
   // for all of the runs and in compare mode all of the runs

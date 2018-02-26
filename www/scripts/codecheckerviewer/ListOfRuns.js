@@ -55,7 +55,19 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
     return container;
   }
 
-  function prettifyStatus(statusCounts) {
+  function versionTagFormatter(param) {
+    var versionTag = util.createRunTag(param.runName, param.versionTag);
+    return versionTag ? versionTag.outerHTML : '';
+  }
+
+  function numOfReportsFormatter(num) {
+    return num === -1 ? '<div class="loading-overlay"></div>' : num;
+  }
+
+  function detectionStatusFormatter(statusCounts) {
+    if (statusCounts === -1)
+      return '<div class="loading-overlay"></div>';
+
     return Object.keys(statusCounts).map(function (statusCount) {
       var status = util.detectionStatusFromCodeToString(statusCount);
 
@@ -64,11 +76,6 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
         + '"></i><span class="num">(' + statusCounts[statusCount]
         + ')</span></div>';
     }).join(', ');
-  }
-
-  function versionTagFormatter(param) {
-    var versionTag = util.createRunTag(param.runName, param.versionTag);
-    return versionTag ? versionTag.outerHTML : '';
   }
 
   var ListOfRunsGrid = declare(DataGrid, {
@@ -80,11 +87,11 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
       this.structure = [
         { name : 'Diff', field : 'diff', styles : 'text-align: center;', formatter : diffBtnFormatter},
         { name : 'Name', field : 'name', styles : 'text-align: left;', width : '100%' },
-        { name : 'Number of reports', field : 'numberofbugs', styles : 'text-align: center;', width : '20%' },
+        { name : 'Number of reports', field : 'numberofbugs', styles : 'text-align: center;', width : '20%', formatter : numOfReportsFormatter },
         { name : 'Storage date', field : 'date', styles : 'text-align: center;', width : '30%' },
         { name : 'Analysis duration', field : 'duration', styles : 'text-align: center;' },
         { name : 'Check command', field : 'checkcmd', styles : 'text-align: center;' },
-        { name : 'Detection status', field : 'detectionstatus', styles : 'text-align: center;', width : '30%' },
+        { name : 'Detection status', field : 'detectionstatus', styles : 'text-align: center;', width : '30%', formatter : detectionStatusFormatter },
         { name : 'Version tag', field : 'versionTag', formatter : versionTagFormatter },
         { name : 'Delete', field : 'del', styles : 'text-align: center;', type : 'dojox.grid.cells.Bool', editable : true }
       ];
@@ -165,14 +172,7 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
         }
       });
 
-      CC_SERVICE.getRunData(runFilter, function (runDataList) {
-        that._updateRunCount(runDataList.length);
-        that._sortRunData(runDataList);
-
-        runDataList.forEach(function (item) {
-          that._addRunData(item);
-        });
-      });
+      this._populateRuns(runFilter);
     },
 
     /**
@@ -187,13 +187,13 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
         versionTag   : { runName : runData.name,
                          versionTag : runData.versionTag },
         date         : currItemDate[0] + ' ' + currItemDate[1],
-        numberofbugs : runData.resultCount,
+        numberofbugs : -1,
         duration     : util.prettifyDuration(runData.duration),
         runData      : runData,
         checkcmd     : '<span class="link">Show</span>',
         del          : false,
         diff         : { 'runData' : runData, 'listOfRunsGrid' : this },
-        detectionstatus : prettifyStatus(runData.detectionStatusCount)
+        detectionstatus : -1
       });
     },
 
@@ -216,6 +216,44 @@ function (declare, dom, ItemFileWriteStore, topic, Dialog, Button,
         });
 
         that.render();
+        that._populateNumOfBug(runFilter);
+        that._populateDetectionStatusCounts(runFilter);
+      });
+    },
+
+    _populateNumOfBug : function (runFilter) {
+      var reportFilter = new CC_OBJECTS.ReportFilter();
+      reportFilter.runName = runFilter ? runFilter.names : null;
+
+      var that = this;
+      CC_SERVICE.getRunReportCounts(null, reportFilter, null, 0,
+      function (res) {
+        that.store.fetch({
+          onComplete : function (runs) {
+            runs.forEach(function (run) {
+              var current = res.filter(function (r) {
+                return r.runId === run.runid[0];
+              });
+
+              if (current.length)
+                that.store.setValue(run, 'numberofbugs',
+                  current[0].reportCount);
+            });
+          }
+        });
+      });
+    },
+
+    _populateDetectionStatusCounts : function (runFilter) {
+      var that = this;
+      CC_SERVICE.getRunDetectionStatusCounts(runFilter, function (res) {
+        that.store.fetch({
+          onComplete : function (runs) {
+            runs.forEach(function (run) {
+                that.store.setValue(run, 'detectionstatus', res[run.runid[0]]);
+            });
+          }
+        });
       });
     },
 

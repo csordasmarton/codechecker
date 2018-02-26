@@ -110,6 +110,23 @@ def conv(text):
     return text.replace('*', '%')
 
 
+def process_run_filter(run_filter):
+    AND = []
+    if run_filter is not None:
+        if run_filter.ids is not None:
+            AND.append(Run.id.in_(run_filter.ids))
+        if run_filter.names is not None:
+            if run_filter.exactMatch:
+                AND.append(Run.name.in_(run_filter.names))
+            else:
+                OR = [Run.name.ilike('{0}'.format(conv(
+                    util.escape_like(name, '\\'))), escape='\\') for
+                    name in run_filter.names]
+                AND.append(or_(*OR))
+
+    return and_(*AND)
+
+
 def process_report_filter_v2(session, report_filter, count_filter=None):
     """
     Process the new report filter.
@@ -505,9 +522,7 @@ class ThriftRequestHandler(object):
         with DBSession(self.__Session) as session:
 
             # Count the reports subquery.
-            stmt = session.query(Report.run_id,
-                                 func.count(Report.bug_id.distinct())
-                                 .label('report_count')) \
+            stmt = session.query(Report.run_id) \
                 .group_by(Report.run_id) \
                 .subquery()
 
@@ -520,55 +535,51 @@ class ThriftRequestHandler(object):
                 .group_by(RunHistory.run_id) \
                 .subquery()
 
+            run_filter_expr = process_run_filter(run_filter)
+
             q = session.query(Run,
-                              RunHistory.version_tag,
-                              stmt.c.report_count)
-
-            if run_filter is not None:
-                if run_filter.ids is not None:
-                    q = q.filter(Run.id.in_(run_filter.ids))
-                if run_filter.names is not None:
-                    if run_filter.exactMatch:
-                        q = q.filter(Run.name.in_(run_filter.names))
-                    else:
-                        OR = [Run.name.ilike('{0}'.format(conv(
-                            util.escape_like(name, '\\'))), escape='\\') for
-                            name in run_filter.names]
-                        q = q.filter(or_(*OR))
-
-            q = q.outerjoin(stmt, Run.id == stmt.c.run_id) \
+                              RunHistory.version_tag) \
+                .filter(run_filter_expr) \
+                .outerjoin(stmt, Run.id == stmt.c.run_id) \
                 .outerjoin(tag_q, Run.id == tag_q.c.run_id) \
                 .outerjoin(RunHistory,
                            RunHistory.id == tag_q.c.run_history_id) \
                 .group_by(Run.id,
-                          RunHistory.version_tag,
-                          stmt.c.report_count) \
+                          RunHistory.version_tag) \
                 .order_by(Run.date)
-
-            status_q = session.query(Report.run_id,
-                                     Report.detection_status,
-                                     func.count(Report.bug_id.distinct())) \
-                .group_by(Report.run_id, Report.detection_status)
-
-            status_sum = defaultdict(defaultdict)
-            for run_id, status, count in status_q:
-                status_sum[run_id][detection_status_enum(status)] = count
 
             results = []
 
-            for instance, version_tag, reportCount in q:
-                if reportCount is None:
-                    reportCount = 0
-
+            for instance, version_tag in q:
                 results.append(RunData(instance.id,
                                        str(instance.date),
                                        instance.name,
                                        instance.duration,
-                                       reportCount,
+                                       -1,
                                        instance.command,
-                                       status_sum[instance.id],
+                                       {},
                                        version_tag))
             return results
+
+    @exc_to_thrift_reqfail
+    @timeit
+    def getRunDetectionStatusCounts(self, run_filter):
+        self.__require_access()
+        with DBSession(self.__Session) as session:
+            run_filter_expr = process_run_filter(run_filter)
+
+            q = session.query(Report.run_id,
+                              Report.detection_status,
+                              func.count(Report.bug_id.distinct())) \
+                .filter(run_filter_expr) \
+                .group_by(Report.run_id,
+                          Report.detection_status)
+
+            status_sum = defaultdict(defaultdict)
+            for run_id, status, count in q:
+                status_sum[run_id][detection_status_enum(status)] = count
+
+            return status_sum
 
     @exc_to_thrift_reqfail
     @timeit

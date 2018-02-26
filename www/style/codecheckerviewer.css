@@ -14,6 +14,12 @@ html, body {
   display: none !important;
 }
 
+.loading-overlay {
+  background: url(../scripts/plugins/dojo/dijit/themes/claro/images/loadingAnimation.gif) no-repeat;
+  background-position: center;
+  min-height: 10px;
+}
+
 #mainLayout {
   height: 100%;
 }
