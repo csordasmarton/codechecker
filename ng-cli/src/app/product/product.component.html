@@ -1,16 +1,21 @@
 <div class="container-fluid">
+  <a [routerLink]="['products', 'new']">New product</a>
   <div id="products">
-    <a class="item" *ngFor="let product of products"
-      [routerLink]="[product.endpoint]">
+    <div class="item" *ngFor="let product of products">
       <div class="avatar"></div>
       <div class="meta">
         <div class="name">
-          {{ product.displayedName_b64 | atou }}
+          <a [routerLink]="[product.endpoint]">{{ product.displayedName_b64 | atou }}</a>
         </div>
         <div class="description">
           {{ product.description_b64 | atou }}
         </div>
+        <div>
+          <a [routerLink]="['products', 'edit', product.endpoint]">Edit</a>
+          <!--<a [routerLink]="['']" [queryParams]="{endpoint: product.endpoint}" queryParamsHandling="merge">Edit</a>
+          <button (click)="edit()">Edit</button>-->
+        </div>
       </div>
-    </a>
+    </div>
   </div>
 </div>

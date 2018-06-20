@@ -11,7 +11,6 @@ import { RunModule } from './run/run.module';
 import {
   FooterComponent,
   HeaderComponent,
-  ProductService,
   UtilService
 } from './shared';
 
@@ -33,7 +32,7 @@ import { ROUTES } from './app.routes';
     FooterComponent,
     HeaderComponent
   ],
-  providers: [ ProductService, UtilService ],
+  providers: [ UtilService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

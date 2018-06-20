@@ -11,8 +11,6 @@ export class DbService implements OnDestroy {
   private client: any;
 
   constructor(private route: ActivatedRoute) {
-    var that = this;
-
     this.sub = this.route.parent.params.subscribe(params => {
       let transport = Thrift.TBufferedTransport;
       let protocol = Thrift.TJSONProtocol;
@@ -23,7 +21,7 @@ export class DbService implements OnDestroy {
         path: '/' + params['product'] +
               '/v' + API_VERSION + '/CodeCheckerService'
       });
-      that.client = Thrift.createXHRClient(ccDbService, connection);
+      this.client = Thrift.createXHRClient(ccDbService, connection);
     });
   }
 
