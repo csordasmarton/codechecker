@@ -30,3 +30,5 @@ yarn-error.log
 # rollup-test output
 /modules/rollup-test/dist/
 
+# Skip generated thrift files
+/api/
