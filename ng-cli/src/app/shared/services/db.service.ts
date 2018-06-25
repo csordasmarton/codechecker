@@ -1,32 +1,23 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 let Thrift = require('thrift');
 let ccDbService = require('api/codeCheckerDBAccess');
 let reportServerTypes = require('api/report_server_types');
 
+import { BaseService } from './base.service';
+import { TokenService } from '.';
+
 @Injectable()
-export class DbService implements OnDestroy {
+export class DbService extends BaseService {
   private sub: any;
-  private client: any;
 
-  constructor(private route: ActivatedRoute) {
-    this.sub = this.route.parent.params.subscribe(params => {
-      let transport = Thrift.TBufferedTransport;
-      let protocol = Thrift.TJSONProtocol;
-      let connection = Thrift.createXHRConnection(
-      SERVER_HOST, SERVER_PORT, {
-        transport: transport,
-        protocol: protocol,
-        path: '/' + params['product'] +
-              '/v' + API_VERSION + '/CodeCheckerService'
-      });
-      this.client = Thrift.createXHRClient(ccDbService, connection);
-    });
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
+  constructor(
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected tokenService: TokenService
+  ) {
+    super(route, router, tokenService, ccDbService, "CodeCheckerService");
   }
 
   public getPackageVerison(cb: (err: string, version: string) => void) {
@@ -43,7 +34,8 @@ export class DbService implements OnDestroy {
     encoding: any,
     cb: (err: string, sourceFile : any) => void
   ) {
-    this.client.getSourceFileData(fileId, fileContent, encoding, cb);
+    this.client.getSourceFileData(fileId, fileContent, encoding,
+      this.cbErrWrapper(cb));
   }
 
   public getRunResults(
@@ -56,21 +48,21 @@ export class DbService implements OnDestroy {
     cb: (err: string, reports: any[]) => void
   ) {
     this.client.getRunResults(runIds, limit, offset, sortType, reportFilter,
-      cmpData, cb);
+      cmpData, this.cbErrWrapper(cb));
   }
 
   getReport(
     reportId: number,
     cb: (err: string, reportData: any) => void
   ) {
-    this.client.getReport(reportId, cb);
+    this.client.getReport(reportId, this.cbErrWrapper(cb));
   }
 
   public getReportDetails(
     reportId: number,
     cb: (err: string, reportDetails: any[]) => void
   ) {
-    this.client.getReportDetails(reportId, cb);
+    this.client.getReportDetails(reportId, this.cbErrWrapper(cb));
   }
 
   public getSeverityCounts(
@@ -79,7 +71,8 @@ export class DbService implements OnDestroy {
     cmpData: any,
     cb: (err: string, severityMap: any) => void
   ){
-    this.client.getSeverityCounts(runIds, reportFilter, cmpData, cb);
+    this.client.getSeverityCounts(runIds, reportFilter, cmpData,
+      this.cbErrWrapper(cb));
   }
 
   public getDetectionStatusCounts(
@@ -88,7 +81,8 @@ export class DbService implements OnDestroy {
     cmpData: any,
     cb: (err: string, detectionStatusMap: any) => void
   ){
-    this.client.getDetectionStatusCounts(runIds, reportFilter, cmpData, cb);
+    this.client.getDetectionStatusCounts(runIds, reportFilter, cmpData,
+      this.cbErrWrapper(cb));
   }
 
   public getReviewStatusCounts(
@@ -97,7 +91,8 @@ export class DbService implements OnDestroy {
     cmpData: any,
     cb: (err: string, reviewStatusMap: any) => void
   ){
-    this.client.getReviewStatusCounts(runIds, reportFilter, cmpData, cb);
+    this.client.getReviewStatusCounts(runIds, reportFilter, cmpData,
+      this.cbErrWrapper(cb));
   }
 
   public getCheckerMsgCounts(
@@ -109,7 +104,7 @@ export class DbService implements OnDestroy {
     cb: (err: string, fileMap: any) => void
   ){
     this.client.getCheckerMsgCounts(runIds, reportFilter, cmpData, limit,
-      offset, cb);
+      offset, this.cbErrWrapper(cb));
   }
 
   public getCheckerCounts(
@@ -121,7 +116,7 @@ export class DbService implements OnDestroy {
     cb: (err: string, fileMap: any) => void
   ){
     this.client.getCheckerCounts(runIds, reportFilter, cmpData, limit,
-      offset, cb);
+      offset, this.cbErrWrapper(cb));
   }
 
   public getFileCounts(
@@ -132,7 +127,8 @@ export class DbService implements OnDestroy {
     offset: number,
     cb: (err: string, fileMap: any) => void
   ){
-    this.client.getFileCounts(runIds, reportFilter, cmpData, limit, offset, cb);
+    this.client.getFileCounts(runIds, reportFilter, cmpData, limit, offset,
+      this.cbErrWrapper(cb));
   }
 
   public getRunResultCount(
@@ -141,7 +137,8 @@ export class DbService implements OnDestroy {
     cmpData: any,
     cb: (err: string, reportCount: any) => void
   ){
-    this.client.getRunResultCount(runIds, reportFilter, cmpData, cb);
+    this.client.getRunResultCount(runIds, reportFilter, cmpData,
+      this.cbErrWrapper(cb));
   }
 
   public getRunReportCounts(
@@ -151,7 +148,8 @@ export class DbService implements OnDestroy {
     offset: number,
     cb: (err: string, reportCount: any) => void
   ){
-    this.client.getRunReportCounts(runIds, reportFilter, limit, offset, cb);
+    this.client.getRunReportCounts(runIds, reportFilter, limit, offset,
+      this.cbErrWrapper(cb));
   }
 
   public getRunHistoryTagCounts(
@@ -160,6 +158,7 @@ export class DbService implements OnDestroy {
     cmpData: any,
     cb: (err: string, reportCount: any) => void
   ){
-    this.client.getRunHistoryTagCounts(runIds, reportFilter, cmpData, cb);
+    this.client.getRunHistoryTagCounts(runIds, reportFilter, cmpData,
+      this.cbErrWrapper(cb));
   }
 }

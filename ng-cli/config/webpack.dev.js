@@ -6,9 +6,17 @@ var helpers = require('./helpers');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
 
+const CC_SERVER_PORT = 8001; // THIS SHOULD BE CONFIGURABLE.
+const CC_SERVER_HOST = 'http://localhost';
+
+const SERVICE_ENDPOINTS = ['Authentication', 'Products', 'CodeCheckerService'];
+
+// Host should be set explicitly to `localhost` because thrift will use
+// the value of `window.location.host` which will contain port number by default
+// on local host which cause invalid url format.
 const METADATA = webpackMerge(commonConfig.METADATA, {
   'SERVER_HOST': JSON.stringify('localhost'),
-  'SERVER_PORT': 8001,
+  'SERVER_PORT': null,
 });
 
 module.exports = webpackMerge(commonConfig, {
@@ -33,6 +41,12 @@ module.exports = webpackMerge(commonConfig, {
 
   devServer: {
     historyApiFallback: true,
-    stats: 'minimal'
+    stats: 'minimal',
+    proxy: [{
+      context: SERVICE_ENDPOINTS.map(endpoint => `**/${endpoint}`),
+      target: CC_SERVER_HOST + ':' + CC_SERVER_PORT,
+      changeOrigin: true,
+      secure: false
+    }]
   }
 });

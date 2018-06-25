@@ -4,29 +4,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 let Thrift = require('thrift');
 let ccProductService = require('api/codeCheckerProductService');
 
+import { BaseService } from './base.service';
+import { TokenService } from '.';
+
 @Injectable()
-export class ProductService {
-  private client : any;
+export class ProductService extends BaseService {
 
-  constructor(private route: ActivatedRoute, private router: Router) {
-    let endpoint =
-      router.routerState.snapshot.root.children[0].params['product'];
-
-    console.log(endpoint);
-    let transport = Thrift.TBufferedTransport;
-    let protocol = Thrift.TJSONProtocol;
-    let connection = Thrift.createXHRConnection(
-    SERVER_HOST, SERVER_PORT, {
-      transport: transport,
-      protocol: protocol,
-      path: (endpoint ? '/' + endpoint : '' ) + '/v' + API_VERSION + '/Products'
-    });
-
-    this.client = Thrift.createXHRClient(ccProductService, connection);
-  }
-
-  public getClient() {
-    return this.client;
+  constructor(
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected tokenService: TokenService
+  ) {
+    super(route, router, tokenService, ccProductService, "Products");
   }
 
   public getProducts(
@@ -34,19 +23,20 @@ export class ProductService {
     productNameFilter: string,
     cb: (err: string, products : any[]) => void
   ) {
-    this.client.getProducts(productEndpointFilter, productNameFilter, cb);
+    this.client.getProducts(productEndpointFilter, productNameFilter,
+      this.cbErrWrapper(cb));
   }
 
   getProductConfiguration(
     productId: number,
     cb: (err: string, config : any) => void
   ) {
-    this.client.getProductConfiguration(productId, cb);
+    this.client.getProductConfiguration(productId, this.cbErrWrapper(cb));
   }
 
   public getCurrentProduct(
     cb: (err: string, product : any) => void
   ) {
-    this.client.getCurrentProduct(cb);
+    this.client.getCurrentProduct(this.cbErrWrapper(cb));
   }
 }

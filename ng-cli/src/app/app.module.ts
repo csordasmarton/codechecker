@@ -1,7 +1,11 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule }    from '@angular/forms';
 
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { AuthGuard } from './_guards';
 import { AppComponent } from './app.component';
 import { BugModule } from './bug/bug.module';
 import { ProductModule } from './product/product.module';
@@ -11,13 +15,17 @@ import { RunModule } from './run/run.module';
 import {
   FooterComponent,
   HeaderComponent,
-  UtilService
+  UtilService,
+  AuthenticationService,
+  TokenService
 } from './shared';
 
 import { ROUTES } from './app.routes';
+import { LoginComponent } from './login';
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     BugModule,
     ProductModule,
@@ -30,9 +38,15 @@ import { ROUTES } from './app.routes';
   declarations: [
     AppComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoginComponent
   ],
-  providers: [ UtilService ],
+  providers: [
+    AuthenticationService,
+    AuthGuard,
+    TokenService,
+    UtilService
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

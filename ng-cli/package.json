@@ -5,10 +5,10 @@
   "description": "CodeChecker viewer.",
   "scripts": {
     "thrift-api": "rimraf ./api && mkdir ./api && find ../api/v6 -iname '*.thrift' -exec thrift -r -o ./api -I ../api --gen js:node '{}' \\;",
-    "build": "npm run thrift-api && rimraf dist && webpack --config config/webpack.prod.js --bail",
+    "build": "npm run thrift-api && rimraf dist && webpack --config config/webpack.dev.js --bail",
     "serve": "lite-server -c=bs-config.json",
     "prestart": "npm run build",
-    "start": "webpack-dev-server --inline --progress",
+    "start": "webpack-dev-server --inline --progress --watch-poll",
     "build:watch": "tsc -p src/ -w",
     "build:upgrade": "tsc",
     "serve:upgrade": "http-server",
