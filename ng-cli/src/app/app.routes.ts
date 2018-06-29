@@ -10,6 +10,7 @@ import {
   ProductEditComponent } from './product';
 import { ReportComponent } from './report';
 import { RunListComponent } from './run';
+import { CheckerStatisticsComponent } from './statistics';
 
 export const ROUTES: Routes = [
   { 
@@ -37,6 +38,7 @@ export const ROUTES: Routes = [
     children: [
       { path: '', redirectTo: 'runs', pathMatch: 'full' },
       { path: 'runs', component: RunListComponent },
+      { path: 'statistics', component: CheckerStatisticsComponent },
       { path: 'reports', component: ReportComponent },
       { path: 'bug', component: BugComponent }
     ],

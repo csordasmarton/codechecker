@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import {
   AtouPipe,
@@ -11,6 +12,9 @@ import {
 } from '../shared';
 
 @NgModule({
+  imports: [
+    RouterModule
+  ],
   exports: [
     AtouPipe,
     DurationPipe,

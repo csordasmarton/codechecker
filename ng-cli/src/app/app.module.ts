@@ -11,6 +11,7 @@ import { BugModule } from './bug/bug.module';
 import { ProductModule } from './product/product.module';
 import { ReportModule } from './report/report.module';
 import { RunModule } from './run/run.module';
+import { CheckerStatisticsModule } from './statistics/checker-statistics.module';
 
 import {
   FooterComponent,
@@ -28,6 +29,7 @@ import { LoginComponent } from './login';
     ReactiveFormsModule,
     BrowserModule,
     BugModule,
+    CheckerStatisticsModule,
     ProductModule,
     ReportModule,
     RunModule,
