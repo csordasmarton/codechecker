@@ -11,10 +11,9 @@
     "start": "webpack-dev-server --inline --progress --watch-poll",
     "build:watch": "tsc -p src/ -w",
     "build:upgrade": "tsc",
-    "serve:upgrade": "http-server",
-    "bundle-report": "webpack-bundle-analyzer dist/stats.json"
+    "serve:upgrade": "http-server"
   },
-  "license": "Open Source License",
+  "license": "University of Illinois/NCSA Open Source License",
   "dependencies": {
     "@angular/animations": "~4.3.1",
     "@angular/common": "~4.3.1",
@@ -75,7 +74,6 @@
     "typescript": "~2.3.2",
     "url-loader": "^0.6.2",
     "webpack": "2.2.1",
-    "webpack-bundle-analyzer": "^2.9.1",
     "webpack-dev-server": "2.4.1",
     "webpack-merge": "^3.0.0"
   },
