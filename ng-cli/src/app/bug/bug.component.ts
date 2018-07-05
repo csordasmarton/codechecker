@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as CodeMirror from 'codemirror';

@@ -30,20 +30,21 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        loaders: [
+        use: [
           {
             loader: 'awesome-typescript-loader',
             options: { configFileName: helpers.root('src', 'tsconfig.json') }
-          } , 'angular2-template-loader'
+          },
+          'angular2-template-loader'
         ]
       },
       {
         test: /\.html$/,
-        loader: 'html-loader'
+        use: 'html-loader'
       },
       {
         test: /\.(png|jpe?g|gif)$/,
-        loader: 'file-loader?name=assets/[name].[ext]'
+        use: 'file-loader?name=assets/[name].[ext]'
       },
       /*
       * Bootstrap 4 loader
@@ -57,25 +58,28 @@ module.exports = {
       */
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "url-loader?limit=10000&mimetype=application/font-woff?name=assets/fonts/[name].[ext]"
+        use: "url-loader?limit=10000&mimetype=application/font-woff?name=assets/fonts/[name].[ext]"
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "file-loader?name=assets/fonts/[name].[ext]"
+        use: "file-loader?name=assets/fonts/[name].[ext]"
       },
       {
         test: /\.scss$/,
-        loaders: ['to-string-loader', 'style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+        use: ['to-string-loader', 'style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       },
       {
         test: /\.css$/,
         exclude: helpers.root('src', 'app'),
-        loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: 'css-loader?sourceMap' })
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader?sourceMap'
+        })
       },
       {
         test: /\.css$/,
         include: helpers.root('src', 'app'),
-        loader: 'raw-loader'
+        use: 'raw-loader'
       }
     ]
   },
@@ -87,8 +91,7 @@ module.exports = {
 
     // Workaround for angular/angular#11580
     new webpack.ContextReplacementPlugin(
-      // The (\\|\/) piece accounts for path separators in *nix and Windows
-      /angular(\\|\/)core(\\|\/)@angular/,
+      /angular(\\|\/)core/,
       helpers.root('./src'), // location of your src
       {} // a map of your routes
     ),

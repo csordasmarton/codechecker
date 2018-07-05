@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import {
   AfterContentInit,
   AfterViewInit,
