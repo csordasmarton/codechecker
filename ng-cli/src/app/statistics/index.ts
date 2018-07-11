@@ -1,1 +1,1 @@
-export * from './checker-statistics.component';
+export * from './statistics.component';

@@ -1,5 +1,22 @@
-<h1>Checker Statistics</h1>
-TODO
-
-<h1>Severity statistics</h1>
-TODO
+<table>
+  <tr>
+    <th>Checker name</th>
+    <th>Severity</th>
+    <th>All reports</th>
+    <th>Resolved</th>
+    <th>Unreviewed</th>
+    <th>Confirmed bug</th>
+    <th>False positive</th>
+    <th>Intentional</th>
+  </tr>
+  <tr *ngFor="let key of (items | keys)">
+    <td>{{items[key].checker}}</td>
+    <td>{{items[key].severity | severityToString}}</td>
+    <td>{{items[key].reports}}</td>
+    <td>{{items[key].resolved}}</td>
+    <td>{{items[key].unreviewed}}</td>
+    <td>{{items[key].confirmed}}</td>
+    <td>{{items[key].falsePositive}}</td>
+    <td>{{items[key].intentional}}</td>
+  </tr>
+</table>

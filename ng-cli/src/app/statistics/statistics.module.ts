@@ -7,8 +7,10 @@ import {
 import { BrowserModule }  from '@angular/platform-browser';
 
 import { CheckerStatisticsComponent } from './checker-statistics.component';
+import { SeverityStatisticsComponent } from './severity-statistics.component';
 import { SharedModule } from '../shared/shared.module';
 import { DbService } from '../shared';
+import { StatisticsComponent } from '.';
 
 @NgModule({
   imports: [
@@ -17,8 +19,10 @@ import { DbService } from '../shared';
     SharedModule
   ],
   declarations: [
-    CheckerStatisticsComponent
+    CheckerStatisticsComponent,
+    SeverityStatisticsComponent,
+    StatisticsComponent
   ],
   providers: [ DbService ]
 })
-export class CheckerStatisticsModule {}
+export class StatisticsModule {}

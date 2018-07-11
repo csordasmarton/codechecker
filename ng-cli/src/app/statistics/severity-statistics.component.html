@@ -1,0 +1,10 @@
+<table>
+  <tr>
+    <th>Severity</th>
+    <th>All reports</th>
+  </tr>
+  <tr *ngFor="let key of (items | keys)">
+    <td>{{key | severityToString}}</td>
+    <td>{{items[key]}}</td>
+  </tr>
+</table>
