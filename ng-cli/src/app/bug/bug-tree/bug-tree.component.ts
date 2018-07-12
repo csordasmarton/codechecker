@@ -13,6 +13,7 @@ import {
 } from 'angular-tree-component';
 
 import { DbService, UtilService } from '../../shared';
+import { ActivatedRoute } from '@angular/router';
 
 let reportServerTypes = require('api/report_server_types');
 
@@ -39,46 +40,62 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
 
   constructor(
     private dbService: DbService,
+    private route: ActivatedRoute,
     private util: UtilService) {
   }
 
   public ngAfterContentInit() {
-    var that = this;
-
-    let treeModel = this.treeComponent.treeModel;
-
     [
-      { id: 'critical',    name: 'Critical', icon: 'severity-critical' },
-      { id: 'high',        name: 'High', icon: 'severity-high' },
-      { id: 'medium',      name: 'Medium', icon: 'severity-medium' },
-      { id: 'low',         name: 'Low', icon: 'severity-low' },
-      { id: 'style',       name: 'Style', icon: 'severity-style' },
+      { id: 'critical',    name: 'Critical',    icon: 'severity-critical' },
+      { id: 'high',        name: 'High',        icon: 'severity-high' },
+      { id: 'medium',      name: 'Medium',      icon: 'severity-medium' },
+      { id: 'low',         name: 'Low',         icon: 'severity-low' },
+      { id: 'style',       name: 'Style',       icon: 'severity-style' },
       { id: 'unspecified', name: 'Unspecified', icon: 'severity-unspecified' },
-      { id: 'resolved'   , name: 'Resolved', icon: 'detection-status-resolved'}
-    ].forEach(function (node: any) {
+      { id: 'resolved'   , name: 'Resolved',    icon: 'detection-status-resolved'}
+    ].forEach((node: any) => {
       node.hasChildren = true;
       node.children = [];
 
-      that.nodes.push(node);
+      this.nodes.push(node);
     });
 
-    this.dbService.getRunResults(null, null, null, null, null, null,
-    (err : string, reports: any[]) => {
-      reports.forEach(function (report) {
-        that.addReport(report);
+    this.loadTreeItems();
+  }
+
+  loadTreeItems() {
+    let treeModel = this.treeComponent.treeModel;
+
+    let runNames = this.route.snapshot.queryParams['run'];
+
+    this.dbService.getRunIds(runNames).then((runIds) => {
+      let limit = reportServerTypes.MAX_QUERY_SIZE;
+      let offset = 0;
+
+      this.dbService.getRunResults(runIds, limit, offset, null, null, null,
+      (err : string, reports: any[]) => {
+
+        // Adding reports to the tree.
+        reports.forEach((report) => {
+          this.addReport(report);
+        });
+
+        // Hide severity items of the tree which doesn't contain any item.
+        treeModel.roots.forEach((node: TreeNode) => {
+          if (!node.getFirstChild())
+            node.setIsHidden(true);
+        });
+
+        // Update the tree.
+        treeModel.update();
       });
-      treeModel.roots.forEach(function (node: TreeNode) {
-        if (!node.getFirstChild())
-          node.setIsHidden(true);
-      });
-      treeModel.update();
     });
   }
 
-  public ngAfterViewInit() {
+  ngAfterViewInit() {
   }
 
-  public getChildren(node: any) {
+  getChildren(node: any) {
     if (node.data.getChildren)
       return node.data.getChildren();
   }

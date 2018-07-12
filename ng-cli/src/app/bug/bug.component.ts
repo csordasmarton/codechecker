@@ -1,8 +1,9 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as CodeMirror from 'codemirror';
-
 let jsPlumb = require('jsplumb').jsPlumb;
+
+let reportServerTypes = require('api/report_server_types');
 
 import { DbService } from '../shared';
 
@@ -49,8 +50,10 @@ export class BugComponent implements OnInit, OnDestroy {
       viewportMargin: 500
     });
 
-    let reportId = this.route.snapshot.queryParams['reportId']; // TODO: this should come from the bug tree.
-    this.loadReport(reportId);
+    // Load the report by query parameters.
+    let reportId = this.route.snapshot.queryParams['reportId'];
+    let reportHash = this.route.snapshot.queryParams['reportHash'];
+    this.loadReport(reportId, reportHash);
   }
 
   @HostListener('window:resize', ['$event'])
@@ -85,22 +88,44 @@ export class BugComponent implements OnInit, OnDestroy {
 
   resize() {
     var fullHeight = this.getFullHeight();
-    console.log(fullHeight);
     this.editor.setSize('100%', fullHeight + 'px');
     this.editor.refresh();
   }
 
-  loadReport(reportId: number) {
-    this.dbService.getReport(reportId, (err: any, reportData: any) => {
-      this.report = reportData;
+  loadReport(reportId: number, reportHash: string) {
+    if (reportId !== null && reportId !== undefined) {
+      this.dbService.getReport(reportId, (err: any, reportData: any) => {
+        this.setReport(reportData);
+      });
+    } else {
+      let runIds: number[] = null; // We should get this from the URL parameters.
 
-      this.dbService.getSourceFileData(reportData.fileId, true, null,
-        (err: any, sourceFile : any) => {
-          this.setContent(sourceFile);
-          this.drawBugPath();
-          this.jumpTo(reportData.line.toNumber(), 0);
-        });
-    });
+      // Get all reports by report hash
+      let reportFilter = new reportServerTypes.ReportFilter();
+      reportFilter.reportHash = [reportHash];
+      reportFilter.isUnique = false;
+
+      // We set a sort option to select a report which has the shortest
+      // bug path length.
+      var sortMode = new reportServerTypes.SortMode();
+      sortMode.type = reportServerTypes.SortType.BUG_PATH_LENGTH;
+      sortMode.ord = reportServerTypes.Order.ASC;
+      this.dbService.getRunResults(runIds,
+        reportServerTypes.MAX_QUERY_SIZE, 0, [sortMode], reportFilter, null,
+        ((err, reports) => {
+          this.setReport(reports[0]);
+        }));
+    }
+  }
+
+  setReport(report: any) {
+    this.report = report;
+    this.dbService.getSourceFileData(report.fileId, true, null,
+      (err: any, sourceFile : any) => {
+        this.setContent(sourceFile);
+        this.drawBugPath();
+        this.jumpTo(report.line.toNumber(), 0);
+      });
   }
 
   ngOnDestroy() {

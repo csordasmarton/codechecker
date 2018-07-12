@@ -28,6 +28,26 @@ export class DbService extends BaseService {
     this.client.getRunData(runFilter, cb);
   }
 
+  getRunIds(runNames : [string]) : Promise<number[]> {
+    return new Promise((resolve, reject) => {
+      if (!runNames) {
+        return resolve(null);
+      }
+
+      if (!(runNames instanceof Array))
+        runNames = [runNames];
+
+      let runFilter = new reportServerTypes.RunFilter();
+      runFilter.names = runNames;
+
+      this.getRunData(runFilter, (err, runs) => {
+        resolve(runs.map((run) => {
+          return run.runId;
+        }));
+      });
+    });
+  }
+
   public getSourceFileData(
     fileId: number,
     fileContent: boolean,

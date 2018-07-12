@@ -1,10 +1,29 @@
 <div class="container-fluid" fill-height>
   <report-filter></report-filter>
-  <ul id="reports">
-    <li *ngFor="let report of reports">
-      <a [routerLink]="['../bug']" [queryParams]="{hash: report.bugHash}" queryParamsHandling="merge" class="item">
-        <div>{{report.bugHash}}, {{report.severity}}</div>
-      </a>
-    </li>
-  </ul>
+  <table id="reports">
+    <tr>
+      <th>Report hash</th>
+      <th>File</th>
+      <th>Message</th>
+      <th>Checker name</th>
+      <th>Severity</th>
+      <th>Bug path length</th>
+      <th>Review status</th>
+      <th>Detection status</th>
+    </tr>
+    <tr *ngFor="let report of reports">
+      <td>
+        <a [routerLink]="['../bug']"
+           [queryParams]="{reportHash: report.bugHash}"
+           queryParamsHandling="merge" class="item">{{report.bugHash}}</a>
+      </td>
+      <td>{{report.file}}</td>
+      <td>{{report.checkerMsg}}</td>
+      <td>{{report.checkerId}}</td>
+      <td>{{report.severity | severityToString}}</td>
+      <td [style.background-color]="report.bugPathLength | colorizeBugPathLength">{{report.bugPathLength}}</td>
+      <td>TODO: {{report.reviewStatus}}</td>
+      <td>TODO: {{report.detectionStatus}}</td>
+    </tr>
+  </table>
 </div>
