@@ -14,6 +14,8 @@ export class LoginComponent {
 
   loginForm: FormGroup;
   returnUrl: string;
+  submitted: boolean;
+  invalidCredentials: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -25,8 +27,8 @@ export class LoginComponent {
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-        username: ['', Validators.required],
-        password: ['', Validators.required]
+      username: ['', Validators.required],
+      password: ['', Validators.required]
     });
 
     // get return url from route parameters or default to '/'
@@ -36,13 +38,9 @@ export class LoginComponent {
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
-  getTokens() {
-    this.authenticationService.getTokens((err, tokens) => {
-      console.log(err, tokens);
-    });
-  }
-
   onSubmit() {
+    this.submitted = true;
+
     // Stop if form is invalid.
     if (this.loginForm.invalid)
       return;
@@ -52,6 +50,13 @@ export class LoginComponent {
     (err, token) => {
       if (!err && token) {
         this.tokenService.saveToken(token, 365);
+        this.invalidCredentials = false;
+        // TODO: set url parameters.
+        this.router.navigate(['/'], { queryParams: {
+        }});
+      } else {
+        console.log(err);
+        this.invalidCredentials = true;
       }
     });
   }
