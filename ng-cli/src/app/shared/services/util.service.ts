@@ -125,4 +125,12 @@ export class UtilService {
         return -1;
     }
   }
+
+  generateRedGreenGradientColor(value: number, max: number, opacity: number) {
+    let red = (255 * value) / max;
+    let green = (255 * (max - value)) / max;
+    let blue = 0;
+    return 'rgba(' + Number(red) + ',' + Number(green) + ',' + blue
+      + ',' + opacity + ')';
+  }
 }

@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import {
   AtouPipe,
+  ColorizeBugPathLengthPipe,
   DurationPipe,
   FillHeightDirective,
   KeysPipe,
@@ -17,6 +18,7 @@ import {
   ],
   exports: [
     AtouPipe,
+    ColorizeBugPathLengthPipe,
     DurationPipe,
     FillHeightDirective,
     KeysPipe,
@@ -26,6 +28,7 @@ import {
   ],
   declarations: [
     AtouPipe,
+    ColorizeBugPathLengthPipe,
     DurationPipe,
     FillHeightDirective,
     KeysPipe,
