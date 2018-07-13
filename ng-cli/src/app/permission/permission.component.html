@@ -1,0 +1,26 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>User name</th>
+      <th *ngFor="let permission of permissions">
+        {{permission | permissionToString}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of (userRights | keys)">
+      <td>{{user}}</td>
+      <td *ngFor="let permission of permissions">
+        <input type="checkbox" [checked]="userRights[user].indexOf(permission) !== -1" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<form [formGroup]="addNewUserForm">
+  <div class="form-group">
+    <input type="text" formControlName="username" class="form-control" placeholder="User name"
+    />
+  </div>
+  <button class="btn btn-primary" (click)="addUser()">Add</button>
+</form>

@@ -32,4 +32,23 @@ export class AuthenticationService extends BaseService {
   public getAuthParameters(cb: (err: string, ret: any) => void) {
     this.client.getAuthParameters(this.cbErrWrapper(cb));
   }
+
+  getPermissionsForUser(
+    scope: string,
+    extraParams: string,
+    permissionFilter: any,
+    cb: (err: string, permissions : [any]) => void
+  ) {
+    this.client.getPermissionsForUser(scope, extraParams, permissionFilter,
+      this.cbErrWrapper(cb));
+  }
+
+  getAuthorisedNames(
+    permission: any,
+    extraParams: string,
+    cb: (err: string, authorizations : any) => void
+  ) {
+    this.client.getAuthorisedNames(permission, extraParams,
+      this.cbErrWrapper(cb));
+  }
 }

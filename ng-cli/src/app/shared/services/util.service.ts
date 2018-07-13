@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 let reportServerTypes = require('api/report_server_types');
+let sharedTypes = require('api/shared_types');
 
 @Injectable()
 export class UtilService {
@@ -123,6 +124,28 @@ export class UtilService {
       default:
         console.warn('Non existing review status: ', status);
         return -1;
+    }
+  }
+
+  /**
+   * Converts a Thrift API permission id to human readable string.
+   *
+   * @param {String|Number} permissionId Thrift API Permission id.
+   * @return Human readable permission string.
+   */
+  permissionFromCodeToString(permissionId: any) {
+    switch (parseInt(permissionId)) {
+      case sharedTypes.Permission.SUPERUSER:
+        return 'Superuser';
+      case sharedTypes.Permission.PRODUCT_ADMIN:
+        return 'Product admin';
+      case sharedTypes.Permission.PRODUCT_ACCESS:
+        return 'Product access';
+      case sharedTypes.Permission.PRODUCT_STORE:
+        return "Product store";
+      default:
+        console.warn('Non existing permission code: ', permissionId);
+        return 'N/A';
     }
   }
 

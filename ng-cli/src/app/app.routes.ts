@@ -11,6 +11,7 @@ import {
 import { ReportComponent } from './report';
 import { RunListComponent } from './run';
 import { StatisticsComponent } from './statistics';
+import { PermissionComponent } from './permission';
 
 export const ROUTES: Routes = [
   { 
@@ -30,6 +31,11 @@ export const ROUTES: Routes = [
   {
     path: 'products/edit/:endpoint',
     component: ProductEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'products/permission/:endpoint',
+    component: PermissionComponent,
     canActivate: [AuthGuard]
   },
   { 

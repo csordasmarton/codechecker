@@ -7,6 +7,7 @@ import {
   DurationPipe,
   FillHeightDirective,
   KeysPipe,
+  PermissionToStringPipe,
   SeverityToStringPipe,
   StrToColorPipe,
   SubMenuComponent
@@ -22,6 +23,7 @@ import {
     DurationPipe,
     FillHeightDirective,
     KeysPipe,
+    PermissionToStringPipe,
     SeverityToStringPipe,
     StrToColorPipe,
     SubMenuComponent
@@ -32,6 +34,7 @@ import {
     DurationPipe,
     FillHeightDirective,
     KeysPipe,
+    PermissionToStringPipe,
     SeverityToStringPipe,
     StrToColorPipe,
     SubMenuComponent

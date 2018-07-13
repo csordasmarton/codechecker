@@ -1,7 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule }    from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -23,6 +23,7 @@ import {
 
 import { ROUTES } from './app.routes';
 import { LoginComponent } from './login';
+import { PermissionModule } from './permission/permission.module';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { LoginComponent } from './login';
     BrowserModule,
     BugModule,
     StatisticsModule,
+    PermissionModule,
     ProductModule,
     ReportModule,
     RunModule,
