@@ -192,13 +192,14 @@ here. For example the CTU related arguments are documented at `analyze`
 subcommand.
 
 ~~~~~~~~~~~~~~~~~~~~~
-usage: CodeChecker check [-h] [-o OUTPUT_DIR] [-q] [-f]
-                         (-b COMMAND | -l LOGFILE) [-j JOBS] [-i SKIPFILE]
-                         [--analyzers ANALYZER [ANALYZER ...]]
-                         [--add-compiler-defaults]
+usage: CodeChecker check [-h] [-o OUTPUT_DIR] [-t {plist}] [-q] [-f]
+                         (-b COMMAND | -l LOGFILE) [-j JOBS] [-c]
+                         [-i SKIPFILE] [--analyzers ANALYZER [ANALYZER ...]]
+                         [--add-compiler-defaults] [--capture-analysis-output]
                          [--saargs CLANGSA_ARGS_CFG_FILE]
                          [--tidyargs TIDY_ARGS_CFG_FILE] [--timeout TIMEOUT]
-                         [-e checker/group/profile] [-d checker/group/profile]
+                         [-e checker/group/profile/warning]
+                         [-d checker/group/profile/warning] [--enable-all]
                          [--print-steps]
                          [--verbose {info,debug,debug_analyzer}]
 
@@ -264,8 +265,8 @@ statistical analysis arguments:
 
 checker configuration:
 
-  -e checker/group/profile, --enable checker/group/profile
-  -d checker/group/profile, --disable checker/group/profile
+  -e checker/group/profile/warning, --enable checker/group/profile/warning
+  -d checker/group/profile/warning, --disable checker/group/profile/warning
 
 output arguments:
   --print-steps
@@ -403,14 +404,16 @@ below:
 
 ~~~~~~~~~~~~~~~~~~~~~
 usage: CodeChecker analyze [-h] [-j JOBS] [-i SKIPFILE] -o OUTPUT_PATH
+                           [--compiler-includes-file COMPILER_INCLUDES_FILE]
+                           [--compiler-target-file COMPILER_TARGET_FILE]
                            [-t {plist}] [-q] [-c] [-n NAME]
                            [--analyzers ANALYZER [ANALYZER ...]]
                            [--add-compiler-defaults]
                            [--capture-analysis-output]
                            [--saargs CLANGSA_ARGS_CFG_FILE]
                            [--tidyargs TIDY_ARGS_CFG_FILE] [--timeout TIMEOUT]
-                           [-e checker/group/profile]
-                           [-d checker/group/profile] [--enable-all]
+                           [-e checker/group/profile/warning]
+                           [-d checker/group/profile/warning] [--enable-all]
                            [--verbose {info,debug,debug_analyzer}]
                            logfile [logfile ...]
 
@@ -621,10 +624,10 @@ available checkers in the binaries installed on your system.
 ~~~~~~~~~~~~~~~~~~~~~
 checker configuration:
 
-  -e checker/group/profile, --enable checker/group/profile
+  -e checker/group/profile/warning, --enable checker/group/profile/warning
                         Set a checker (or checker group or checker profile)
                         to BE USED in the analysis.
-  -d checker/group/profile, --disable checker/group/profile
+  -d checker/group/profile/warning, --disable checker/group/profile/warning
                         Set a checker (or checker group or checker profile)
                         to BE PROHIBITED from use in the analysis.
   --enable-all          Force the running analyzers to use almost every

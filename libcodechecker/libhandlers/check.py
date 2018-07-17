@@ -374,7 +374,7 @@ see: https://clang.llvm.org/docs/DiagnosticsReference.html.""")
 
     checkers_opts.add_argument('-e', '--enable',
                                dest="enable",
-                               metavar='checker/group/profile',
+                               metavar='checker/group/profile/warning',
                                default=argparse.SUPPRESS,
                                action=OrderedCheckersAction,
                                help="Set a checker (or checker group) "
@@ -382,7 +382,7 @@ see: https://clang.llvm.org/docs/DiagnosticsReference.html.""")
 
     checkers_opts.add_argument('-d', '--disable',
                                dest="disable",
-                               metavar='checker/group/profile',
+                               metavar='checker/group/profile/warning',
                                default=argparse.SUPPRESS,
                                action=OrderedCheckersAction,
                                help="Set a checker (or checker group) "
