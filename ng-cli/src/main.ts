@@ -16,6 +16,8 @@ import 'angular-tree-component/dist/angular-tree-component.css';
 import './assets/fonts/codechecker.scss';
 import './styles.scss';
 
+import 'font-awesome/css/font-awesome.css';
+
 if (process.env.ENV === 'production') {
   enableProdMode();
 }

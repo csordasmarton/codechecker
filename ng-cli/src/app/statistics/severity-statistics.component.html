@@ -1,10 +1,27 @@
-<table>
-  <tr>
-    <th>Severity</th>
-    <th>All reports</th>
-  </tr>
-  <tr *ngFor="let key of (items | keys)">
-    <td>{{key | severityToString}}</td>
-    <td>{{items[key]}}</td>
-  </tr>
-</table>
+<data-table id="severity-statistics"
+  [title]="'Severity statistics'"
+  [items]="items"
+  [itemCount]="itemCount"
+  [indexColumn]="false"
+  [pagination]="false"
+  [header]="true"
+  (reload)="reloadItems($event)">
+
+  <data-table-column
+    [header]="'Severity'"
+    [property]="'severity'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
+    </ng-template>
+  </data-table-column>
+
+  <data-table-column
+    [header]="'All reports'"
+    [property]="'reports'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      {{item.reports}}
+    </ng-template>
+  </data-table-column>
+</data-table>

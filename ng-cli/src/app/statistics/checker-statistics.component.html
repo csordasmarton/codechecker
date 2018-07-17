@@ -1,22 +1,78 @@
-<table>
-  <tr>
-    <th>Checker name</th>
-    <th>Severity</th>
-    <th>All reports</th>
-    <th>Resolved</th>
-    <th>Unreviewed</th>
-    <th>Confirmed bug</th>
-    <th>False positive</th>
-    <th>Intentional</th>
-  </tr>
-  <tr *ngFor="let key of (items | keys)">
-    <td>{{items[key].checker}}</td>
-    <td>{{items[key].severity | severityToString}}</td>
-    <td>{{items[key].reports}}</td>
-    <td>{{items[key].resolved}}</td>
-    <td>{{items[key].unreviewed}}</td>
-    <td>{{items[key].confirmed}}</td>
-    <td>{{items[key].falsePositive}}</td>
-    <td>{{items[key].intentional}}</td>
-  </tr>
-</table>
+<data-table id="checker-statistics"
+  [title]="'Checker statistics'"
+  [items]="items"
+  [itemCount]="itemCount"
+  [indexColumn]="false"
+  [pagination]="false"
+  [header]="true"
+  (reload)="reloadItems($event)">
+
+  <data-table-column
+    [header]="'Checker name'"
+    [property]="'checker'"
+    [sortable]="true">
+  </data-table-column>
+
+  <data-table-column
+    [header]="'Severity'"
+    [property]="'severity'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
+    </ng-template>
+  </data-table-column>
+
+  <data-table-column
+    [header]="'All reports'"
+    [property]="'reports'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      {{item.reports}}
+    </ng-template>
+  </data-table-column>
+
+  <data-table-column
+    [header]="'Resolved'"
+    [property]="'resolved'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      {{item.resolved ? item.resolved : ''}}
+    </ng-template>
+  </data-table-column>
+
+  <data-table-column
+    [header]="'Unreviewed'"
+    [property]="'unreviewed'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      {{item.unreviewed ? item.unreviewed : ''}}
+    </ng-template>
+  </data-table-column>
+
+  <data-table-column
+    [header]="'Confirmed bug'"
+    [property]="'confirmed'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      {{item.confirmed ? item.confirmed : ''}}
+    </ng-template>
+  </data-table-column>
+
+  <data-table-column
+    [header]="'False positive'"
+    [property]="'falsePositive'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      {{item.falsePositive ? item.falsePositive : ''}}
+    </ng-template>
+  </data-table-column>
+
+  <data-table-column
+    [header]="'Intentional'"
+    [property]="'intentional'"
+    [sortable]="true">
+    <ng-template #dataTableCell let-item="item">
+      {{item.intentional ? item.intentional : ''}}
+    </ng-template>
+  </data-table-column>
+</data-table>

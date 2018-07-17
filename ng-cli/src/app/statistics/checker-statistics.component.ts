@@ -11,13 +11,29 @@ import { DbService } from '../shared';
     styleUrls: ['./checker-statistics.component.scss']
 })
 export class CheckerStatisticsComponent implements OnInit {
-  protected items: any = {};
+  protected items: any = [];
+  protected itemCount: number = 0;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private dbService: DbService
   ) {}
+
+  public reloadItems(param: any) {
+    this.items.sort((a: any, b: any) => {
+      let sortByA = a[param['sortBy']];
+      let sortByB = b[param['sortBy']];
+
+      if (sortByA > sortByB) {
+        return param.sortAsc ? -1 : 1;
+      } else if (sortByA < sortByB) {
+        return param.sortAsc ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+  }
 
   public ngOnInit() {
     let runIds: number[] = null; // TODO: this should be controlled by a filter bar.
@@ -51,8 +67,12 @@ export class CheckerStatisticsComponent implements OnInit {
 
     Promise.all(queries).then(res => {
       var checkers = res[0];
-      Object.keys(checkers).map((key) => {
-        this.items[key] = {
+      let checkerNames = Object.keys(checkers);
+
+      this.itemCount = checkerNames.length;
+
+      checkerNames.map((key) => {
+        this.items.push({
           id            : key,
           checker       : key,
           severity      : checkers[key].severity,
@@ -62,7 +82,7 @@ export class CheckerStatisticsComponent implements OnInit {
           falsePositive : res[3][key] !== undefined ? res[3][key].count : 0,
           intentional   : res[4][key] !== undefined ? res[4][key].count : 0,
           resolved      : res[5][key] !== undefined ? res[5][key].count : 0
-        };
+        });
       });
     });
   }
