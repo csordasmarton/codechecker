@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 
+let reportServerTypes = require('api/report_server_types');
+
 import { DbService } from '../shared';
 import { Filter } from './filter/Filter';
 import { SharedService } from './shared.service'
@@ -12,8 +14,9 @@ import { SharedService } from './shared.service'
 })
 export class ReportComponent implements OnInit, OnDestroy, Filter {
   private reports: any[] = [];
-  private reportCount: number = 0;
-  private limit: number = 5;
+  private pageLimits: number[] = [25, 50, 100, 250];
+  private limit: number = null;
+  private offset: number = 0;
 
   constructor(
     private dbService: DbService,
@@ -34,15 +37,43 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
   public getUrlValues() { return {}; }
   public clear() {}
 
+  private getSortMode(column: string, sortAsc: boolean) {
+    var sortMode = new reportServerTypes.SortMode();
+
+    sortMode.type
+      = column === 'file'
+      ? reportServerTypes.SortType.FILENAME
+      : column === 'checkerId'
+      ? reportServerTypes.SortType.CHECKER_NAME
+      : column === 'detectionStatus'
+      ? reportServerTypes.SortType.DETECTION_STATUS
+      : column === 'reviewStatus'
+      ? reportServerTypes.SortType.REVIEW_STATUS
+      : column === 'bugPathLength'
+      ? reportServerTypes.SortType.BUG_PATH_LENGTH
+      : reportServerTypes.SortType.SEVERITY;
+
+    sortMode.ord = sortAsc
+      ? reportServerTypes.Order.DESC
+      : reportServerTypes.Order.ASC;
+
+    return sortMode;
+  }
+
   public reloadItems(param: any) {
-    // TODO: Server side reload.
+    this.limit = param.limit ? param.limit : this.pageLimits[0];
+    this.offset = param.offset ? param.offset : 0;
+    let sortMode = this.getSortMode(param.column, param.sortAsc);
+
+    this.dbService.getRunResults(this.shared.runIds, this.limit, this.offset,
+    [ sortMode ], this.shared.reportFilter, null,
+    (err : string, reports: any[]) => {
+      this.reports = reports;
+      console.log(reports);
+    });
   }
 
   public notify() {
-    this.dbService.getRunResults(this.shared.runIds, this.limit, 0, null,
-    this.shared.reportFilter, null, (err : string, reports: any[]) => {
-      this.reports = reports;
-      this.reportCount = reports.length;
-    });
+    this.reloadItems({});
   }
 }

@@ -14,6 +14,7 @@ export class SharedService {
   runIds: number[];
   reportFilter: any = new reportServerTypes.ReportFilter();
   cmpData: any = null;
+  reportCount: number = 0;
 
   private filters: Filter[] = [];
 

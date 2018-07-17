@@ -4,10 +4,12 @@ import { RouterModule } from '@angular/router';
 import {
   AtouPipe,
   ColorizeBugPathLengthPipe,
+  DetectionStatusToStringPipe,
   DurationPipe,
   FillHeightDirective,
   KeysPipe,
   PermissionToStringPipe,
+  ReviewStatusToStringPipe,
   SeverityToStringPipe,
   StrToColorPipe,
   SubMenuComponent
@@ -20,10 +22,12 @@ import {
   exports: [
     AtouPipe,
     ColorizeBugPathLengthPipe,
+    DetectionStatusToStringPipe,
     DurationPipe,
     FillHeightDirective,
     KeysPipe,
     PermissionToStringPipe,
+    ReviewStatusToStringPipe,
     SeverityToStringPipe,
     StrToColorPipe,
     SubMenuComponent
@@ -31,10 +35,12 @@ import {
   declarations: [
     AtouPipe,
     ColorizeBugPathLengthPipe,
+    DetectionStatusToStringPipe,
     DurationPipe,
     FillHeightDirective,
     KeysPipe,
     PermissionToStringPipe,
+    ReviewStatusToStringPipe,
     SeverityToStringPipe,
     StrToColorPipe,
     SubMenuComponent

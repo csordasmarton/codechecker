@@ -11,8 +11,6 @@ import { SharedService } from '..';
 })
 export class ReportCountComponent implements Filter
 {
-  reportCount: number|string = 'N/A';
-
   constructor(protected dbService: DbService, private shared: SharedService) {
     this.shared.register(this);
   }
@@ -27,7 +25,7 @@ export class ReportCountComponent implements Filter
     this.dbService.getRunResultCount(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
     (err: any, reportCount: any) => {
-      this.reportCount = reportCount.toNumber();
+      this.shared.reportCount = reportCount.toNumber();
     });
   }
 
