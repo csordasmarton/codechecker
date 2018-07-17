@@ -1,29 +1,91 @@
 <div class="container-fluid" fill-height>
   <report-filter></report-filter>
-  <table id="reports">
-    <tr>
-      <th>Report hash</th>
-      <th>File</th>
-      <th>Message</th>
-      <th>Checker name</th>
-      <th>Severity</th>
-      <th>Bug path length</th>
-      <th>Review status</th>
-      <th>Detection status</th>
-    </tr>
-    <tr *ngFor="let report of reports">
-      <td>
+
+  <data-table
+    id="reports"
+    [items]="reports"
+    [itemCount]="reportCount"
+    [indexColumn]="false"
+    [pagination]="true"
+    [substituteRows]="false"
+    [header]="false"
+    (reload)="reloadItems($event)">
+
+    <data-table-column
+      [header]="'Report hash'"
+      [property]="'bugHash'"
+      [sortable]="true"
+      [resizable]="true">
+      <ng-template #dataTableCell let-item="item">
         <a [routerLink]="['../bug']"
-           [queryParams]="{reportHash: report.bugHash}"
-           queryParamsHandling="merge" class="item">{{report.bugHash}}</a>
-      </td>
-      <td>{{report.file}}</td>
-      <td>{{report.checkerMsg}}</td>
-      <td>{{report.checkerId}}</td>
-      <td>{{report.severity | severityToString}}</td>
-      <td [style.background-color]="report.bugPathLength | colorizeBugPathLength">{{report.bugPathLength}}</td>
-      <td>TODO: {{report.reviewStatus}}</td>
-      <td>TODO: {{report.detectionStatus}}</td>
-    </tr>
-  </table>
+          [queryParams]="{reportHash: item.bugHash}"
+          queryParamsHandling="merge" class="item">{{item.bugHash}}</a>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'File'"
+      [property]="'checkedFile'"
+      [sortable]="true"
+      [resizable]="true">
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Message'"
+      [property]="'checkerMsg'"
+      [sortable]="true"
+      [resizable]="true">
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Checker name'"
+      [property]="'checkerId'"
+      [sortable]="true"
+      [resizable]="true">
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Severity'"
+      [property]="'severity'"
+      [sortable]="true"
+      [resizable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Bug path length'"
+      [property]="'bugPathLength'"
+      [sortable]="true"
+      [resizable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <span
+          [style.background-color]="item.bugPathLength | colorizeBugPathLength">
+          {{item.bugPathLength}}
+        </span>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Review status'"
+      [property]="'status'"
+      [sortable]="true"
+      [resizable]="true">
+      <ng-template #dataTableCell let-item="item">
+        TODO: review status
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Detection status'"
+      [property]="'detectionStatus'"
+      [sortable]="true"
+      [resizable]="true">
+      <ng-template #dataTableCell let-item="item">
+        TODO: detection status
+      </ng-template>
+    </data-table-column>
+  </data-table>
+
 </div>

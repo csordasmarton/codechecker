@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 import { BrowserModule }  from '@angular/platform-browser';
 
+import { DataTableModule } from 'angular5-data-table';
 import { PopoverModule } from 'ngx-popover';
 
 import { ReportComponent } from './report.component';
@@ -31,6 +32,7 @@ import {
 @NgModule({
   imports: [
     BrowserModule,
+    DataTableModule,
     FormsModule,
     RouterModule,
     SharedModule,

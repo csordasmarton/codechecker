@@ -7,10 +7,12 @@ import { SharedService } from './shared.service'
 @Component({
     selector: 'report',
     templateUrl: './report.component.html',
+    styleUrls: ['./report.component.scss'],
     providers: [ DbService ]
 })
 export class ReportComponent implements OnInit, OnDestroy, Filter {
-  private reports: any[];
+  private reports: any[] = [];
+  private reportCount: number = 0;
   private limit: number = 5;
 
   constructor(
@@ -32,10 +34,15 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
   public getUrlValues() { return {}; }
   public clear() {}
 
+  public reloadItems(param: any) {
+    // TODO: Server side reload.
+  }
+
   public notify() {
     this.dbService.getRunResults(this.shared.runIds, this.limit, 0, null,
     this.shared.reportFilter, null, (err : string, reports: any[]) => {
       this.reports = reports;
+      this.reportCount = reports.length;
     });
   }
 }
