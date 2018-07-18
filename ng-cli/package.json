@@ -11,6 +11,7 @@
     "start": "webpack-dev-server --inline --progress --watch-poll",
     "build:watch": "tsc -p src/ -w",
     "build:upgrade": "tsc",
+    "lint": "tslint -p ./tslint.json",
     "serve:upgrade": "http-server"
   },
   "license": "University of Illinois/NCSA Open Source License",
@@ -48,6 +49,7 @@
     "awesome-typescript-loader": "^3.4.1",
     "bootstrap-loader": "^2.2.0",
     "bootstrap-sass": "^3.3.7",
+    "codelyzer": "^4.4.2",
     "css-loader": "^0.26.4",
     "exports-loader": "~0.7.0",
     "extract-text-webpack-plugin": "^2.1.0",
@@ -63,6 +65,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.13.2",
     "to-string-loader": "^1.1.5",
+    "tslint": "~5.11.0",
     "typescript": "~2.5.3",
     "url-loader": "^0.6.2",
     "webpack": "2.2.1",

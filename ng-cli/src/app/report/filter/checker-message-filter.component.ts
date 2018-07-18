@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PopoverModule } from "ngx-popover";
+import { PopoverModule } from 'ngx-popover';
 
 import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
@@ -11,8 +11,7 @@ import { SharedService } from '..';
   templateUrl: './select-filter-base.html',
   styleUrls: ['./select-filter-base.scss']
 })
-export class CheckerMessageFilterComponent extends SelectFilterBase
-{
+export class CheckerMessageFilterComponent extends SelectFilterBase {
   constructor(
     protected dbService: DbService,
     protected route: ActivatedRoute,
@@ -28,19 +27,20 @@ export class CheckerMessageFilterComponent extends SelectFilterBase
   }
 
   public notify() {
-    let limit = 10;
-    let offset = 0;
+    const limit = 10;
+    const offset = 0;
     this.dbService.getCheckerMsgCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData, limit, offset,
-    (err : any, checkerMsgCounts: any[]) => {
+    (err: any, checkerMsgCounts: any[]) => {
       this.items = Object.keys(checkerMsgCounts).map((key) => {
-        let item = {
+        const item = {
           label: key,
           count: checkerMsgCounts[key].toNumber()
         };
 
-        if (this.selectedItems[key] === null)
+        if (this.selectedItems[key] === null) {
           this.selectedItems[key] = item;
+        }
 
         return item;
       });

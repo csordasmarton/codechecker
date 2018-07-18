@@ -1,20 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PopoverModule } from "ngx-popover";
+import { PopoverModule } from 'ngx-popover';
 
 import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
-let reportServerTypes = require('api/report_server_types');
+const reportServerTypes = require('api/report_server_types');
 
 @Component({
   selector: 'review-status-filter',
   templateUrl: './select-filter-base.html',
   styleUrls: ['./select-filter-base.scss']
 })
-export class ReviewStatusFilterComponent extends SelectFilterBase
-{
+export class ReviewStatusFilterComponent extends SelectFilterBase {
   constructor(
     protected dbService: DbService,
     protected route: ActivatedRoute,
@@ -30,15 +29,15 @@ export class ReviewStatusFilterComponent extends SelectFilterBase
   }
 
   public notify() {
-    let limit = 10; // TODO
-    let offset = 0; // TODO
+    const limit = 10; // TODO
+    const offset = 0; // TODO
     this.dbService.getReviewStatusCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
-    (err : any, reviewStatusCounts: any[]) => {
+    (err: any, reviewStatusCounts: any[]) => {
       this.items = Object.keys(reportServerTypes.ReviewStatus).map((key) => {
-        let value: number = reportServerTypes.ReviewStatus[key];
-        let label = this.stateEncoder(value);
-        let item = {
+        const value: number = reportServerTypes.ReviewStatus[key];
+        const label = this.stateEncoder(value);
+        const item = {
           label: label,
           count: reviewStatusCounts[value] !== undefined
                ? reviewStatusCounts[value].toNumber()
@@ -46,8 +45,9 @@ export class ReviewStatusFilterComponent extends SelectFilterBase
           icon: 'review-status-' + label.toLowerCase().split(' ').join('-')
         };
 
-        if (this.selectedItems[label] === null)
+        if (this.selectedItems[label] === null) {
           this.selectedItems[label] = item;
+        }
 
         return item;
       });

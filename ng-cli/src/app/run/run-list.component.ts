@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { DbService } from '../shared';
@@ -10,7 +10,7 @@ import { DbService } from '../shared';
   styleUrls: ['./run-list.component.scss']
 })
 export class RunListComponent implements OnInit {
-  runs : any[];
+  runs: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -18,9 +18,9 @@ export class RunListComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    var that = this;
+    const that = this;
 
-    this.dbService.getRunData(null, (err : any, runs: any[]) => {
+    this.dbService.getRunData(null, (err: any, runs: any[]) => {
       that.runs = runs;
     });
   }

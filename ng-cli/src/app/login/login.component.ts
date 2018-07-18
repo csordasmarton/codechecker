@@ -10,12 +10,12 @@ import { AuthenticationService, TokenService } from '../shared';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   returnUrl: string;
   submitted: boolean;
-  invalidCredentials: boolean = false;
+  invalidCredentials = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,11 +42,12 @@ export class LoginComponent {
     this.submitted = true;
 
     // Stop if form is invalid.
-    if (this.loginForm.invalid)
+    if (this.loginForm.invalid) {
       return;
+    }
 
-    let authString = this.f.username.value + ':' + this.f.password.value;
-    this.authenticationService.performLogin("Username:Password", authString,
+    const authString = this.f.username.value + ':' + this.f.password.value;
+    this.authenticationService.performLogin('Username:Password', authString,
     (err, token) => {
       if (!err && token) {
         this.tokenService.saveToken(token, 365);

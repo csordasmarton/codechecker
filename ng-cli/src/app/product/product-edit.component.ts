@@ -2,15 +2,15 @@ import { Component, OnInit} from '@angular/core';
 
 import { ProductService } from '../shared';
 import { ActivatedRoute } from '@angular/router';
-let productTypes = require('api/products_types');
+const productTypes = require('api/products_types');
 
 @Component({
   selector: 'product-edit',
   templateUrl: './product-new.component.html'
 })
 export class ProductEditComponent {
-  productName: string = "";
-  productDescription: string = "";
+  productName = '';
+  productDescription = '';
   dbConnectionUsername: string = null;
   dbConnectionPassword: string = null;
 
@@ -19,7 +19,7 @@ export class ProductEditComponent {
     private productService: ProductService,
     private route: ActivatedRoute,
   ) {
-    let endpoint = this.route.snapshot.params['endpoint'];
+    const endpoint = this.route.snapshot.params['endpoint'];
     this.product.connection = new productTypes.DatabaseConnection();
 
     this.productService.getProducts(endpoint, null, (err: any, products: any) => {
@@ -27,11 +27,11 @@ export class ProductEditComponent {
         return product.endpoint === endpoint;
       });
 
-      if (currentProduct.length){
+      if (currentProduct.length) {
         currentProduct = currentProduct[0];
 
         this.productService.getProductConfiguration(currentProduct.id,
-        (err: any, config: any) => {
+        (configErr: any, config: any) => {
           console.log(config);
           this.product = config;
         });

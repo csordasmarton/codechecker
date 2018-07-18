@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-let reportServerTypes = require('api/report_server_types');
+const reportServerTypes = require('api/report_server_types');
 
 import { DbService } from '../shared';
 
@@ -12,7 +12,7 @@ import { DbService } from '../shared';
 })
 export class CheckerStatisticsComponent implements OnInit {
   protected items: any = [];
-  protected itemCount: number = 0;
+  protected itemCount = 0;
 
   constructor(
     private router: Router,
@@ -22,8 +22,8 @@ export class CheckerStatisticsComponent implements OnInit {
 
   public reloadItems(param: any) {
     this.items.sort((a: any, b: any) => {
-      let sortByA = a[param['sortBy']];
-      let sortByB = b[param['sortBy']];
+      const sortByA = a[param['sortBy']];
+      const sortByB = b[param['sortBy']];
 
       if (sortByA > sortByB) {
         return param.sortAsc ? -1 : 1;
@@ -36,12 +36,12 @@ export class CheckerStatisticsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    let runIds: number[] = null; // TODO: this should be controlled by a filter bar.
-    let limit: number = null;
-    let offset: number = null;
-    let isUnique: boolean = true; // TODO: this should be controlled by a filter bar.
+    const runIds: number[] = null; // TODO: this should be controlled by a filter bar.
+    const limit: number = null;
+    const offset: number = null;
+    const isUnique = true; // TODO: this should be controlled by a filter bar.
 
-    let queries = [
+    const queries = [
       { field: null, values: null },
       {field: 'reviewStatus', values: [reportServerTypes.ReviewStatus.UNREVIEWED]},
       {field: 'reviewStatus', values: [reportServerTypes.ReviewStatus.CONFIRMED]},
@@ -49,16 +49,17 @@ export class CheckerStatisticsComponent implements OnInit {
       {field: 'reviewStatus', values: [reportServerTypes.ReviewStatus.INTENTIONAL]},
       {field: 'detectionStatus', values: [reportServerTypes.DetectionStatus.RESOLVED]}
     ].map((q) => {
-      let reportFilter = new reportServerTypes.ReportFilter();
+      const reportFilter = new reportServerTypes.ReportFilter();
       reportFilter.isUnique = isUnique;
 
-      if (q.field)
+      if (q.field) {
         reportFilter[q.field] = q.values;
+      }
 
       return new Promise((resolve, reject) => {
         this.dbService.getCheckerCounts(runIds, reportFilter, null, limit,
         offset, (err, res) => {
-          let obj = {};
+          const obj = {};
           res.forEach((item: any) => { obj[item.name] = item; });
           resolve(obj);
         });
@@ -66,8 +67,8 @@ export class CheckerStatisticsComponent implements OnInit {
     });
 
     Promise.all(queries).then(res => {
-      var checkers = res[0];
-      let checkerNames = Object.keys(checkers);
+      const checkers = res[0];
+      const checkerNames = Object.keys(checkers);
 
       this.itemCount = checkerNames.length;
 

@@ -1,9 +1,9 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as CodeMirror from 'codemirror';
-let jsPlumb = require('jsplumb').jsPlumb;
 
-let reportServerTypes = require('api/report_server_types');
+const jsPlumb = require('jsplumb').jsPlumb;
+const reportServerTypes = require('api/report_server_types');
 
 import { DbService } from '../shared';
 
@@ -23,8 +23,8 @@ export class BugComponent implements OnInit, OnDestroy {
   sub: any;
   queryParams: any;
 
-  bug : any;
-  editor : CodeMirror.Editor;
+  bug: any;
+  editor: CodeMirror.Editor;
   private jsPlumbInstance: any;
 
   constructor(
@@ -40,7 +40,7 @@ export class BugComponent implements OnInit, OnDestroy {
       this.queryParams = params;
     });
 
-    let elemet = this.rd.selectRootElement('#editor');
+    const elemet = this.rd.selectRootElement('#editor');
     this.editor = CodeMirror(elemet, {
       lineNumbers: true,
       readOnly: true,
@@ -51,8 +51,8 @@ export class BugComponent implements OnInit, OnDestroy {
     });
 
     // Load the report by query parameters.
-    let reportId = this.route.snapshot.queryParams['reportId'];
-    let reportHash = this.route.snapshot.queryParams['reportHash'];
+    const reportId = this.route.snapshot.queryParams['reportId'];
+    const reportHash = this.route.snapshot.queryParams['reportHash'];
     this.loadReport(reportId, reportHash);
   }
 
@@ -62,7 +62,7 @@ export class BugComponent implements OnInit, OnDestroy {
   }
 
   resetJsPlumb() {
-    var jsPlumbParentElement =
+    const jsPlumbParentElement =
       this.elRef.nativeElement.querySelector('.CodeMirror-lines');
     jsPlumbParentElement.style.position = 'relative';
 
@@ -71,7 +71,7 @@ export class BugComponent implements OnInit, OnDestroy {
       Anchor : ['Perimeter', { shape : 'Ellipse' }],
       Endpoint : ['Dot', { radius: 1 }],
       PaintStyle : { stroke : '#a94442', strokeWidth: 2 },
-      Connector:[ "Bezier", { curviness: 10 }],
+      Connector: ['Bezier', { curviness: 10 }],
       ConnectionsDetachable : false,
       ConnectionOverlays : [
         ['Arrow', { location: 1, length: 10, width: 8 }]
@@ -87,7 +87,7 @@ export class BugComponent implements OnInit, OnDestroy {
   }
 
   resize() {
-    var fullHeight = this.getFullHeight();
+    const fullHeight = this.getFullHeight();
     this.editor.setSize('100%', fullHeight + 'px');
     this.editor.refresh();
   }
@@ -98,16 +98,16 @@ export class BugComponent implements OnInit, OnDestroy {
         this.setReport(reportData);
       });
     } else {
-      let runIds: number[] = null; // We should get this from the URL parameters.
+      const runIds: number[] = null; // We should get this from the URL parameters.
 
       // Get all reports by report hash
-      let reportFilter = new reportServerTypes.ReportFilter();
+      const reportFilter = new reportServerTypes.ReportFilter();
       reportFilter.reportHash = [reportHash];
       reportFilter.isUnique = false;
 
       // We set a sort option to select a report which has the shortest
       // bug path length.
-      var sortMode = new reportServerTypes.SortMode();
+      const sortMode = new reportServerTypes.SortMode();
       sortMode.type = reportServerTypes.SortType.BUG_PATH_LENGTH;
       sortMode.ord = reportServerTypes.Order.ASC;
       this.dbService.getRunResults(runIds,
@@ -121,7 +121,7 @@ export class BugComponent implements OnInit, OnDestroy {
   setReport(report: any) {
     this.report = report;
     this.dbService.getSourceFileData(report.fileId, true, null,
-      (err: any, sourceFile : any) => {
+      (err: any, sourceFile: any) => {
         this.setContent(sourceFile);
         this.drawBugPath();
         this.jumpTo(report.line.toNumber(), 0);
@@ -138,13 +138,13 @@ export class BugComponent implements OnInit, OnDestroy {
 
     this.dbService.getReportDetails(this.report.reportId,
     (err: string, reportDetail: any) => {
-      let points = reportDetail.executionPath.filter((path: any) => {
+      const points = reportDetail.executionPath.filter((path: any) => {
         return path.fileId.toNumber() === this.sourceFile.fileId.toNumber();
       });
-      let bubbles = reportDetail.pathEvents.filter((path: any) => {
+      const bubbles = reportDetail.pathEvents.filter((path: any) => {
         return path.fileId.toNumber() === this.sourceFile.fileId.toNumber();
       });
-  
+
       this.addBubbles(bubbles);
       this.addLines(points);
     });
@@ -164,12 +164,12 @@ export class BugComponent implements OnInit, OnDestroy {
   addBubbles(bubbles: any[]) {
     this.editor.operation(() => {
       bubbles.forEach((bubble, i) => {
-        var enumType = i === bubbles.length - 1
+        const enumType = i === bubbles.length - 1
             ? 'error' : bubble.msg.indexOf(' (fixit)') > -1
             ? 'fixit' : 'info';
-        var left = this.editor.defaultCharWidth() * bubble.startCol + 'px';
+        const left = this.editor.defaultCharWidth() * bubble.startCol + 'px';
 
-        let widget = document.createElement('span');
+        const widget = document.createElement('span');
         widget.innerHTML = (bubbles.length !== 1
           ? this.createBugStepEnumeration(i + 1, enumType).outerHTML
           : '') + bubble.msg;
@@ -185,25 +185,25 @@ export class BugComponent implements OnInit, OnDestroy {
   addLines(points: any[]) {
     this.editor.operation(() => {
       points.forEach((p, i) => {
-        let from = { line : p.startLine - 1, ch : p.startCol - 1 };
-        let to =   { line : p.endLine - 1,   ch : p.endCol       };
-        let title = [from.line, from.ch, to.line, to.ch].join('_');
+        const from = { line : p.startLine - 1, ch : p.startCol - 1 };
+        const to =   { line : p.endLine - 1,   ch : p.endCol       };
+        const title = [from.line, from.ch, to.line, to.ch].join('_');
 
         this.lineMarks.push(this.editor.getDoc().markText(from, to,
           { className : 'checker-step', title: title }));
       });
     });
 
-    var range = this.editor.getViewport();
+    const range = this.editor.getViewport();
     this.drawLines(range.from, range.to);
   }
 
   jumpTo(line: number, column: number) {
     setTimeout(() => {
-      var selPosPixel
+      const selPosPixel
         = this.editor.charCoords({ line : line, ch : column }, 'local');
-      //let editorDom = this.rd.selectRootElement('#editor');
-      var editorSize = {
+      // let editorDom = this.rd.selectRootElement('#editor');
+      const editorSize = {
         width :  0,
         height : 535, // TODO: get the correct editor height.
       };
@@ -222,40 +222,43 @@ export class BugComponent implements OnInit, OnDestroy {
   }
 
   private getDomToMarker(textMarker: any) {
-    let selector = `[title='${textMarker.title}']`;
+    const selector = `[title='${textMarker.title}']`;
     return this.elRef.nativeElement.querySelector(selector);
   }
 
   private drawLines(from: number, to: number) {
-    if (!this.lineMarks.length)
+    if (!this.lineMarks.length) {
       return;
+    }
 
-      let prev: any = null;
-      this.lineMarks.forEach((textMarker) => {
-        let current = this.getDomToMarker(textMarker);
+    let prev: any = null;
+    this.lineMarks.forEach((textMarker) => {
+      const current = this.getDomToMarker(textMarker);
 
-        if (!current)
-          return;
+      if (!current) {
+        return;
+      }
 
-        if (prev)
-          this.jsPlumbInstance.connect({
-            source : prev,
-            target : current
-          });
+      if (prev) {
+        this.jsPlumbInstance.connect({
+          source : prev,
+          target : current
+        });
+      }
 
-        prev = current;
-      });
+      prev = current;
+    });
   }
 
   private createBugStepEnumeration(value: number, type: string): HTMLElement {
-    let element = document.createElement('span');
+    const element = document.createElement('span');
     element.innerHTML = value.toString();
     element.setAttribute('class', 'checker-enum ' + type);
     return element;
   }
 
   backToReports() {
-    let queryParams = {...this.queryParams};
+    const queryParams = {...this.queryParams};
     // Remove `hash` parameter from the query parameters.
     delete queryParams['hash'];
 

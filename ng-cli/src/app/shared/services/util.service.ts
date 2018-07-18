@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-let reportServerTypes = require('api/report_server_types');
-let sharedTypes = require('api/shared_types');
+const reportServerTypes = require('api/report_server_types');
+const sharedTypes = require('api/shared_types');
 
 @Injectable()
 export class UtilService {
@@ -12,7 +12,7 @@ export class UtilService {
    * @return Human readable severity string.
    */
   severityFromCodeToString(severity: any): string {
-    switch (parseInt(severity)) {
+    switch (parseInt(severity, 10)) {
       case reportServerTypes.Severity.UNSPECIFIED:
         return 'Unspecified';
       case reportServerTypes.Severity.STYLE:
@@ -58,7 +58,7 @@ export class UtilService {
    * @return Human readable review status string.
    */
   detectionStatusFromCodeToString(detectionStatus: any): string {
-    switch (parseInt(detectionStatus)) {
+    switch (parseInt(detectionStatus, 10)) {
       case reportServerTypes.DetectionStatus.NEW:
         return 'New';
       case reportServerTypes.DetectionStatus.RESOLVED:
@@ -96,7 +96,7 @@ export class UtilService {
    * @return Human readable review status string.
    */
   reviewStatusFromCodeToString(reviewCode: any): string {
-    switch (parseInt(reviewCode)) {
+    switch (parseInt(reviewCode, 10)) {
       case reportServerTypes.ReviewStatus.UNREVIEWED:
         return 'Unreviewed';
       case reportServerTypes.ReviewStatus.CONFIRMED:
@@ -104,7 +104,7 @@ export class UtilService {
       case reportServerTypes.ReviewStatus.FALSE_POSITIVE:
         return 'False positive';
       case reportServerTypes.ReviewStatus.INTENTIONAL:
-        return "Intentional";
+        return 'Intentional';
       default:
         console.warn('Non existing review status code: ', reviewCode);
         return 'N/A';
@@ -134,7 +134,7 @@ export class UtilService {
    * @return Human readable permission string.
    */
   permissionFromCodeToString(permissionId: any) {
-    switch (parseInt(permissionId)) {
+    switch (parseInt(permissionId, 10)) {
       case sharedTypes.Permission.SUPERUSER:
         return 'Superuser';
       case sharedTypes.Permission.PRODUCT_ADMIN:
@@ -142,7 +142,7 @@ export class UtilService {
       case sharedTypes.Permission.PRODUCT_ACCESS:
         return 'Product access';
       case sharedTypes.Permission.PRODUCT_STORE:
-        return "Product store";
+        return 'Product store';
       default:
         console.warn('Non existing permission code: ', permissionId);
         return 'N/A';
@@ -150,9 +150,9 @@ export class UtilService {
   }
 
   generateRedGreenGradientColor(value: number, max: number, opacity: number) {
-    let red = (255 * value) / max;
-    let green = (255 * (max - value)) / max;
-    let blue = 0;
+    const red = (255 * value) / max;
+    const green = (255 * (max - value)) / max;
+    const blue = 0;
     return 'rgba(' + Number(red) + ',' + Number(green) + ',' + blue
       + ',' + opacity + ')';
   }

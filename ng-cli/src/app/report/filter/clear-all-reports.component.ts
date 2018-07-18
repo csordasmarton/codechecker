@@ -9,8 +9,7 @@ import { SharedService } from '..';
     <button (click)="clearAll()">Clear all</button>
   `
 })
-export class ClearAllReportsComponent
-{
+export class ClearAllReportsComponent {
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,

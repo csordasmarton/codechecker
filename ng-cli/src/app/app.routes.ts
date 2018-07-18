@@ -14,7 +14,7 @@ import { StatisticsComponent } from './statistics';
 import { PermissionComponent } from './permission';
 
 export const ROUTES: Routes = [
-  { 
+  {
     path: '',
     component: ProductComponent,
     canActivate: [AuthGuard]
@@ -38,7 +38,7 @@ export const ROUTES: Routes = [
     component: PermissionComponent,
     canActivate: [AuthGuard]
   },
-  { 
+  {
     path: ':product',
     component: ProductDetailComponent,
     children: [

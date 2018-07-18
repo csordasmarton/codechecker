@@ -11,13 +11,13 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DurationPipe implements PipeTransform {
   transform(seconds: number): string {
     if (seconds >= 0) {
-      let durHours = Math.floor(seconds / 3600);
-      let durMins  = Math.floor(seconds / 60) - durHours * 60;
-      let durSecs  = seconds - durMins * 60 - durHours * 3600;
+      const durHours = Math.floor(seconds / 3600);
+      const durMins  = Math.floor(seconds / 60) - durHours * 60;
+      const durSecs  = seconds - durMins * 60 - durHours * 3600;
 
-      let prettyDurHours = (durHours < 10 ? '0' : '') + durHours;
-      let prettyDurMins  = (durMins  < 10 ? '0' : '') + durMins;
-      let prettyDurSecs  = (durSecs  < 10 ? '0' : '') + durSecs;
+      const prettyDurHours = (durHours < 10 ? '0' : '') + durHours;
+      const prettyDurMins  = (durMins  < 10 ? '0' : '') + durMins;
+      const prettyDurSecs  = (durSecs  < 10 ? '0' : '') + durSecs;
 
       return prettyDurHours + ':' + prettyDurMins + ':' + prettyDurSecs;
     }

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-let reportServerTypes = require('api/report_server_types');
+const reportServerTypes = require('api/report_server_types');
 
 import { DbService } from '../shared';
 
@@ -12,7 +12,7 @@ import { DbService } from '../shared';
 })
 export class SeverityStatisticsComponent implements OnInit {
   protected items: any = [];
-  protected itemCount: number = 0;
+  protected itemCount = 0;
 
   constructor(
     private router: Router,
@@ -22,8 +22,8 @@ export class SeverityStatisticsComponent implements OnInit {
 
   public reloadItems(param: any) {
     this.items.sort((a: any, b: any) => {
-      let sortByA = a[param['sortBy']];
-      let sortByB = b[param['sortBy']];
+      const sortByA = a[param['sortBy']];
+      const sortByB = b[param['sortBy']];
 
       if (sortByA > sortByB) {
         return param.sortAsc ? -1 : 1;
@@ -36,14 +36,14 @@ export class SeverityStatisticsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    let runIds: number[] = null; // TODO: this should be controlled by a filter bar.
-    let isUnique: boolean = true; // TODO: this should be controlled by a filter bar.
+    const runIds: number[] = null; // TODO: this should be controlled by a filter bar.
+    const isUnique = true; // TODO: this should be controlled by a filter bar.
 
-    let reportFilter = new reportServerTypes.ReportFilter();
+    const reportFilter = new reportServerTypes.ReportFilter();
     reportFilter.isUnique = isUnique;
 
     this.dbService.getSeverityCounts(runIds, reportFilter, null, (err, res) => {
-      for (let key in res) {
+      for (const key of Object.keys(res)) {
         this.items.push({
           severity: key,
           reports: res[key]

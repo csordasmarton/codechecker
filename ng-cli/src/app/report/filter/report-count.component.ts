@@ -9,8 +9,7 @@ import { SharedService } from '..';
   templateUrl: './report-count.component.html',
   styleUrls: ['./report-count.component.scss']
 })
-export class ReportCountComponent implements Filter
-{
+export class ReportCountComponent implements Filter {
   constructor(protected dbService: DbService, private shared: SharedService) {
     this.shared.register(this);
   }

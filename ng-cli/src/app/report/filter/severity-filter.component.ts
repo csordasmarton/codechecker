@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PopoverModule } from "ngx-popover";
+import { PopoverModule } from 'ngx-popover';
 
-let reportServerTypes = require('api/report_server_types');
+const reportServerTypes = require('api/report_server_types');
 
 import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
@@ -13,8 +13,7 @@ import { SharedService } from '..';
   templateUrl: './select-filter-base.html',
   styleUrls: ['./select-filter-base.scss']
 })
-export class SeverityFilterComponent extends SelectFilterBase
-{
+export class SeverityFilterComponent extends SelectFilterBase {
   constructor(
     protected dbService: DbService,
     protected route: ActivatedRoute,
@@ -32,18 +31,20 @@ export class SeverityFilterComponent extends SelectFilterBase
   public notify() {
     this.dbService.getSeverityCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
-    (err : any, severityCounts: any[]) => {
+    (err: any, severityCounts: any[]) => {
       this.items = Object.keys(reportServerTypes.Severity)
-      .sort((a:any , b: any) => {
-        if (reportServerTypes.Severity[a] > reportServerTypes.Severity[b])
+      .sort((a: any , b: any) => {
+        if (reportServerTypes.Severity[a] > reportServerTypes.Severity[b]) {
           return -1;
-        if (reportServerTypes.Severity[a] < reportServerTypes.Severity[b])
+        }
+        if (reportServerTypes.Severity[a] < reportServerTypes.Severity[b]) {
           return 1;
+        }
         return 0;
       }).map((key: any) => {
-        let value: number = reportServerTypes.Severity[key];
-        let label = this.stateEncoder(value);
-        let item = {
+        const value: number = reportServerTypes.Severity[key];
+        const label = this.stateEncoder(value);
+        const item = {
           label: label,
           count: severityCounts[value] !== undefined
                ? severityCounts[value].toNumber()
@@ -51,8 +52,9 @@ export class SeverityFilterComponent extends SelectFilterBase
           icon: 'severity-' + label.toLowerCase()
         };
 
-        if (this.selectedItems[label] === null)
+        if (this.selectedItems[label] === null) {
           this.selectedItems[label] = item;
+        }
 
         return item;
       });

@@ -12,12 +12,13 @@ import { UtilService } from '..';
 export class ColorizeBugPathLengthPipe implements PipeTransform {
   constructor(private util: UtilService) {}
 
-  transform(bugPathLength: number, limit : number): string {
+  transform(bugPathLength: number, limit: number): string {
     // This value says that bug path length with this value and above are
     // difficult to understand. The background color of these bug path lengths
     // will be red.
-    if (limit === undefined)
+    if (limit === undefined) {
       limit = 20;
+    }
 
     return this.util.generateRedGreenGradientColor(bugPathLength, limit, 0.5);
   }

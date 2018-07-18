@@ -1,20 +1,19 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PopoverModule } from "ngx-popover";
+import { PopoverModule } from 'ngx-popover';
 
 import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
-let reportServerTypes = require('api/report_server_types');
+const reportServerTypes = require('api/report_server_types');
 
 @Component({
   selector: 'run-tag-filter',
   templateUrl: './select-filter-base.html',
   styleUrls: ['./select-filter-base.scss']
 })
-export class RunTagFilterComponent extends SelectFilterBase
-{
+export class RunTagFilterComponent extends SelectFilterBase {
   constructor(
     protected dbService: DbService,
     protected route: ActivatedRoute,
@@ -26,28 +25,30 @@ export class RunTagFilterComponent extends SelectFilterBase
   }
 
   getSelectedItemValues() {
-    let values: any[] = [];
-    let unknownRunTag: any[] = [];
-    for(let key in this.selectedItems) {
-      let item = this.selectedItems[key];
-      if (item)
+    const values: any[] = [];
+    const unknownRunTag: any[] = [];
+    for (const key of Object.keys(this.selectedItems)) {
+      const item = this.selectedItems[key];
+      if (item) {
         values.push(item.value);
-      else
+      } else {
         unknownRunTag.push(key);
+      }
     }
 
     return Promise.all(unknownRunTag.map(runTag => {
       return this.getRunTagCountByName(runTag);
     })).then((runTagCounts: any[]) => {
       for (let i = 0; i < unknownRunTag.length; ++i) {
-        let runTag = unknownRunTag[i];
-        let tagCount = runTagCounts[i];
-        if (!this.selectedItems[runTag])
+        const runTag = unknownRunTag[i];
+        const tagCount = runTagCounts[i];
+        if (!this.selectedItems[runTag]) {
           this.selectedItems[runTag] = {
             label: runTag,
             value: tagCount.value,
             count: 'N/A'
           };
+        }
         values.push(tagCount.value);
       }
       return values;
@@ -56,12 +57,12 @@ export class RunTagFilterComponent extends SelectFilterBase
 
   getRunTagCountByName(tagName: string) {
     return new Promise((resolve, reject) => {
-      let reportFilter = new reportServerTypes.ReportFilter();
+      const reportFilter = new reportServerTypes.ReportFilter();
       Object.assign(reportFilter, this.shared.reportFilter);
 
       this.dbService.getRunHistoryTagCounts(this.shared.runIds, reportFilter, null,
-      (err:string, res) => {
-        let tagCount = res.filter((runTagCount: any) => {
+      (err: string, res) => {
+        const tagCount = res.filter((runTagCount: any) => {
           return runTagCount.name === tagName;
         });
 
@@ -80,18 +81,19 @@ export class RunTagFilterComponent extends SelectFilterBase
   public notify() {
     this.dbService.getRunHistoryTagCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
-    (err : any, runTagCounts: any[]) => {
+    (err: any, runTagCounts: any[]) => {
       this.items = runTagCounts.map((runTagCount) => {
-        let label = runTagCount.name;
-        let item = {
+        const label = runTagCount.name;
+        const item = {
           label: label,
           value: runTagCount.time,
           count: runTagCount.count,
           icon: 'tag'
         };
 
-        if (this.selectedItems[label] !== undefined)
+        if (this.selectedItems[label] !== undefined) {
           this.selectedItems[label] = item;
+        }
 
         return item;
       });

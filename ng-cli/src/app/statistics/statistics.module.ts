@@ -4,7 +4,7 @@ import {
   RouterModule,
   RouterStateSnapshot
 } from '@angular/router';
-import { BrowserModule }  from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { DataTableModule } from 'angular5-data-table';
 

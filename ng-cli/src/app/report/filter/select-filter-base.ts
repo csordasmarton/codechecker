@@ -30,7 +30,7 @@ export abstract class SelectFilterBase implements Filter {
 
   // Returns the URL state of this filter.
   getUrlState() {
-    let selectedItems = Object.keys(this.selectedItems);
+    const selectedItems = Object.keys(this.selectedItems);
     return {
       [this.id] : selectedItems.length ? selectedItems : null
     };
@@ -43,7 +43,7 @@ export abstract class SelectFilterBase implements Filter {
       params = [params];
     }
 
-    for (let key in this.selectedItems) {
+    for (const key in this.selectedItems) {
       if (params.indexOf(key) === -1) {
         delete this.selectedItems[key];
       }
@@ -84,7 +84,7 @@ export abstract class SelectFilterBase implements Filter {
 
   // Clears out the filter state.
   clear() {
-    for (let key in this.selectedItems) {
+    for (const key of Object.keys(this.selectedItems)) {
       delete this.selectedItems[key];
     }
   }
@@ -101,10 +101,11 @@ export abstract class SelectFilterBase implements Filter {
 
   // Toggleing a filter tooltip item.
   onTooltipItemClick(item: any) {
-    if (!this.selectedItems[item.label])
+    if (!this.selectedItems[item.label]) {
       this.select(item);
-    else
+    } else {
       this.deselect(item.label);
+    }
   }
 
   onSelectedItemClick(key: any) {

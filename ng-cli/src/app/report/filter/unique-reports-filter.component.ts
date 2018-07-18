@@ -10,10 +10,9 @@ import { SharedService } from '..';
   templateUrl: './unique-reports-filter.html',
   styleUrls: ['./unique-reports-filter.scss']
 })
-export class UniqueReportsFilterComponent implements Filter
-{
-  id: string = 'is-unique';
-  isUnique: boolean = true;
+export class UniqueReportsFilterComponent implements Filter {
+  id = 'is-unique';
+  isUnique = true;
 
   constructor(
     protected dbService: DbService,

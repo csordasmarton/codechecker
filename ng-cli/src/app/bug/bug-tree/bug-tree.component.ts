@@ -15,7 +15,7 @@ import {
 import { DbService, UtilService } from '../../shared';
 import { ActivatedRoute } from '@angular/router';
 
-let reportServerTypes = require('api/report_server_types');
+const reportServerTypes = require('api/report_server_types');
 
 @Component({
   selector: 'bug-tree',
@@ -36,7 +36,7 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
     animateSpeed: 30,
     animateAcceleration: 1.2,
     getChildren: this.getChildren.bind(this)
-  }
+  };
 
   constructor(
     private dbService: DbService,
@@ -64,16 +64,16 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
   }
 
   loadTreeItems() {
-    let treeModel = this.treeComponent.treeModel;
+    const treeModel = this.treeComponent.treeModel;
 
-    let runNames = this.route.snapshot.queryParams['run'];
+    const runNames = this.route.snapshot.queryParams['run'];
 
     this.dbService.getRunIds(runNames).then((runIds) => {
-      let limit = reportServerTypes.MAX_QUERY_SIZE;
-      let offset = 0;
+      const limit = reportServerTypes.MAX_QUERY_SIZE;
+      const offset = 0;
 
       this.dbService.getRunResults(runIds, limit, offset, null, null, null,
-      (err : string, reports: any[]) => {
+      (err: string, reports: any[]) => {
 
         // Adding reports to the tree.
         reports.forEach((report) => {
@@ -82,8 +82,9 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
 
         // Hide severity items of the tree which doesn't contain any item.
         treeModel.roots.forEach((node: TreeNode) => {
-          if (!node.getFirstChild())
+          if (!node.getFirstChild()) {
             node.setIsHidden(true);
+          }
         });
 
         // Update the tree.
@@ -96,17 +97,18 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
   }
 
   getChildren(node: any) {
-    if (node.data.getChildren)
+    if (node.data.getChildren) {
       return node.data.getChildren();
+    }
   }
 
   private addReport(report: any) {
-    let that = this;
+    const that = this;
 
-    let treeModel = this.treeComponent.treeModel;
-    let severity = this.util.severityFromCodeToString(report.severity);
-    let severityNode = treeModel.getNodeById(severity.toLowerCase());
-    let status =
+    const treeModel = this.treeComponent.treeModel;
+    const severity = this.util.severityFromCodeToString(report.severity);
+    const severityNode = treeModel.getNodeById(severity.toLowerCase());
+    const status =
       this.util.detectionStatusFromCodeToString(report.detectionStatus);
 
     severityNode.children.push({
@@ -117,9 +119,8 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
       getChildren: function () {
         return new Promise((resolve, reject) => {
           that.dbService.getReportDetails(report.reportId,
-            (err: string, details: any) =>
-          {
-            let children: any[] = [];
+          (err: string, details: any) => {
+            const children: any[] = [];
 
             children.push({
               id: report.reportId + '_0',
@@ -131,11 +132,11 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
               return;
             }
 
-            details.pathEvents.forEach((step:any, index: number) => {
+            details.pathEvents.forEach((step: any, index: number) => {
               children.push({
                 id: report.reportId + '_' + (index + 1),
                 name: step.msg,
-              })
+              });
             });
 
             resolve(children);

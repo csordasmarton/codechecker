@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-let Thrift = require('thrift');
-let ccDbService = require('api/codeCheckerDBAccess');
-let reportServerTypes = require('api/report_server_types');
+const Thrift = require('thrift');
+const ccDbService = require('api/codeCheckerDBAccess');
+const reportServerTypes = require('api/report_server_types');
 
 import { BaseService } from './base.service';
 import { TokenService } from '.';
@@ -17,27 +17,28 @@ export class DbService extends BaseService {
     protected router: Router,
     protected tokenService: TokenService
   ) {
-    super(route, router, tokenService, ccDbService, "CodeCheckerService");
+    super(route, router, tokenService, ccDbService, 'CodeCheckerService');
   }
 
   public getPackageVerison(cb: (err: string, version: string) => void) {
     this.client.getPackageVersion(cb);
   }
 
-  public getRunData(runFilter: any, cb: (err: string, runs : any[]) => void) {
+  public getRunData(runFilter: any, cb: (err: string, runs: any[]) => void) {
     this.client.getRunData(runFilter, cb);
   }
 
-  getRunIds(runNames : [string]) : Promise<number[]> {
+  getRunIds(runNames: [string]): Promise<number[]> {
     return new Promise((resolve, reject) => {
       if (!runNames) {
         return resolve(null);
       }
 
-      if (!(runNames instanceof Array))
+      if (!(runNames instanceof Array)) {
         runNames = [runNames];
+      }
 
-      let runFilter = new reportServerTypes.RunFilter();
+      const runFilter = new reportServerTypes.RunFilter();
       runFilter.names = runNames;
 
       this.getRunData(runFilter, (err, runs) => {
@@ -52,7 +53,7 @@ export class DbService extends BaseService {
     fileId: number,
     fileContent: boolean,
     encoding: any,
-    cb: (err: string, sourceFile : any) => void
+    cb: (err: string, sourceFile: any) => void
   ) {
     this.client.getSourceFileData(fileId, fileContent, encoding,
       this.cbErrWrapper(cb));
@@ -90,7 +91,7 @@ export class DbService extends BaseService {
     reportFilter: any,
     cmpData: any,
     cb: (err: string, severityMap: any) => void
-  ){
+  ) {
     this.client.getSeverityCounts(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
   }
@@ -100,7 +101,7 @@ export class DbService extends BaseService {
     reportFilter: any,
     cmpData: any,
     cb: (err: string, detectionStatusMap: any) => void
-  ){
+  ) {
     this.client.getDetectionStatusCounts(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
   }
@@ -110,7 +111,7 @@ export class DbService extends BaseService {
     reportFilter: any,
     cmpData: any,
     cb: (err: string, reviewStatusMap: any) => void
-  ){
+  ) {
     this.client.getReviewStatusCounts(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
   }
@@ -122,7 +123,7 @@ export class DbService extends BaseService {
     limit: number,
     offset: number,
     cb: (err: string, fileMap: any) => void
-  ){
+  ) {
     this.client.getCheckerMsgCounts(runIds, reportFilter, cmpData, limit,
       offset, this.cbErrWrapper(cb));
   }
@@ -134,7 +135,7 @@ export class DbService extends BaseService {
     limit: number,
     offset: number,
     cb: (err: string, fileMap: any) => void
-  ){
+  ) {
     this.client.getCheckerCounts(runIds, reportFilter, cmpData, limit,
       offset, this.cbErrWrapper(cb));
   }
@@ -146,7 +147,7 @@ export class DbService extends BaseService {
     limit: number,
     offset: number,
     cb: (err: string, fileMap: any) => void
-  ){
+  ) {
     this.client.getFileCounts(runIds, reportFilter, cmpData, limit, offset,
       this.cbErrWrapper(cb));
   }
@@ -156,7 +157,7 @@ export class DbService extends BaseService {
     reportFilter: any,
     cmpData: any,
     cb: (err: string, reportCount: any) => void
-  ){
+  ) {
     this.client.getRunResultCount(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
   }
@@ -167,7 +168,7 @@ export class DbService extends BaseService {
     limit: number,
     offset: number,
     cb: (err: string, reportCount: any) => void
-  ){
+  ) {
     this.client.getRunReportCounts(runIds, reportFilter, limit, offset,
       this.cbErrWrapper(cb));
   }
@@ -177,7 +178,7 @@ export class DbService extends BaseService {
     reportFilter: any,
     cmpData: any,
     cb: (err: string, reportCount: any) => void
-  ){
+  ) {
     this.client.getRunHistoryTagCounts(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
   }

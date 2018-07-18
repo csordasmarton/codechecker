@@ -9,17 +9,17 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent {
-  products : any[];
+  products: any[];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private productService: ProductService
   ) {
-    var that = this;
+    const that = this;
 
     console.log('GET PRODUCTS');
-    productService.getProducts(null, null, (err: any, products : any[]) => {
+    productService.getProducts(null, null, (err: any, products: any[]) => {
       that.products = products;
       console.log(products);
     });

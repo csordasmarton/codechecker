@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-let reportServerTypes = require('api/report_server_types');
+const reportServerTypes = require('api/report_server_types');
 
 import { Filter } from './filter/Filter';
 
@@ -14,7 +14,7 @@ export class SharedService {
   runIds: number[];
   reportFilter: any = new reportServerTypes.ReportFilter();
   cmpData: any = null;
-  reportCount: number = 0;
+  reportCount = 0;
 
   private filters: Filter[] = [];
 
@@ -33,7 +33,7 @@ export class SharedService {
 
     this.subLocation = this.location.subscribe(value => {
       setTimeout(() => {
-        let queryParam = this.route.snapshot.queryParams;
+        queryParam = this.route.snapshot.queryParams;
         this.initByUrl(queryParam);
       }, 0);
     });
@@ -48,13 +48,13 @@ export class SharedService {
   }
 
   destory() {
-    //console.log(this.subLocation);
-    //this.subLocation.destory();
+    // console.log(this.subLocation);
+    // this.subLocation.destory();
   }
 
   // Register filter modules on notifications.
   register(filter: any) {
-    this.filters.push(filter)
+    this.filters.push(filter);
   }
 
   // Notify all filter module on filter change.
@@ -77,9 +77,9 @@ export class SharedService {
    * the actual url values.
    */
   updateUrl() {
-    let urlValues = { ...this.route.snapshot.queryParams };
+    const urlValues = { ...this.route.snapshot.queryParams };
     this.filters.forEach(filter => {
-      let values = filter.getUrlState();
+      const values = filter.getUrlState();
       Object.assign(urlValues, values);
     });
 
