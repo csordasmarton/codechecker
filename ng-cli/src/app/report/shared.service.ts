@@ -79,7 +79,7 @@ export class SharedService {
   updateUrl() {
     let urlValues = { ...this.route.snapshot.queryParams };
     this.filters.forEach(filter => {
-      let values = filter.getUrlValues();
+      let values = filter.getUrlState();
       Object.assign(urlValues, values);
     });
 

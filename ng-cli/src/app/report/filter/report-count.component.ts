@@ -15,7 +15,7 @@ export class ReportCountComponent implements Filter
     this.shared.register(this);
   }
 
-  getUrlValues() {
+  getUrlState() {
     return {};
   }
 

@@ -34,7 +34,7 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
   }
 
   public initByUrl() {}
-  public getUrlValues() { return {}; }
+  public getUrlState() { return {}; }
   public clear() {}
 
   private getSortMode(column: string, sortAsc: boolean) {

@@ -25,7 +25,7 @@ export class UniqueReportsFilterComponent implements Filter
     shared.register(this);
   }
 
-  getUrlValues() {
+  getUrlState() {
     return {[this.id] : this.isUnique ? null : ['off']};
   }
 
