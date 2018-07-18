@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -33,7 +33,7 @@ export class ReviewStatusFilterComponent extends SelectFilterBase {
     const offset = 0; // TODO
     this.dbService.getReviewStatusCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
-    (err: any, reviewStatusCounts: any[]) => {
+    (err: RequestFailed, reviewStatusCounts: any[]) => {
       this.items = Object.keys(reportServerTypes.ReviewStatus).map((key) => {
         const value: number = reportServerTypes.ReviewStatus[key];
         const label = this.stateEncoder(value);

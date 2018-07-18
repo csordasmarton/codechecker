@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -33,7 +33,7 @@ export class DetectionStatusFilterComponent extends SelectFilterBase {
     const offset = 0; // TODO
     this.dbService.getDetectionStatusCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
-    (err: any, detectionStatusCounts: any[]) => {
+    (err: RequestFailed, detectionStatusCounts: any[]) => {
       this.items = Object.keys(reportServerTypes.DetectionStatus).map((key) => {
         const value: number = reportServerTypes.DetectionStatus[key];
         const label = this.stateEncoder(value);

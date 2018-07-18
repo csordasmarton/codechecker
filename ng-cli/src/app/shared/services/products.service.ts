@@ -6,6 +6,7 @@ const ccProductService = require('api/codeCheckerProductService');
 
 import { BaseService } from './base.service';
 import { TokenService } from '.';
+import { RequestFailed } from '..';
 
 @Injectable()
 export class ProductService extends BaseService {
@@ -21,7 +22,7 @@ export class ProductService extends BaseService {
   public getProducts(
     productEndpointFilter: string,
     productNameFilter: string,
-    cb: (err: string, products: any[]) => void
+    cb: (err: RequestFailed, products: any[]) => void
   ) {
     this.client.getProducts(productEndpointFilter, productNameFilter,
       this.cbErrWrapper(cb));
@@ -29,13 +30,13 @@ export class ProductService extends BaseService {
 
   getProductConfiguration(
     productId: number,
-    cb: (err: string, config: any) => void
+    cb: (err: RequestFailed, config: any) => void
   ) {
     this.client.getProductConfiguration(productId, this.cbErrWrapper(cb));
   }
 
   public getCurrentProduct(
-    cb: (err: string, product: any) => void
+    cb: (err: RequestFailed, product: any) => void
   ) {
     this.client.getCurrentProduct(this.cbErrWrapper(cb));
   }

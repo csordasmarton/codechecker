@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 
-import { ProductService } from '../shared';
+import { ProductService, RequestFailed } from '../shared';
 import { ActivatedRoute } from '@angular/router';
 const productTypes = require('api/products_types');
 
@@ -22,7 +22,8 @@ export class ProductEditComponent {
     const endpoint = this.route.snapshot.params['endpoint'];
     this.product.connection = new productTypes.DatabaseConnection();
 
-    this.productService.getProducts(endpoint, null, (err: any, products: any) => {
+    this.productService.getProducts(endpoint, null,
+    (err: RequestFailed, products: any) => {
       let currentProduct = products.filter((product: any) => {
         return product.endpoint === endpoint;
       });
@@ -31,7 +32,7 @@ export class ProductEditComponent {
         currentProduct = currentProduct[0];
 
         this.productService.getProductConfiguration(currentProduct.id,
-        (configErr: any, config: any) => {
+        (configErr: RequestFailed, config: any) => {
           console.log(config);
           this.product = config;
         });

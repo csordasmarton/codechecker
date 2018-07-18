@@ -7,6 +7,7 @@ const reportServerTypes = require('api/report_server_types');
 
 import { BaseService } from './base.service';
 import { TokenService } from '.';
+import { RequestFailed } from '..';
 
 @Injectable()
 export class DbService extends BaseService {
@@ -20,11 +21,14 @@ export class DbService extends BaseService {
     super(route, router, tokenService, ccDbService, 'CodeCheckerService');
   }
 
-  public getPackageVerison(cb: (err: string, version: string) => void) {
+  public getPackageVerison(cb: (err: RequestFailed, version: string) => void) {
     this.client.getPackageVersion(cb);
   }
 
-  public getRunData(runFilter: any, cb: (err: string, runs: any[]) => void) {
+  public getRunData(
+    runFilter: any,
+    cb: (err: RequestFailed, runs: any[]) => void
+  ) {
     this.client.getRunData(runFilter, cb);
   }
 
@@ -53,7 +57,7 @@ export class DbService extends BaseService {
     fileId: number,
     fileContent: boolean,
     encoding: any,
-    cb: (err: string, sourceFile: any) => void
+    cb: (err: RequestFailed, sourceFile: any) => void
   ) {
     this.client.getSourceFileData(fileId, fileContent, encoding,
       this.cbErrWrapper(cb));
@@ -66,7 +70,7 @@ export class DbService extends BaseService {
     sortType: any[],
     reportFilter: any,
     cmpData: any,
-    cb: (err: string, reports: any[]) => void
+    cb: (err: RequestFailed, reports: any[]) => void
   ) {
     this.client.getRunResults(runIds, limit, offset, sortType, reportFilter,
       cmpData, this.cbErrWrapper(cb));
@@ -74,14 +78,14 @@ export class DbService extends BaseService {
 
   getReport(
     reportId: number,
-    cb: (err: string, reportData: any) => void
+    cb: (err: RequestFailed, reportData: any) => void
   ) {
     this.client.getReport(reportId, this.cbErrWrapper(cb));
   }
 
   public getReportDetails(
     reportId: number,
-    cb: (err: string, reportDetails: any[]) => void
+    cb: (err: RequestFailed, reportDetails: any[]) => void
   ) {
     this.client.getReportDetails(reportId, this.cbErrWrapper(cb));
   }
@@ -90,7 +94,7 @@ export class DbService extends BaseService {
     runIds: number[],
     reportFilter: any,
     cmpData: any,
-    cb: (err: string, severityMap: any) => void
+    cb: (err: RequestFailed, severityMap: any) => void
   ) {
     this.client.getSeverityCounts(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
@@ -100,7 +104,7 @@ export class DbService extends BaseService {
     runIds: number[],
     reportFilter: any,
     cmpData: any,
-    cb: (err: string, detectionStatusMap: any) => void
+    cb: (err: RequestFailed, detectionStatusMap: any) => void
   ) {
     this.client.getDetectionStatusCounts(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
@@ -110,7 +114,7 @@ export class DbService extends BaseService {
     runIds: number[],
     reportFilter: any,
     cmpData: any,
-    cb: (err: string, reviewStatusMap: any) => void
+    cb: (err: RequestFailed, reviewStatusMap: any) => void
   ) {
     this.client.getReviewStatusCounts(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
@@ -122,7 +126,7 @@ export class DbService extends BaseService {
     cmpData: any,
     limit: number,
     offset: number,
-    cb: (err: string, fileMap: any) => void
+    cb: (err: RequestFailed, fileMap: any) => void
   ) {
     this.client.getCheckerMsgCounts(runIds, reportFilter, cmpData, limit,
       offset, this.cbErrWrapper(cb));
@@ -134,7 +138,7 @@ export class DbService extends BaseService {
     cmpData: any,
     limit: number,
     offset: number,
-    cb: (err: string, fileMap: any) => void
+    cb: (err: RequestFailed, fileMap: any) => void
   ) {
     this.client.getCheckerCounts(runIds, reportFilter, cmpData, limit,
       offset, this.cbErrWrapper(cb));
@@ -146,7 +150,7 @@ export class DbService extends BaseService {
     cmpData: any,
     limit: number,
     offset: number,
-    cb: (err: string, fileMap: any) => void
+    cb: (err: RequestFailed, fileMap: any) => void
   ) {
     this.client.getFileCounts(runIds, reportFilter, cmpData, limit, offset,
       this.cbErrWrapper(cb));
@@ -156,7 +160,7 @@ export class DbService extends BaseService {
     runIds: number[],
     reportFilter: any,
     cmpData: any,
-    cb: (err: string, reportCount: any) => void
+    cb: (err: RequestFailed, reportCount: any) => void
   ) {
     this.client.getRunResultCount(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));
@@ -167,7 +171,7 @@ export class DbService extends BaseService {
     reportFilter: any,
     limit: number,
     offset: number,
-    cb: (err: string, reportCount: any) => void
+    cb: (err: RequestFailed, reportCount: any) => void
   ) {
     this.client.getRunReportCounts(runIds, reportFilter, limit, offset,
       this.cbErrWrapper(cb));
@@ -177,7 +181,7 @@ export class DbService extends BaseService {
     runIds: number[],
     reportFilter: any,
     cmpData: any,
-    cb: (err: string, reportCount: any) => void
+    cb: (err: RequestFailed, reportCount: any) => void
   ) {
     this.client.getRunHistoryTagCounts(runIds, reportFilter, cmpData,
       this.cbErrWrapper(cb));

@@ -4,7 +4,7 @@ import { PopoverModule } from 'ngx-popover';
 
 const reportServerTypes = require('api/report_server_types');
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -31,7 +31,7 @@ export class SeverityFilterComponent extends SelectFilterBase {
   public notify() {
     this.dbService.getSeverityCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
-    (err: any, severityCounts: any[]) => {
+    (err: RequestFailed, severityCounts: any[]) => {
       this.items = Object.keys(reportServerTypes.Severity)
       .sort((a: any , b: any) => {
         if (reportServerTypes.Severity[a] > reportServerTypes.Severity[b]) {

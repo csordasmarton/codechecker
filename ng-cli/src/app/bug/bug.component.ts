@@ -5,7 +5,7 @@ import * as CodeMirror from 'codemirror';
 const jsPlumb = require('jsplumb').jsPlumb;
 const reportServerTypes = require('api/report_server_types');
 
-import { DbService } from '../shared';
+import { DbService, RequestFailed } from '../shared';
 
 @Component({
   selector: 'bug-page',
@@ -94,7 +94,8 @@ export class BugComponent implements OnInit, OnDestroy {
 
   loadReport(reportId: number, reportHash: string) {
     if (reportId !== null && reportId !== undefined) {
-      this.dbService.getReport(reportId, (err: any, reportData: any) => {
+      this.dbService.getReport(reportId,
+      (err: RequestFailed, reportData: any) => {
         this.setReport(reportData);
       });
     } else {
@@ -121,7 +122,7 @@ export class BugComponent implements OnInit, OnDestroy {
   setReport(report: any) {
     this.report = report;
     this.dbService.getSourceFileData(report.fileId, true, null,
-      (err: any, sourceFile: any) => {
+      (err: RequestFailed, sourceFile: any) => {
         this.setContent(sourceFile);
         this.drawBugPath();
         this.jumpTo(report.line.toNumber(), 0);
@@ -137,7 +138,7 @@ export class BugComponent implements OnInit, OnDestroy {
     this.clearLines();
 
     this.dbService.getReportDetails(this.report.reportId,
-    (err: string, reportDetail: any) => {
+    (err: RequestFailed, reportDetail: any) => {
       const points = reportDetail.executionPath.filter((path: any) => {
         return path.fileId.toNumber() === this.sourceFile.fileId.toNumber();
       });

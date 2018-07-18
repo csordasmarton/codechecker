@@ -12,7 +12,7 @@ import {
   TreeNode
 } from 'angular-tree-component';
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { ActivatedRoute } from '@angular/router';
 
 const reportServerTypes = require('api/report_server_types');
@@ -73,7 +73,7 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
       const offset = 0;
 
       this.dbService.getRunResults(runIds, limit, offset, null, null, null,
-      (err: string, reports: any[]) => {
+      (err: RequestFailed, reports: any[]) => {
 
         // Adding reports to the tree.
         reports.forEach((report) => {
@@ -119,7 +119,7 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
       getChildren: function () {
         return new Promise((resolve, reject) => {
           that.dbService.getReportDetails(report.reportId,
-          (err: string, details: any) => {
+          (err: RequestFailed, details: any) => {
             const children: any[] = [];
 
             children.push({

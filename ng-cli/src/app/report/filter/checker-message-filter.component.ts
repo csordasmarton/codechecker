@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -31,7 +31,7 @@ export class CheckerMessageFilterComponent extends SelectFilterBase {
     const offset = 0;
     this.dbService.getCheckerMsgCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData, limit, offset,
-    (err: any, checkerMsgCounts: any[]) => {
+    (err: RequestFailed, checkerMsgCounts: any[]) => {
       this.items = Object.keys(checkerMsgCounts).map((key) => {
         const item = {
           label: key,

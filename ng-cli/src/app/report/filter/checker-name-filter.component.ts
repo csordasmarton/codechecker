@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -31,7 +31,7 @@ export class CheckerNameFilterComponent extends SelectFilterBase {
     const offset = 0;
     this.dbService.getCheckerCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData, limit, offset,
-    (err: any, checkerCounts: any[]) => {
+    (err: RequestFailed, checkerCounts: any[]) => {
       this.items = checkerCounts.map(checkerCount => {
         const name = checkerCount.name;
         const item = {

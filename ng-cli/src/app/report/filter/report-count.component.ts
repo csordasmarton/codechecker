@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { DbService } from '../../shared';
+import { DbService, RequestFailed } from '../../shared';
 import { Filter } from './Filter';
 import { SharedService } from '..';
 
@@ -23,7 +23,7 @@ export class ReportCountComponent implements Filter {
   notify() {
     this.dbService.getRunResultCount(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
-    (err: any, reportCount: any) => {
+    (err: RequestFailed, reportCount: any) => {
       this.shared.reportCount = reportCount.toNumber();
     });
   }

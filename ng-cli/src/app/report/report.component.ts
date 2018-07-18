@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 const reportServerTypes = require('api/report_server_types');
 
-import { DbService } from '../shared';
+import { DbService, RequestFailed } from '../shared';
 import { Filter } from './filter/Filter';
 import { SharedService } from './shared.service';
 
@@ -67,7 +67,7 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
 
     this.dbService.getRunResults(this.shared.runIds, this.limit, this.offset,
     [ sortMode ], this.shared.reportFilter, null,
-    (err: string, reports: any[]) => {
+    (err: RequestFailed, reports: any[]) => {
       this.reports = reports;
       console.log(reports);
     });

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { SharedService } from '..';
 import { SelectFilterBase } from './select-filter-base';
 
@@ -29,7 +29,7 @@ export class FileFilterComponent extends SelectFilterBase {
   public notify() {
     this.dbService.getFileCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData, null, null,
-    (err: any, fileCounts: any[]) => {
+    (err: RequestFailed, fileCounts: any[]) => {
       this.items = Object.keys(fileCounts).map((key) => {
         const item = {
           label: key,

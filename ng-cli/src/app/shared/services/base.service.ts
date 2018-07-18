@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TokenService } from '.';
+import { RequestFailed } from '..';
 
 const Thrift = require('thrift');
 const ccSharedTypes = require('api/shared_types');

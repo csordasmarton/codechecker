@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -62,7 +62,7 @@ export class RunFilterComponent extends SelectFilterBase {
       reportFilter.runName = [runName];
 
       this.dbService.getRunReportCounts(null, reportFilter, null, null,
-        (err: string, res) => {
+        (err: RequestFailed, res) => {
           const runIds = res.map((reportCount: any) => {
             return reportCount.runId.toNumber();
           });
@@ -85,7 +85,7 @@ export class RunFilterComponent extends SelectFilterBase {
     const offset = 0; // TODO
     this.dbService.getRunReportCounts(null,
     this.shared.reportFilter, limit, offset,
-    (err: any, runReportCounts: any[]) => {
+    (err: RequestFailed, runReportCounts: any[]) => {
       this.items = runReportCounts.map((runReport) => {
         const label = runReport.name;
         const item = {

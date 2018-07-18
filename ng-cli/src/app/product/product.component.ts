@@ -1,6 +1,6 @@
 import { Component} from '@angular/core';
 
-import { ProductService } from '../shared';
+import { ProductService, RequestFailed } from '../shared';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -19,13 +19,17 @@ export class ProductComponent {
     const that = this;
 
     console.log('GET PRODUCTS');
-    productService.getProducts(null, null, (err: any, products: any[]) => {
+    productService.getProducts(null, null,
+    (err: RequestFailed, products: any[]) => {
       that.products = products;
       console.log(products);
     });
   }
 
   edit() {
-    this.router.navigate(['.'], { relativeTo: this.route, queryParams: { id: 1 }});
+    this.router.navigate(['.'], {
+      relativeTo: this.route,
+      queryParams: { id: 1 }
+    });
   }
 }

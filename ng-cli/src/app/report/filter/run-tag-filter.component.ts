@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService } from '../../shared';
+import { DbService, UtilService, RequestFailed } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -61,7 +61,7 @@ export class RunTagFilterComponent extends SelectFilterBase {
       Object.assign(reportFilter, this.shared.reportFilter);
 
       this.dbService.getRunHistoryTagCounts(this.shared.runIds, reportFilter, null,
-      (err: string, res) => {
+      (err: RequestFailed, res) => {
         const tagCount = res.filter((runTagCount: any) => {
           return runTagCount.name === tagName;
         });
@@ -81,7 +81,7 @@ export class RunTagFilterComponent extends SelectFilterBase {
   public notify() {
     this.dbService.getRunHistoryTagCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData,
-    (err: any, runTagCounts: any[]) => {
+    (err: RequestFailed, runTagCounts: any[]) => {
       this.items = runTagCounts.map((runTagCount) => {
         const label = runTagCount.name;
         const item = {

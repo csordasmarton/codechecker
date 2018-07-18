@@ -5,6 +5,7 @@ const ccAuthService = require('api/codeCheckerAuthentication');
 
 import { BaseService } from './base.service';
 import { TokenService } from '.';
+import { RequestFailed } from '..';
 
 @Injectable()
 export class AuthenticationService extends BaseService {
@@ -20,16 +21,16 @@ export class AuthenticationService extends BaseService {
   public performLogin(
     authMethod: string,
     authString: string,
-    cb: (err: string, token: string) => void
+    cb: (err: RequestFailed, token: string) => void
   ) {
     this.client.performLogin(authMethod, authString, cb);
   }
 
-  public getTokens(cb: (err: string, tokens: string[]) => void) {
+  public getTokens(cb: (err: RequestFailed, tokens: string[]) => void) {
     this.client.getTokens(this.cbErrWrapper(cb));
   }
 
-  public getAuthParameters(cb: (err: string, ret: any) => void) {
+  public getAuthParameters(cb: (err: RequestFailed, ret: any) => void) {
     this.client.getAuthParameters(this.cbErrWrapper(cb));
   }
 
@@ -37,7 +38,7 @@ export class AuthenticationService extends BaseService {
     scope: string,
     extraParams: string,
     permissionFilter: any,
-    cb: (err: string, permissions: [any]) => void
+    cb: (err: RequestFailed, permissions: [any]) => void
   ) {
     this.client.getPermissionsForUser(scope, extraParams, permissionFilter,
       this.cbErrWrapper(cb));
@@ -46,7 +47,7 @@ export class AuthenticationService extends BaseService {
   getAuthorisedNames(
     permission: any,
     extraParams: string,
-    cb: (err: string, authorizations: any) => void
+    cb: (err: RequestFailed, authorizations: any) => void
   ) {
     this.client.getAuthorisedNames(permission, extraParams,
       this.cbErrWrapper(cb));
