@@ -10,7 +10,7 @@ import { DbService, RequestFailed } from '../shared';
   styleUrls: ['./run-list.component.scss']
 })
 export class RunListComponent implements OnInit {
-  runs: any[];
+  runs: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -18,10 +18,8 @@ export class RunListComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    const that = this;
-
     this.dbService.getRunData(null, (err: RequestFailed, runs: any[]) => {
-      that.runs = runs;
+      this.runs = runs;
     });
   }
 }
