@@ -2,6 +2,7 @@
   width: 300px;
   float: left;
   margin-right: 10px;
+  position: relative;
 
   .options {
     position: absolute;
@@ -13,5 +14,11 @@
         color: #878d96;
       }
     }
+  }
+
+  > *:not(report-count):not(clear-all-reports):not(:last-child) {
+    padding: 5px;
+    border-bottom: 1px solid rgba(86, 96, 105, 0.23);
+    display: block;
   }
 }

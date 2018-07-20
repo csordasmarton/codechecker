@@ -6,8 +6,9 @@ import { SharedService } from '..';
 @Component({
   selector: 'clear-all-reports',
   template: `
-    <button (click)="clearAll()">Clear all</button>
-  `
+    <button class="btn btn-info" (click)="clearAll()">Clear all</button>
+  `,
+  styleUrls: ['./clear-all-reports.component.scss']
 })
 export class ClearAllReportsComponent {
   constructor(
