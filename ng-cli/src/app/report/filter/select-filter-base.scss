@@ -1,19 +1,55 @@
 #report-filters .report-filter {
   position: relative;
 
+  .popover {
+    width: 300px;
+  }
+
   .title {
     font-weight: bold; 
   }
 
+  .count {
+    min-width: 16px;
+    height: 16px;
+    color: #878d96;
+    padding: 5px 5px 5px 10px;
+    position: absolute;
+    right: 0;
+    top: 0px;
+    text-align: center;
+  }
+
   .filter-options {
-    width: 300px;
-    .item {
-      &.selected {
-        color: #292b2c;
-        border: 1px solid #cee0e6;
+    padding: 10px;
+
+    .items {
+      padding: 0;
+      margin: 0;
+
+      .item {
         position: relative;
-        margin: 2px;
-        background-color: #f1fbff;
+        list-style-type: none;
+        padding: 5px 0px 5px 10px;
+        margin: 0px;
+        overflow: hidden;
+        color: inherit;
+        cursor: pointer;
+        background-color: white;
+
+        &.selected {
+          color: #292b2c;
+          position: relative;
+          background-color: #f1fbff;
+        }
+
+        &:hover {
+          background-color: #f1f1f1;
+        }
+      }
+
+      .item:not(:last-child) {
+        border-bottom: 1px solid #eaecef;
       }
     }
   }
@@ -45,17 +81,6 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         direction: ltr;
-      }
-
-      .count {
-        min-width: 16px;
-        height: 16px;
-        color: #878d96;
-        padding: 5px 5px 5px 10px;
-        position: absolute;
-        right: 0;
-        top: 0px;
-        text-align: center;
       }
 
       .remove {
