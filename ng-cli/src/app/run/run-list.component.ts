@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
-import { DbService, RequestFailed } from '../shared';
+import { DbService } from '../shared';
+import { RunData, RunFilter } from '@cc/db-access';
 
 @Component({
   selector: 'run-list',
@@ -10,16 +10,17 @@ import { DbService, RequestFailed } from '../shared';
   styleUrls: ['./run-list.component.scss']
 })
 export class RunListComponent implements OnInit {
-  runs: any[] = [];
+  runs: RunData[] = [];
 
   constructor(
-    private route: ActivatedRoute,
     private dbService: DbService
   ) {}
 
   public ngOnInit() {
-    this.dbService.getRunData(null, (err: RequestFailed, runs: any[]) => {
-      this.runs = runs;
+    const runFilter = new RunFilter();
+    this.dbService.getClient().getRunData(runFilter).then(
+    (runData: RunData[]) => {
+      this.runs = runData;
     });
   }
 }

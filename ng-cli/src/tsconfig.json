@@ -11,7 +11,14 @@
     "suppressImplicitAnyIndexErrors": true,
     "typeRoots": [
       "../node_modules/@types/"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@cc/shared": ["../api"],
+      "@cc/authentication": ["../api/codeCheckerAuthentication_v6/"],
+      "@cc/db-access": ["../api/codeCheckerDBAccess_v6/"],
+      "@cc/product-management": ["../api/codeCheckerProductManagement_v6/"]
+    }
   },
   "compileOnSave": true,
   "exclude": [

@@ -47,18 +47,20 @@ export class LoginComponent implements OnInit {
     }
 
     const authString = this.f.username.value + ':' + this.f.password.value;
-    this.authenticationService.performLogin('Username:Password', authString,
-    (err, token) => {
-      if (!err && token) {
+    this.authenticationService.getClient().performLogin(
+      'Username:Password',
+      authString
+    ).then((token: string) => {
+      if (token) {
         this.tokenService.saveToken(token, 365);
         this.invalidCredentials = false;
         // TODO: set url parameters.
         this.router.navigate(['/'], { queryParams: {
         }});
-      } else {
-        console.log(err);
-        this.invalidCredentials = true;
       }
+    }).catch(reason => {
+      console.log(reason);
+      this.invalidCredentials = true;
     });
   }
 }

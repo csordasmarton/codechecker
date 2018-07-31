@@ -1,6 +1,9 @@
 
 import { Component } from '@angular/core';
-import { DbService, RequestFailed } from '../../shared';
+
+import Int64 = require('node-int64');
+
+import { DbService } from '../../shared';
 import { Filter } from './Filter';
 import { SharedService } from '..';
 
@@ -21,9 +24,9 @@ export class ReportCountComponent implements Filter {
   initByUrl(queryParam: any) {}
 
   notify() {
-    this.dbService.getRunResultCount(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData,
-    (err: RequestFailed, reportCount: any) => {
+    this.dbService.getClient().getRunResultCount(this.shared.runIds,
+    this.shared.reportFilter, this.shared.cmpData).then(
+    (reportCount: Int64) => {
       this.shared.reportCount = reportCount.toNumber();
     });
   }

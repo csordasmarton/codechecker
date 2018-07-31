@@ -7,21 +7,20 @@ import {
 } from '@angular/router';
 import { TokenService, AuthenticationService } from '../shared';
 
+import { HandshakeInformation } from '@cc/authentication';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  private authParameters: Promise<any>;
+  private authParameters: Promise<HandshakeInformation>;
 
   constructor(
     private router: Router,
     private tokenService: TokenService,
     private authenticationService: AuthenticationService
   ) {
-    this.authParameters = new Promise((resolve, reject) => {
-      this.authenticationService.getAuthParameters((err, ret) => {
-        resolve(ret);
-      });
-    });
+    this.authParameters = 
+      this.authenticationService.getClient().getAuthParameters();
   }
 
   canActivate(

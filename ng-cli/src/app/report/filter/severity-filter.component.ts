@@ -2,9 +2,11 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-const reportServerTypes = require('api/report_server_types');
+import Int64 = require('node-int64');
 
-import { DbService, UtilService, RequestFailed } from '../../shared';
+import { Severity } from '@cc/db-access';
+
+import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -29,20 +31,21 @@ export class SeverityFilterComponent extends SelectFilterBase {
   }
 
   public notify() {
-    this.dbService.getSeverityCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData,
-    (err: RequestFailed, severityCounts: any[]) => {
-      this.items = Object.keys(reportServerTypes.Severity)
+    this.dbService.getClient().getSeverityCounts(this.shared.runIds,
+    this.shared.reportFilter, this.shared.cmpData).then(
+    (severityCounts: Map<Severity, Int64>) => {
+      this.items = Object.keys(Severity)
       .sort((a: any , b: any) => {
-        if (reportServerTypes.Severity[a] > reportServerTypes.Severity[b]) {
+        if (Severity[a] > Severity[b]) {
           return -1;
         }
-        if (reportServerTypes.Severity[a] < reportServerTypes.Severity[b]) {
+        if (Severity[a] < Severity[b]) {
           return 1;
         }
         return 0;
       }).map((key: any) => {
-        const value: number = reportServerTypes.Severity[key];
+        // TODO: FIX THIS.
+        const value: any = Severity[key];
         const label = this.stateEncoder(value);
         const item = {
           label: label,

@@ -385,7 +385,7 @@ def filter_report_filter(q, filter_expression, run_ids=None, cmp_data=None,
                    ReviewStatus.bug_hash == Report.bug_id) \
         .filter(filter_expression)
 
-    if cmp_data:
+    if cmp_data and cmp_data.diffType is not None:
         q = q.filter(Report.bug_id.in_(diff_hashes))
 
     return q
@@ -566,7 +566,7 @@ class ThriftRequestHandler(object):
         """
         res = session.query(Run.id).all()
         run_ids = [r[0] for r in res]
-        if cmp_data:
+        if cmp_data and cmp_data.diffType is not None:
             all_rids = set(run_ids)
             cmp_rids = set(cmp_data.runIds) if cmp_data.runIds else set()
             run_ids = list(all_rids.difference(cmp_rids))
@@ -850,7 +850,7 @@ class ThriftRequestHandler(object):
             results = []
 
             diff_hashes = None
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,
@@ -949,7 +949,7 @@ class ThriftRequestHandler(object):
                 if run_ids:
                     q = q.filter(Report.run_id.in_(run_ids))
 
-                if cmp_data:
+                if cmp_data and cmp_data.diffType is not None:
                     q = q.filter(Report.bug_id.in_(diff_hashes))
 
                 sort_types, sort_type_map, order_type_map = \
@@ -1034,7 +1034,7 @@ class ThriftRequestHandler(object):
 
         with DBSession(self.__Session) as session:
             diff_hashes = None
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,
@@ -1433,7 +1433,7 @@ class ThriftRequestHandler(object):
         results = []
         with DBSession(self.__Session) as session:
             diff_hashes = None
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,
@@ -1493,7 +1493,7 @@ class ThriftRequestHandler(object):
         results = {}
         with DBSession(self.__Session) as session:
             diff_hashes = None
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,
@@ -1539,7 +1539,7 @@ class ThriftRequestHandler(object):
         results = {}
         with DBSession(self.__Session) as session:
             diff_hashes = None
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,
@@ -1590,7 +1590,7 @@ class ThriftRequestHandler(object):
         results = defaultdict(int)
         with DBSession(self.__Session) as session:
             diff_hashes = None
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,
@@ -1644,7 +1644,7 @@ class ThriftRequestHandler(object):
         self.__require_access()
         results = {}
         with DBSession(self.__Session) as session:
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,
@@ -1700,7 +1700,7 @@ class ThriftRequestHandler(object):
         self.__require_access()
         results = []
         with DBSession(self.__Session) as session:
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,
@@ -1787,7 +1787,7 @@ class ThriftRequestHandler(object):
         results = {}
         with DBSession(self.__Session) as session:
             diff_hashes = None
-            if cmp_data:
+            if cmp_data and cmp_data.diffType is not None:
                 diff_hashes, run_ids = self._cmp_helper(session,
                                                         run_ids,
                                                         report_filter,

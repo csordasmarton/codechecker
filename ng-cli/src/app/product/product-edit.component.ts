@@ -1,8 +1,12 @@
-import { Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 
-import { ProductService, RequestFailed } from '../shared';
+import { ProductService } from '../shared';
 import { ActivatedRoute } from '@angular/router';
-const productTypes = require('api/products_types');
+
+import {
+  ProductConfiguration,
+  DatabaseConnection, 
+  Product} from '@cc/product-management';
 
 @Component({
   selector: 'product-edit',
@@ -14,26 +18,26 @@ export class ProductEditComponent {
   dbConnectionUsername: string = null;
   dbConnectionPassword: string = null;
 
-  private product = new productTypes.ProductConfiguration();
+  private product = new ProductConfiguration();
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
   ) {
     const endpoint = this.route.snapshot.params['endpoint'];
-    this.product.connection = new productTypes.DatabaseConnection();
+    this.product.connection = new DatabaseConnection();
 
-    this.productService.getProducts(endpoint, null,
-    (err: RequestFailed, products: any) => {
-      let currentProduct = products.filter((product: any) => {
+    this.productService.getClient().getProducts(endpoint, '').then(
+    (products: Product[]) => {
+      const currentProducts = products.filter((product: any) => {
         return product.endpoint === endpoint;
       });
 
-      if (currentProduct.length) {
-        currentProduct = currentProduct[0];
+      if (currentProducts.length) {
+        const currentProduct: Product = currentProducts[0];
 
-        this.productService.getProductConfiguration(currentProduct.id,
-        (configErr: RequestFailed, config: any) => {
-          console.log(config);
+        this.productService.getClient().getProductConfiguration(
+          currentProduct.id
+        ).then((config: ProductConfiguration) => {
           this.product = config;
         });
       }

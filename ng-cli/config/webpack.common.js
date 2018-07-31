@@ -20,9 +20,11 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.scss'],
     alias: {
-      thrift: 'thrift/lib/nodejs/lib/thrift/browser.js',
-      api: helpers.root('api/gen-nodejs/'),
-      shared: 'src/app/shared/'
+      'thrift': 'thrift/lib/nodejs/lib/thrift/browser.js',
+      '@cc/shared': helpers.root('api'),
+      '@cc/authentication': helpers.root('api', 'codeCheckerAuthentication_v6'),
+      '@cc/db-access': helpers.root('api', 'codeCheckerDBAccess_v6'),
+      '@cc/product-management': helpers.root('api', 'codeCheckerProductManagement_v6')
     }
   },
 

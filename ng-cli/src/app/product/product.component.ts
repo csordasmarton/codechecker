@@ -1,7 +1,9 @@
 import { Component} from '@angular/core';
 
-import { ProductService, RequestFailed } from '../shared';
+import { ProductService } from '../shared';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { Product } from '@cc/product-management';
 
 @Component({
   selector: 'product-page',
@@ -16,13 +18,9 @@ export class ProductComponent {
     private route: ActivatedRoute,
     private productService: ProductService
   ) {
-    const that = this;
-
-    console.log('GET PRODUCTS');
-    productService.getProducts(null, null,
-    (err: RequestFailed, products: any[]) => {
-      that.products = products;
-      console.log(products);
+    this.productService.getClient().getProducts('', '').then(
+    (products: Product[]) => {
+      this.products = products;
     });
   }
 

@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService, RequestFailed } from '../../shared';
+import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
-const reportServerTypes = require('api/report_server_types');
+import { ReportFilter, CompareData, RunTagCount, RunTagCounts } from '@cc/db-access';
 
 @Component({
   selector: 'run-tag-filter',
@@ -57,12 +57,15 @@ export class RunTagFilterComponent extends SelectFilterBase {
 
   getRunTagCountByName(tagName: string) {
     return new Promise((resolve, reject) => {
-      const reportFilter = new reportServerTypes.ReportFilter();
+      const reportFilter = new ReportFilter();
       Object.assign(reportFilter, this.shared.reportFilter);
 
-      this.dbService.getRunHistoryTagCounts(this.shared.runIds, reportFilter, null,
-      (err: RequestFailed, res) => {
-        const tagCount = res.filter((runTagCount: any) => {
+      const cmpData = new CompareData();
+
+      this.dbService.getClient().getRunHistoryTagCounts(
+      this.shared.runIds, reportFilter, cmpData).then(
+      (runTagCounts: RunTagCounts) => {
+        const tagCount = runTagCounts.filter((runTagCount: any) => {
           return runTagCount.name === tagName;
         });
 
@@ -70,7 +73,7 @@ export class RunTagFilterComponent extends SelectFilterBase {
           value: tagCount.length ? tagCount[0].time : null,
           count: tagCount.length ? tagCount[0].count.toNumber() : 'N/A'
         });
-    });
+      });
     });
   }
 
@@ -79,9 +82,9 @@ export class RunTagFilterComponent extends SelectFilterBase {
   }
 
   public notify() {
-    this.dbService.getRunHistoryTagCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData,
-    (err: RequestFailed, runTagCounts: any[]) => {
+    this.dbService.getClient().getRunHistoryTagCounts(this.shared.runIds,
+    this.shared.reportFilter, this.shared.cmpData).then(
+    (runTagCounts: RunTagCounts) => {
       this.items = runTagCounts.map((runTagCount) => {
         const label = runTagCount.name;
         const item = {

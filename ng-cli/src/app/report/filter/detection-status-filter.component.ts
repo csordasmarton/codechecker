@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService, RequestFailed } from '../../shared';
+import Int64 = require('node-int64');
+
+import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
-const reportServerTypes = require('api/report_server_types');
+import { DetectionStatus } from '@cc/db-access';
 
 @Component({
   selector: 'detection-status-filter',
@@ -29,19 +31,17 @@ export class DetectionStatusFilterComponent extends SelectFilterBase {
   }
 
   public notify() {
-    const limit = 10; // TODO
-    const offset = 0; // TODO
-    this.dbService.getDetectionStatusCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData,
-    (err: RequestFailed, detectionStatusCounts: any[]) => {
-      this.items = Object.keys(reportServerTypes.DetectionStatus).map((key) => {
-        const value: number = reportServerTypes.DetectionStatus[key];
-        const label = this.stateEncoder(value);
+    const limit = new Int64(10);
+    const offset = new Int64(0);
+
+    this.dbService.getClient().getDetectionStatusCounts(this.shared.runIds,
+    this.shared.reportFilter, this.shared.cmpData).then(
+    (detectionStatusCounts: Map<DetectionStatus, Int64>) => {
+      this.items = Array.from(detectionStatusCounts).map(([key, value]) => {
+        const label = this.stateEncoder(key);
         const item = {
-          label: this.util.detectionStatusFromCodeToString(value),
-          count: detectionStatusCounts[value] !== undefined
-               ? detectionStatusCounts[value].toNumber()
-               : 0,
+          label: label,
+          count: value !== undefined ? value.toNumber() : 0,
           icon: 'detection-status-' + label.toLowerCase()
         };
 
@@ -54,7 +54,7 @@ export class DetectionStatusFilterComponent extends SelectFilterBase {
     });
   }
 
-  public stateEncoder(status: number) {
+  public stateEncoder(status: DetectionStatus) {
     return this.util.detectionStatusFromCodeToString(status);
   }
 

@@ -12,10 +12,12 @@ import {
   TreeNode
 } from 'angular-tree-component';
 
-import { DbService, UtilService, RequestFailed } from '../../shared';
+import Int64 = require('node-int64');
+
+import { DbService, UtilService } from '../../shared';
 import { ActivatedRoute } from '@angular/router';
 
-const reportServerTypes = require('api/report_server_types');
+import { MAX_QUERY_SIZE, ReportDetails, ReportFilter, CompareData, ReportDataList } from '@cc/db-access';
 
 @Component({
   selector: 'bug-tree',
@@ -69,12 +71,13 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
     const runNames = this.route.snapshot.queryParams['run'];
 
     this.dbService.getRunIds(runNames).then((runIds) => {
-      const limit = reportServerTypes.MAX_QUERY_SIZE;
-      const offset = 0;
+      const limit: Int64 = MAX_QUERY_SIZE;
+      const offset: Int64 = new Int64(0);
+      const reportFilter = new ReportFilter();
+      const cmpData = new CompareData();
 
-      this.dbService.getRunResults(runIds, limit, offset, null, null, null,
-      (err: RequestFailed, reports: any[]) => {
-
+      this.dbService.getClient().getRunResults(runIds, limit, offset, [],
+      reportFilter, cmpData).then((reports: ReportDataList) => {
         // Adding reports to the tree.
         reports.forEach((report) => {
           this.addReport(report);
@@ -117,9 +120,9 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
       icon: 'detection-status-' + status.toLowerCase(),
       hasChildren: true,
       getChildren: function () {
-        return new Promise((resolve, reject) => {
-          that.dbService.getReportDetails(report.reportId,
-          (err: RequestFailed, details: any) => {
+        return new Promise((resolve) => {
+          that.dbService.getClient().getReportDetails(report.reportId).then(
+          (details: ReportDetails) => {
             const children: any[] = [];
 
             children.push({

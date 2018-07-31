@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-const reportServerTypes = require('api/report_server_types');
+import { SortMode , SortType, Order, ReportData } from '@cc/db-access';
 
-import { DbService, RequestFailed } from '../shared';
+import { DbService } from '../shared';
 import { Filter } from './filter/Filter';
 import { SharedService } from './shared.service';
+
+import Int64 = require('node-int64');
 
 @Component({
     selector: 'report',
@@ -15,8 +17,8 @@ import { SharedService } from './shared.service';
 export class ReportComponent implements OnInit, OnDestroy, Filter {
   private reports: any[] = [];
   private pageLimits: number[] = [25, 50, 100, 250];
-  private limit: number = null;
-  private offset = 0;
+  private limit: Int64 = null;
+  private offset: Int64 = null;
 
   constructor(
     private dbService: DbService,
@@ -38,38 +40,40 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
   public clear() {}
 
   private getSortMode(column: string, sortAsc: boolean) {
-    const sortMode = new reportServerTypes.SortMode();
+    const sortMode = new SortMode();
 
     sortMode.type
       = column === 'file'
-      ? reportServerTypes.SortType.FILENAME
+      ? SortType.FILENAME
       : column === 'checkerId'
-      ? reportServerTypes.SortType.CHECKER_NAME
+      ? SortType.CHECKER_NAME
       : column === 'detectionStatus'
-      ? reportServerTypes.SortType.DETECTION_STATUS
+      ? SortType.DETECTION_STATUS
       : column === 'reviewStatus'
-      ? reportServerTypes.SortType.REVIEW_STATUS
+      ? SortType.REVIEW_STATUS
       : column === 'bugPathLength'
-      ? reportServerTypes.SortType.BUG_PATH_LENGTH
-      : reportServerTypes.SortType.SEVERITY;
+      ? SortType.BUG_PATH_LENGTH
+      : SortType.SEVERITY;
 
-    sortMode.ord = sortAsc
-      ? reportServerTypes.Order.DESC
-      : reportServerTypes.Order.ASC;
+    sortMode.ord = sortAsc ? Order.DESC : Order.ASC;
 
     return sortMode;
   }
 
   public reloadItems(param: any) {
-    this.limit = param.limit ? param.limit : this.pageLimits[0];
+    this.limit = new Int64(param.limit ? param.limit : this.pageLimits[0]);
     this.offset = param.offset ? param.offset : 0;
     const sortMode = this.getSortMode(param.column, param.sortAsc);
 
-    this.dbService.getRunResults(this.shared.runIds, this.limit, this.offset,
-    [ sortMode ], this.shared.reportFilter, null,
-    (err: RequestFailed, reports: any[]) => {
+    this.dbService.getClient().getRunResults(
+      this.shared.runIds,
+      this.limit,
+      this.offset,
+      [ sortMode ],
+      this.shared.reportFilter,
+      this.shared.cmpData
+    ).then((reports: ReportData[]) => {
       this.reports = reports;
-      console.log(reports);
     });
   }
 

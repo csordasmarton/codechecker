@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-const reportServerTypes = require('api/report_server_types');
-
 import { DbService } from '../shared';
 
 @Component({

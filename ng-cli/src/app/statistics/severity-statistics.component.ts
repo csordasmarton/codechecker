@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-const reportServerTypes = require('api/report_server_types');
+import { ReportFilter, Severity, CompareData, DiffType } from '@cc/db-access';
 
 import { DbService } from '../shared';
+import { Int64 } from 'thrift';
 
 @Component({
     selector: 'severity-statistics',
@@ -36,19 +37,20 @@ export class SeverityStatisticsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    const runIds: number[] = null; // TODO: this should be controlled by a filter bar.
-    const isUnique = true; // TODO: this should be controlled by a filter bar.
+    const runIds: Int64[] = []; // TODO: this should be controlled by a filter bar.
+    const reportFilter = new ReportFilter({isUnique: true});
 
-    const reportFilter = new reportServerTypes.ReportFilter();
-    reportFilter.isUnique = isUnique;
-
-    this.dbService.getSeverityCounts(runIds, reportFilter, null, (err, res) => {
-      for (const key of Object.keys(res)) {
+    this.dbService.getClient().getSeverityCounts(
+      runIds,
+      reportFilter,
+      new CompareData()
+    ).then((res: Map<Severity, Int64>) => {
+      res.forEach((value: Int64, key: Severity) => {
         this.items.push({
           severity: key,
-          reports: res[key]
+          reports: value
         });
-      }
+      });
       this.itemCount = this.items.length;
     });
   }

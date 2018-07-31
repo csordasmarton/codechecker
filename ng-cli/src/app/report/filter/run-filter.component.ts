@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService, RequestFailed } from '../../shared';
+import Int64 = require('node-int64');
+
+import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
-const reportServerTypes = require('api/report_server_types');
+import { ReportFilter, RunReportCount, RunReportCounts } from '@cc/db-access';
 
 @Component({
   selector: 'run-filter',
@@ -42,6 +44,7 @@ export class RunFilterComponent extends SelectFilterBase {
       for (let i = 0; i < unknownRunNames.length; ++i) {
         const runName = unknownRunNames[i];
         const reportCount = runReportCounts[i];
+        console.log(reportCount);
         if (!this.selectedItems[runName]) {
           this.selectedItems[runName] = {
             label: runName,
@@ -57,12 +60,15 @@ export class RunFilterComponent extends SelectFilterBase {
 
   getRunReportCountsByRunName(runName: string) {
     return new Promise((resolve, reject) => {
-      const reportFilter = new reportServerTypes.ReportFilter();
+      const reportFilter = new ReportFilter();
       Object.assign(reportFilter, this.shared.reportFilter);
       reportFilter.runName = [runName];
 
-      this.dbService.getRunReportCounts(null, reportFilter, null, null,
-        (err: RequestFailed, res) => {
+      const limit: Int64 = new Int64(500);
+      const offset: Int64 = new Int64(500);
+
+      this.dbService.getClient().getRunReportCounts([], reportFilter, limit,
+      offset).then((res: RunReportCount[]) => {
           const runIds = res.map((reportCount: any) => {
             return reportCount.runId.toNumber();
           });
@@ -81,11 +87,12 @@ export class RunFilterComponent extends SelectFilterBase {
   }
 
   public notify() {
-    const limit = 10; // TODO
-    const offset = 0; // TODO
-    this.dbService.getRunReportCounts(null,
-    this.shared.reportFilter, limit, offset,
-    (err: RequestFailed, runReportCounts: any[]) => {
+    const limit = new Int64(10);
+    const offset = new Int64(0);
+
+    this.dbService.getClient().getRunReportCounts([],
+    this.shared.reportFilter, limit, offset).then(
+    (runReportCounts: RunReportCounts) => {
       this.items = runReportCounts.map((runReport) => {
         const label = runReport.name;
         const item = {

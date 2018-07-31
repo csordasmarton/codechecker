@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-const reportServerTypes = require('api/report_server_types');
+import Int64 = require('node-int64');
+
+import {
+  DetectionStatus,
+  ReportFilter,
+  ReviewStatus,
+  CheckerCounts,
+  MAX_QUERY_SIZE,
+  CompareData} from '@cc/db-access';
 
 import { DbService } from '../shared';
 
@@ -36,20 +44,20 @@ export class CheckerStatisticsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    const runIds: number[] = null; // TODO: this should be controlled by a filter bar.
-    const limit: number = null;
-    const offset: number = null;
+    const runIds: Int64[] = []; // TODO: this should be controlled by a filter bar.
+    const limit: Int64 = MAX_QUERY_SIZE;
+    const offset: Int64 = new Int64(0);
     const isUnique = true; // TODO: this should be controlled by a filter bar.
 
     const queries = [
       { field: null, values: null },
-      {field: 'reviewStatus', values: [reportServerTypes.ReviewStatus.UNREVIEWED]},
-      {field: 'reviewStatus', values: [reportServerTypes.ReviewStatus.CONFIRMED]},
-      {field: 'reviewStatus', values: [reportServerTypes.ReviewStatus.FALSE_POSITIVE]},
-      {field: 'reviewStatus', values: [reportServerTypes.ReviewStatus.INTENTIONAL]},
-      {field: 'detectionStatus', values: [reportServerTypes.DetectionStatus.RESOLVED]}
+      {field: 'reviewStatus', values: [ReviewStatus.UNREVIEWED]},
+      {field: 'reviewStatus', values: [ReviewStatus.CONFIRMED]},
+      {field: 'reviewStatus', values: [ReviewStatus.FALSE_POSITIVE]},
+      {field: 'reviewStatus', values: [ReviewStatus.INTENTIONAL]},
+      {field: 'detectionStatus', values: [DetectionStatus.RESOLVED]}
     ].map((q) => {
-      const reportFilter = new reportServerTypes.ReportFilter();
+      const reportFilter = new ReportFilter();
       reportFilter.isUnique = isUnique;
 
       if (q.field) {
@@ -57,10 +65,15 @@ export class CheckerStatisticsComponent implements OnInit {
       }
 
       return new Promise((resolve, reject) => {
-        this.dbService.getCheckerCounts(runIds, reportFilter, null, limit,
-        offset, (err, res) => {
+        this.dbService.getClient().getCheckerCounts(
+          runIds,
+          reportFilter,
+          new CompareData(),
+          limit,
+          offset
+        ).then((checkerCounts: CheckerCounts) => {
           const obj = {};
-          res.forEach((item: any) => { obj[item.name] = item; });
+          checkerCounts.forEach((item: any) => { obj[item.name] = item; });
           resolve(obj);
         });
       });

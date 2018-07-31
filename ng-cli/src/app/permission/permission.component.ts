@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AuthenticationService } from '../shared';
 
-const authTypes = require('api/authentication_types');
+import { PermissionFilter, AuthorisationList } from '@cc/authentication';
+import { Permission } from '@cc/shared';
 
 @Component({
   selector: 'permission',
@@ -14,7 +15,7 @@ const authTypes = require('api/authentication_types');
 export class PermissionComponent implements OnInit {
   addNewUserForm: FormGroup;
 
-  private permissions: [number] = null;
+  private permissions: Permission[] = null;
   private userRights = {};
   private groupRights = {};
 
@@ -35,42 +36,43 @@ export class PermissionComponent implements OnInit {
     const extraParamsJSON = JSON.stringify(extraParam);
 
     const scope = 'PRODUCT';
-    const filter = new authTypes.PermissionFilter({ canManage: true });
+    const filter = new PermissionFilter({ canManage: true });
 
-    this.authService.getPermissionsForUser(
+    this.authService.getClient().getPermissionsForUser(
       scope,
       extraParamsJSON,
-      filter,
-      (err, permissions) => {
-        this.permissions = permissions;
-        this.getAuthorizationRights(permissions, extraParamsJSON);
-      }
-    );
+      filter
+    ).then((permissions: Permission[]) => {
+      this.permissions = permissions;
+      this.getAuthorizationRights(permissions, extraParamsJSON);
+    });
   }
 
-  private getAuthorizationRights(permissions: [any], extraParamsJSON: string) {
+  private getAuthorizationRights(
+    permissions: Permission[],
+    extraParamsJSON: string
+  ) {
     permissions.forEach(permission => {
-      this.authService.getAuthorisedNames(
+      this.authService.getClient().getAuthorisedNames(
         permission,
-        extraParamsJSON,
-        (err, authUserAndGroups) => {
-          authUserAndGroups.users.forEach((user: string) => {
-            if (!this.userRights.hasOwnProperty(user)) {
-              this.userRights[user] = [];
-            }
-            this.userRights[user] = this.userRights[user].concat(permission);
-          });
+        extraParamsJSON
+      ).then((authUserAndGroups: AuthorisationList) => {
+        authUserAndGroups.users.forEach((user: string) => {
+          if (!this.userRights.hasOwnProperty(user)) {
+            this.userRights[user] = [];
+          }
+          this.userRights[user] = this.userRights[user].concat(permission);
+        });
 
-          authUserAndGroups.groups.forEach((group: string) => {
-            if (!this.groupRights.hasOwnProperty(group)) {
-              this.groupRights[group] = [];
-            }
-            this.groupRights[group] = this.groupRights[group].concat(
-              permission
-            );
-          });
-        }
-      );
+        authUserAndGroups.groups.forEach((group: string) => {
+          if (!this.groupRights.hasOwnProperty(group)) {
+            this.groupRights[group] = [];
+          }
+          this.groupRights[group] = this.groupRights[group].concat(
+            permission
+          );
+        });
+      });
     });
   }
 

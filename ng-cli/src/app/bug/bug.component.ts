@@ -2,10 +2,23 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2 } fro
 import { ActivatedRoute, Router } from '@angular/router';
 import * as CodeMirror from 'codemirror';
 
+import Int64 = require('node-int64');
 const jsPlumb = require('jsplumb').jsPlumb;
-const reportServerTypes = require('api/report_server_types');
 
-import { DbService, RequestFailed } from '../shared';
+import {
+  MAX_QUERY_SIZE,
+  Order,
+  ReportFilter,
+  SortMode,
+  SortType,
+  SourceFileData,
+  ReportData,
+  CompareData,
+  ReportDataList,
+  Encoding,
+  ReportDetails} from '@cc/db-access';
+
+import { DbService } from '../shared';
 
 @Component({
   selector: 'bug-page',
@@ -92,41 +105,46 @@ export class BugComponent implements OnInit, OnDestroy {
     this.editor.refresh();
   }
 
-  loadReport(reportId: number, reportHash: string) {
+  loadReport(reportId: Int64, reportHash: string) {
     if (reportId !== null && reportId !== undefined) {
-      this.dbService.getReport(reportId,
-      (err: RequestFailed, reportData: any) => {
+      this.dbService.getClient().getReport(reportId).then(
+      (reportData: ReportData) => {
         this.setReport(reportData);
       });
     } else {
-      const runIds: number[] = null; // We should get this from the URL parameters.
+      const runIds: Int64[] = []; // We should get this from the URL parameters.
+
+      const limit: Int64 = MAX_QUERY_SIZE;
+      const offset: Int64 = new Int64(0);
 
       // Get all reports by report hash
-      const reportFilter = new reportServerTypes.ReportFilter();
+      const reportFilter = new ReportFilter();
       reportFilter.reportHash = [reportHash];
       reportFilter.isUnique = false;
 
+      const cmpData = new CompareData();
+
       // We set a sort option to select a report which has the shortest
       // bug path length.
-      const sortMode = new reportServerTypes.SortMode();
-      sortMode.type = reportServerTypes.SortType.BUG_PATH_LENGTH;
-      sortMode.ord = reportServerTypes.Order.ASC;
-      this.dbService.getRunResults(runIds,
-        reportServerTypes.MAX_QUERY_SIZE, 0, [sortMode], reportFilter, null,
-        ((err, reports) => {
+      const sortMode = new SortMode();
+      sortMode.type = SortType.BUG_PATH_LENGTH;
+      sortMode.ord = Order.ASC;
+      this.dbService.getClient().getRunResults(runIds, limit, offset,
+      [sortMode], reportFilter, cmpData).then(
+        (reports: ReportDataList) => {
           this.setReport(reports[0]);
-        }));
+        });
     }
   }
 
   setReport(report: any) {
     this.report = report;
-    this.dbService.getSourceFileData(report.fileId, true, null,
-      (err: RequestFailed, sourceFile: any) => {
-        this.setContent(sourceFile);
-        this.drawBugPath();
-        this.jumpTo(report.line.toNumber(), 0);
-      });
+    this.dbService.getClient().getSourceFileData(report.fileId, true,
+    Encoding.DEFAULT).then((sourceFile: SourceFileData) => {
+      this.setContent(sourceFile);
+      this.drawBugPath();
+      this.jumpTo(report.line.toNumber(), 0);
+    });
   }
 
   ngOnDestroy() {
@@ -137,8 +155,8 @@ export class BugComponent implements OnInit, OnDestroy {
     this.clearBubbles();
     this.clearLines();
 
-    this.dbService.getReportDetails(this.report.reportId,
-    (err: RequestFailed, reportDetail: any) => {
+    this.dbService.getClient().getReportDetails(this.report.reportId).then(
+    (reportDetail: ReportDetails) => {
       const points = reportDetail.executionPath.filter((path: any) => {
         return path.fileId.toNumber() === this.sourceFile.fileId.toNumber();
       });

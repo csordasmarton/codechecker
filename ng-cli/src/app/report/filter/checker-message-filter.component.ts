@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverModule } from 'ngx-popover';
 
-import { DbService, UtilService, RequestFailed } from '../../shared';
+import Int64 = require('node-int64');
+
+import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 import { SharedService } from '..';
 
@@ -27,15 +29,16 @@ export class CheckerMessageFilterComponent extends SelectFilterBase {
   }
 
   public notify() {
-    const limit = 10;
-    const offset = 0;
-    this.dbService.getCheckerMsgCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData, limit, offset,
-    (err: RequestFailed, checkerMsgCounts: any[]) => {
-      this.items = Object.keys(checkerMsgCounts).map((key) => {
+    const limit = new Int64(10);
+    const offset = new Int64(0);
+
+    this.dbService.getClient().getCheckerMsgCounts(this.shared.runIds,
+    this.shared.reportFilter, this.shared.cmpData, limit, offset).then(
+    (checkerMsgCounts: Map<string, Int64>) => {
+      this.items = Array.from(checkerMsgCounts).map(([key, value]) => {
         const item = {
           label: key,
-          count: checkerMsgCounts[key].toNumber()
+          count: value.toNumber()
         };
 
         if (this.selectedItems[key] === null) {

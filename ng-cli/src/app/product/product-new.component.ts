@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../shared';
-const productTypes = require('api/products_types');
+
+import {
+  ProductConfiguration,
+  DatabaseConnection } from '@cc/product-management';
 
 @Component({
   selector: 'product-new',
@@ -12,9 +15,9 @@ export class ProductNewComponent {
   dbConnectionUsername: string = null;
   dbConnectionPassword: string = null;
 
-  product = new productTypes.ProductConfiguration();
+  product = new ProductConfiguration();
   constructor(private productService: ProductService) {
-    this.product.connection = new productTypes.DatabaseConnection();
+    this.product.connection = new DatabaseConnection();
     this.product.connection.engine = 'sqlite';
   }
 

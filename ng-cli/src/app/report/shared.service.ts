@@ -2,18 +2,19 @@ import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-const reportServerTypes = require('api/report_server_types');
+import { ReportFilter, CompareData } from '@cc/db-access';
 
 import { Filter } from './filter/Filter';
+import { Int64 } from 'thrift';
 
 /**
  * Common service to pass data between filters.
  */
 @Injectable()
 export class SharedService {
-  runIds: number[];
-  reportFilter: any = new reportServerTypes.ReportFilter();
-  cmpData: any = null;
+  runIds: Int64[] = [];
+  reportFilter: any = new ReportFilter();
+  cmpData: any = new CompareData();
   reportCount = 0;
 
   private filters: Filter[] = [];
