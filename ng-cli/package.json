@@ -6,6 +6,7 @@
   "scripts": {
     "thrift-api": "rimraf ./api && thrift-typescript --rootDir . --sourceDir ../api  --outDir ./api",
     "build": "npm run thrift-api && rimraf dist && webpack --config config/webpack.dev.js --bail",
+    "release": "npm run thrift-api && rimraf dist && webpack --config config/webpack.prod.js --bail",
     "serve": "lite-server -c=bs-config.json",
     "prestart": "npm run build",
     "start": "webpack-dev-server --inline --progress --watch-poll",

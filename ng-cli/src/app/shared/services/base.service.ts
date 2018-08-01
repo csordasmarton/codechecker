@@ -27,7 +27,10 @@ export class BaseService<T> {
       ? router.routerState.snapshot.root.children[0].params['product']
       : null;
 
-    const connection = createXHRConnection(SERVER_HOST, SERVER_PORT, {
+    const host = SERVER_HOST || window.location.hostname;
+    const port = SERVER_PORT || parseInt(window.location.port, 10);
+
+    const connection = createXHRConnection(host, port, {
       transport: TBufferedTransport,
       protocol: TJSONProtocol,
       path: `${product ? '/' + product : '' }/v${API_VERSION}/${endpoint}`

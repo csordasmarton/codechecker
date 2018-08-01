@@ -152,7 +152,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
                 if self.path != '/' else ''
 
             self.send_response(307)  # 307 Temporary Redirect
-            self.send_header('Location', '/login.html' + returnto)
+            self.send_header('Location', '/index.html' + returnto)
             self.send_header('Connection', 'close')
             self.end_headers()
             self.wfile.write('')
@@ -188,7 +188,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
                         # If the reconnection fails,
                         # redirect user to the products page.
                         self.send_response(307)  # 307 Temporary Redirect
-                        self.send_header("Location", '/products.html')
+                        self.send_header("Location", '/index.html')
                         self.end_headers()
                         return
 
@@ -239,14 +239,14 @@ class RequestHandler(SimpleHTTPRequestHandler):
                                   .format(only_product.endpoint))
 
                         self.send_response(307)  # 307 Temporary Redirect
-                        self.send_header("Location", '/products.html')
+                        self.send_header("Location", '/index.html')
                         self.end_headers()
                         return
 
                 # If multiple products exist, route homepage queries to
                 # serve the product list.
                 LOG.debug("Serving product list as homepage.")
-                self.path = '/products.html'
+                self.path = '/index.html'
             else:
                 # The path requested does not specify a product: it is most
                 # likely a resource file.

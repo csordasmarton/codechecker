@@ -8,7 +8,7 @@ const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
 const METADATA = webpackMerge(commonConfig.metadata, {
   'SERVER_HOST': null,
-  'SERVER_PORT': 80
+  'SERVER_PORT': null
 });
 
 module.exports = webpackMerge(commonConfig, {

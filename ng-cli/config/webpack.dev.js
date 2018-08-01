@@ -15,7 +15,7 @@ const SERVICE_ENDPOINTS = ['Authentication', 'Products', 'CodeCheckerService'];
 // the value of `window.location.host` which will contain port number by default
 // on local host which cause invalid url format.
 const METADATA = webpackMerge(commonConfig.METADATA, {
-  'SERVER_HOST': JSON.stringify('localhost'),
+  'SERVER_HOST': null,
   'SERVER_PORT': null,
 });
 
