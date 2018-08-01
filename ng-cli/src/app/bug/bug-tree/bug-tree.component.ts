@@ -84,7 +84,7 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
       const reportFilter = new ReportFilter();
       const cmpData = new CompareData();
 
-      this.dbService.getClient().getRunResults(runIds, limit, offset, [],
+      this.dbService.getClient().getRunResults(runIds || [], limit, offset, [],
       reportFilter, cmpData).then((reports: ReportDataList) => {
         // Adding reports to the tree.
         reports.forEach((report) => {
