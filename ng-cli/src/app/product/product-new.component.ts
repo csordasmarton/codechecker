@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../shared';
 
 import {
-  ProductConfiguration,
-  DatabaseConnection } from '@cc/product-management';
+  DatabaseConnection,
+  ProductConfiguration
+} from '@cc/product-management';
+
+import { ProductService } from '../shared';
 
 @Component({
   selector: 'product-new',

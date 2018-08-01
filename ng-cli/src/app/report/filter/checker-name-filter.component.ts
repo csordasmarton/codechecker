@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PopoverModule } from 'ngx-popover';
 
 import Int64 = require('node-int64');
 
+import { CheckerCounts } from '@cc/db-access';
+
+import { SharedService } from '..';
 import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
-import { SharedService } from '..';
-import { CheckerCount } from '../../../../api/codeCheckerDBAccess_v6';
 
 @Component({
   selector: 'checker-name-filter',
@@ -35,7 +35,7 @@ export class CheckerNameFilterComponent extends SelectFilterBase {
 
     this.dbService.getClient().getCheckerCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData, limit, offset).then(
-      (checkerCounts: CheckerCount[]) => {
+      (checkerCounts: CheckerCounts) => {
         this.items = checkerCounts.map((checkerCount) => {
           const name = checkerCount.name;
         const item = {

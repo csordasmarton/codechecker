@@ -1,8 +1,8 @@
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 
-import { Filter } from './Filter';
 import { SharedService } from '..';
 import { UtilService } from '../../shared';
+import { Filter } from './Filter';
 
 export abstract class SelectFilterBase implements Filter {
   protected items: any[];

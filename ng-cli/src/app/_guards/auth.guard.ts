@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
+
 import {
-  Router,
-  CanActivate,
   ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
   RouterStateSnapshot
 } from '@angular/router';
-import { TokenService, AuthenticationService } from '../shared';
 
 import { HandshakeInformation } from '@cc/authentication';
+
+import { AuthenticationService, TokenService } from '../shared';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -19,7 +21,7 @@ export class AuthGuard implements CanActivate {
     private tokenService: TokenService,
     private authenticationService: AuthenticationService
   ) {
-    this.authParameters = 
+    this.authParameters =
       this.authenticationService.getClient().getAuthParameters();
   }
 

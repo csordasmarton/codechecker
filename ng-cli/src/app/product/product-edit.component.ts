@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-
-import { ProductService } from '../shared';
 import { ActivatedRoute } from '@angular/router';
 
 import {
-  ProductConfiguration,
-  DatabaseConnection, 
-  Product} from '@cc/product-management';
+  DatabaseConnection,
+  Product,
+  ProductConfiguration
+} from '@cc/product-management';
+
+import { ProductService } from '../shared';
 
 @Component({
   selector: 'product-edit',

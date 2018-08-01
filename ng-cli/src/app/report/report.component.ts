@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { SortMode , SortType, Order, ReportData } from '@cc/db-access';
+import Int64 = require('node-int64');
+
+import { Order, ReportData, SortMode , SortType } from '@cc/db-access';
 
 import { DbService } from '../shared';
 import { Filter } from './filter/Filter';
 import { SharedService } from './shared.service';
-
-import Int64 = require('node-int64');
 
 @Component({
     selector: 'report',

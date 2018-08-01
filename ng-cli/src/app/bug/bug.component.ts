@@ -2,21 +2,23 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, Renderer2 } fro
 import { ActivatedRoute, Router } from '@angular/router';
 import * as CodeMirror from 'codemirror';
 
-import Int64 = require('node-int64');
 const jsPlumb = require('jsplumb').jsPlumb;
 
+import Int64 = require('node-int64');
+
 import {
+  CompareData,
+  Encoding,
   MAX_QUERY_SIZE,
   Order,
+  ReportData,
+  ReportDataList,
+  ReportDetails,
   ReportFilter,
   SortMode,
   SortType,
-  SourceFileData,
-  ReportData,
-  CompareData,
-  ReportDataList,
-  Encoding,
-  ReportDetails} from '@cc/db-access';
+  SourceFileData
+} from '@cc/db-access';
 
 import { DbService } from '../shared';
 

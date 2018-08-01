@@ -2,10 +2,11 @@ import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ReportFilter, CompareData } from '@cc/db-access';
+import Int64 = require('node-int64');
+
+import { CompareData, ReportFilter } from '@cc/db-access';
 
 import { Filter } from './filter/Filter';
-import { Int64 } from 'thrift';
 
 /**
  * Common service to pass data between filters.

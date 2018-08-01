@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import Int64 = require('node-int64');
 
-import { codeCheckerDBAccess, RunFilter, RunDataList } from '@cc/db-access';
+import { codeCheckerDBAccess, RunDataList, RunFilter } from '@cc/db-access';
 
-import { BaseService } from './base.service';
 import { TokenService } from '.';
+import { BaseService } from './base.service';
 
 @Injectable()
 export class DbService extends BaseService<codeCheckerDBAccess.Client> {

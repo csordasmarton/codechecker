@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PopoverModule } from 'ngx-popover';
 
+import {
+  CompareData,
+  ReportFilter,
+  RunTagCount,
+  RunTagCounts
+} from '@cc/db-access';
+
+import { SharedService } from '..';
 import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
-import { SharedService } from '..';
-
-import { ReportFilter, CompareData, RunTagCount, RunTagCounts } from '@cc/db-access';
 
 @Component({
   selector: 'run-tag-filter',

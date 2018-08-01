@@ -3,15 +3,16 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './_guards';
 import { BugComponent } from './bug';
 import { LoginComponent } from './login';
+import { PermissionComponent } from './permission';
 import {
   ProductComponent,
   ProductDetailComponent,
-  ProductNewComponent,
-  ProductEditComponent } from './product';
+  ProductEditComponent,
+  ProductNewComponent
+} from './product';
 import { ReportComponent } from './report';
 import { RunListComponent } from './run';
 import { StatisticsComponent } from './statistics';
-import { PermissionComponent } from './permission';
 
 export const ROUTES: Routes = [
   {

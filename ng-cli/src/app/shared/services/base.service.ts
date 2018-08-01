@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TokenService } from '.';
 
 import {
-  createXHRConnection,
   createXHRClient,
+  createXHRConnection,
   TBufferedTransport,
   TJSONProtocol} from 'thrift';
 

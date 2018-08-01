@@ -1,9 +1,9 @@
 import { Component} from '@angular/core';
-
-import { ProductService } from '../shared';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Product } from '@cc/product-management';
+
+import { ProductService } from '../shared';
 
 @Component({
   selector: 'product-page',

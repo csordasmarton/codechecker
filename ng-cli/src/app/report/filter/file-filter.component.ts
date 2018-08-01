@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PopoverModule } from 'ngx-popover';
 
 import Int64 = require('node-int64');
 
-import { DbService, UtilService } from '../../shared';
 import { SharedService } from '..';
+import { DbService, UtilService } from '../../shared';
 import { SelectFilterBase } from './select-filter-base';
 
 @Component({

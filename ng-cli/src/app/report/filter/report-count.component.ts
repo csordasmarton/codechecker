@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 
 import Int64 = require('node-int64');
 
+import { SharedService } from '..';
 import { DbService } from '../../shared';
 import { Filter } from './Filter';
-import { SharedService } from '..';
+
 
 @Component({
   selector: 'report-count',

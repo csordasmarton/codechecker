@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { codeCheckerProductService } from '@cc/product-management';
 
-import { BaseService } from './base.service';
 import { TokenService } from '.';
+import { BaseService } from './base.service';
 
 @Injectable()
 export class ProductService extends BaseService<codeCheckerProductService.Client> {

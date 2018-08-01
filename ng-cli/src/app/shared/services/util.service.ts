@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 
 import {
-  Severity,
   DetectionStatus,
-  ReviewStatus } from '@cc/db-access';
+  ReviewStatus,
+  Severity,
+} from '@cc/db-access';
 
 import { Permission } from '@cc/shared';
 

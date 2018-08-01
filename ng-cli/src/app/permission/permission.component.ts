@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { AuthorisationList, PermissionFilter } from '@cc/authentication';
+import { Permission } from '@cc/shared';
 
 import { AuthenticationService } from '../shared';
-
-import { PermissionFilter, AuthorisationList } from '@cc/authentication';
-import { Permission } from '@cc/shared';
 
 @Component({
   selector: 'permission',

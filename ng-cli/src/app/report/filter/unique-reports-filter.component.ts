@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { SharedService } from '..';
 import { DbService, UtilService } from '../../shared';
 import { Filter } from './Filter';
-import { SharedService } from '..';
 
 @Component({
   selector: 'unique-reports-filter',

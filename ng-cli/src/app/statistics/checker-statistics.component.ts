@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import Int64 = require('node-int64');
 
 import {
+  CheckerCounts,
+  CompareData,
   DetectionStatus,
+  MAX_QUERY_SIZE,
   ReportFilter,
   ReviewStatus,
-  CheckerCounts,
-  MAX_QUERY_SIZE,
-  CompareData} from '@cc/db-access';
+} from '@cc/db-access';
 
 import { DbService } from '../shared';
 

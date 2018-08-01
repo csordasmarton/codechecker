@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ReportFilter, Severity, CompareData, DiffType } from '@cc/db-access';
+import Int64 = require('node-int64');
+
+import { CompareData, DiffType, ReportFilter, Severity } from '@cc/db-access';
 
 import { DbService } from '../shared';
-import { Int64 } from 'thrift';
 
 @Component({
     selector: 'severity-statistics',

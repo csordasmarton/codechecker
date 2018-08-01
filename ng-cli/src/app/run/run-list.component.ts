@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DbService } from '../shared';
 import { RunData, RunFilter } from '@cc/db-access';
+
+import { DbService } from '../shared';
 
 @Component({
   selector: 'run-list',

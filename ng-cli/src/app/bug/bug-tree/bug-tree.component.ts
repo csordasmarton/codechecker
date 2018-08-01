@@ -4,6 +4,9 @@ import {
   Component,
   ViewChild
 } from '@angular/core';
+
+import { ActivatedRoute } from '@angular/router';
+
 import {
   ITreeOptions,
   TreeComponent,
@@ -14,10 +17,15 @@ import {
 
 import Int64 = require('node-int64');
 
-import { DbService, UtilService } from '../../shared';
-import { ActivatedRoute } from '@angular/router';
+import {
+  CompareData,
+  MAX_QUERY_SIZE,
+  ReportDataList,
+  ReportDetails,
+  ReportFilter
+} from '@cc/db-access';
 
-import { MAX_QUERY_SIZE, ReportDetails, ReportFilter, CompareData, ReportDataList } from '@cc/db-access';
+import { DbService, UtilService } from '../../shared';
 
 @Component({
   selector: 'bug-tree',
