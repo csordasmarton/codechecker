@@ -1,49 +1,72 @@
-<div>
-  <label for="endpoint">URL endpoint*</label>
-  <input type="textbox" name="endpoint" placeholder="Unique identifier for product!" [(ngModel)]="product.endpoint">
+<div class="container">
+  <form>
+    <div class="form-group row">
+      <label for="endpoint" class="col-sm-2 col-form-label">URL endpoint*</label>
+      <div class="col-sm-10">
+        <input type="textbox" name="endpoint"  class="form-control" placeholder="Unique identifier for product!" [(ngModel)]="product.endpoint">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="name" class="col-sm-2 col-form-label">Display name</label>
+      <div class="col-sm-10">
+        <input type="textbox" name="name" class="form-control" placeholder="(Optional)" [(ngModel)]="productName">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="endpoint" class="col-sm-2 col-form-label">Description</label>
+      <div class="col-sm-10">
+        <input type="textbox" name="description" class="form-control" placeholder="(Optional)" [(ngModel)]="productDescription">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="endpoint" class="col-sm-2 col-form-label">Database engine*</label>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input type="radio" name="db-engine" value="postgresql" class="form-check-input" [(ngModel)]="product.connection.engine">
+          <label class="form-check-label" for="db-engine">
+            PostgreSQL
+          </label>
+        </div>
+        <div class="form-check">
+          <input type="radio" name="db-engine" value="sqlite" class="form-check-input" [(ngModel)]="product.connection.engine">
+          <label class="form-check-label" for="db-engine">
+            SQLite
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="product.connection.engine == 'sqlite'">
+      <label for="sqlite-file" class="col-sm-2 col-form-label">Database file*</label>
+      <div class="col-sm-10">
+        <input type="textbox" name="sqlite-file" class="form-control" placeholder="(If relative, to CONFIG_DIRECTORY)" [(ngModel)]="product.connection.database">
+      </div>
+    </div>
+    <div *ngIf="product.connection.engine == 'postgresql'">
+      <div class="form-group row">
+        <label for="psql-address" class="col-sm-2 col-form-label">Server address*</label>
+        <div class="col-sm-10">
+          <input type="textbox" name="psql-address" class="form-control" [(ngModel)]="product.connection.host">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="psql-port" class="col-sm-2 col-form-label">Port*</label>
+        <div class="col-sm-10">
+          <input type="textbox" name="psql-port" class="form-control" [(ngModel)]="product.connection.port">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="psql-username" class="col-sm-2 col-form-label">Username*</label>
+        <div class="col-sm-10">
+          <input type="textbox" name="psql-username" class="form-control" [(ngModel)]="dbConnectionUsername">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="psql-dbname" class="col-sm-2 col-form-label">Database name*</label>
+        <div class="col-sm-10">
+          <input type="textbox" name="psql-dbname" class="form-control" placeholder="Database must exist!" [(ngModel)]="product.connection.database">
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="addProduct()">Add</button> 
+  </form>
 </div>
-<div>
-  <label for="name">Display name</label>
-  <input type="textbox" name="name" placeholder="(Optional)" [(ngModel)]="productName">
-</div>
-<div>
-  <label for="description">Description</label>
-  <input type="textbox" name="description" placeholder="(Optional)" [(ngModel)]="productDescription">
-</div>
-<div>
-  <ul>
-    <li>
-      <input type="radio" name="db-engine" value="sqlite" [(ngModel)]="product.connection.engine">
-      <label>SQLite</label>
-    </li>
-    <li>
-      <input type="radio" name="db-engine" value="psql" [(ngModel)]="product.connection.engine">
-      <label>PostgreSQL</label>
-    </li>
-  </ul>
-</div>
-<div *ngIf="product.connection.engine == 'sqlite'">
-  <div>
-    <label for="sqlite-file">Database file</label>
-    <input type="textbox" name="sqlite-file" placeholder="(If relative, to CONFIG_DIRECTORY)" [(ngModel)]="product.connection.database">
-  </div>
-</div>
-<div *ngIf="product.connection.engine == 'postgresql'">
-  <div>
-    <label for="psql-address">Server address</label>
-    <input type="textbox" name="psql-address" [(ngModel)]="product.connection.host">
-  </div>
-  <div>
-    <label for="psql-port">Port</label>
-    <input type="textbox" name="psql-port" [(ngModel)]="product.connection.port">
-  </div>
-  <div>
-    <label for="psql-username">Username</label>
-    <input type="textbox" name="psql-username" [(ngModel)]="dbConnectionUsername">
-  </div>
-  <div>
-    <label for="psql-dbname">Database name</label>
-    <input type="textbox" name="psql-dbname" placeholder="Database must exist!" [(ngModel)]="product.connection.database">
-  </div>
-</div>
-<button type="button" (click)="addProduct()">Add</button> 
