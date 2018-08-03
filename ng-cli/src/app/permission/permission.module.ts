@@ -9,11 +9,22 @@ import {
 
 import { AuthenticationService } from '../shared';
 import { SharedModule } from '../shared/shared.module';
+import { GroupPermissionComponent } from './group-permission.component';
 import { PermissionComponent } from './permission.component';
+import { UserPermissionComponent } from './user-permission.component';
 
 @NgModule({
-  imports: [BrowserModule, ReactiveFormsModule, RouterModule, SharedModule],
-  declarations: [PermissionComponent],
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    RouterModule,
+    SharedModule
+  ],
+  declarations: [
+    GroupPermissionComponent,
+    PermissionComponent,
+    UserPermissionComponent
+  ],
   providers: [AuthenticationService]
 })
 export class PermissionModule {}

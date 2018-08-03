@@ -1,11 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import Int64 = require('node-int64');
+
 import { AuthorisationList, PermissionFilter } from '@cc/authentication';
+import { Products } from '@cc/product-management';
 import { Permission } from '@cc/shared';
 
-import { AuthenticationService } from '../shared';
+import { AuthenticationService, ProductService } from '../shared';
+import { GroupPermissionComponent } from './group-permission.component';
+import { UserPermissionComponent } from './user-permission.component';
+
 
 @Component({
   selector: 'permission',
@@ -13,38 +19,53 @@ import { AuthenticationService } from '../shared';
   styleUrls: ['./permission.component.scss']
 })
 export class PermissionComponent implements OnInit {
-  addNewUserForm: FormGroup;
-
   private permissions: Permission[] = null;
-  private userRights = {};
-  private groupRights = {};
+  private userRights: {[key: string]: Permission[]} = {};
+  private groupRights: {[key: string]: Permission[]} = {};
+  private extraParamsJSON: string = null;
+
+  @ViewChild(UserPermissionComponent)
+    userPermissionComponent: UserPermissionComponent;
+
+  @ViewChild(GroupPermissionComponent)
+    groupPermissionComponent: GroupPermissionComponent;
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthenticationService,
+    private productService: ProductService,
     private formBuilder: FormBuilder
   ) {}
 
   public ngOnInit() {
-    this.addNewUserForm = this.formBuilder.group({
-      username: ['', Validators.required]
+    const endpoint = this.route.snapshot.params['endpoint'];
+    this.productService.getClient().getProducts(endpoint, '').then(
+      (products: Products) => {
+        if (products.length) {
+          const currentProduct = products[0];
+          this.loadPermissions(currentProduct.id);
+        } else {
+          // TODO: Handle case when product cannot be found.
+          console.warn(`Product with the following endpoint name can not be
+            found: ${endpoint}`);
+        }
     });
+  }
 
-    const productId = 1; // TODO: this should come from the URL.
-
-    const extraParam = { productID: productId };
-    const extraParamsJSON = JSON.stringify(extraParam);
+  loadPermissions(productId: Int64) {
+    const extraParam = { productID: productId.toNumber() };
+    this.extraParamsJSON = JSON.stringify(extraParam);
 
     const scope = 'PRODUCT';
     const filter = new PermissionFilter({ canManage: true });
 
     this.authService.getClient().getPermissionsForUser(
       scope,
-      extraParamsJSON,
+      this.extraParamsJSON,
       filter
     ).then((permissions: Permission[]) => {
       this.permissions = permissions;
-      this.getAuthorizationRights(permissions, extraParamsJSON);
+      this.getAuthorizationRights(permissions, this.extraParamsJSON);
     });
   }
 
@@ -57,32 +78,29 @@ export class PermissionComponent implements OnInit {
         permission,
         extraParamsJSON
       ).then((authUserAndGroups: AuthorisationList) => {
-        authUserAndGroups.users.forEach((user: string) => {
-          if (!this.userRights.hasOwnProperty(user)) {
-            this.userRights[user] = [];
-          }
-          this.userRights[user] = this.userRights[user].concat(permission);
-        });
-
-        authUserAndGroups.groups.forEach((group: string) => {
-          if (!this.groupRights.hasOwnProperty(group)) {
-            this.groupRights[group] = [];
-          }
-          this.groupRights[group] = this.groupRights[group].concat(
-            permission
-          );
-        });
+        this.addAuthorizations(this.userRights, authUserAndGroups.users,
+          permission);
+        this.addAuthorizations(this.groupRights, authUserAndGroups.groups,
+          permission);
       });
     });
   }
 
-  addUser() {
-    // Stop if form is invalid.
-    if (this.addNewUserForm.invalid) {
-      return;
-    }
+  addAuthorizations(
+    authRights: {[key: string]: Permission[]},
+    authorizations: string[],
+    permission: Permission
+  ) {
+    authorizations.forEach((user: string) => {
+      if (!authRights.hasOwnProperty(user)) {
+        authRights[user] = [];
+      }
+      authRights[user] = authRights[user].concat(permission);
+    });
+  }
 
-    const userName = this.addNewUserForm.controls.username.value;
-    this.userRights[userName] = [];
+  saveAll() {
+    this.userPermissionComponent.saveAll();
+    this.groupPermissionComponent.saveAll();
   }
 }

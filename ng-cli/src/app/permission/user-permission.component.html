@@ -1,0 +1,28 @@
+<div>
+  <h3>User permissions</h3>
+  <h5>Grant permission for individual users.</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>User name</th>
+        <th *ngFor="let permission of permissions">
+          {{permission | permissionToString}}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let username of (authRights | keys)">
+        <td>{{username}}</td>
+        <td *ngFor="let permission of permissions">
+          <input type="checkbox" (change)="changeAuthPermission(username, permission)" [checked]="authRights[username].indexOf(permission) !== -1" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form form class="form-inline" [formGroup]="addAuthNameForm">
+    <label class="mr-sm-2" for="username">Grand permission for:</label>
+    <input type="text" formControlName="username" class="form-control mb-2 mr-sm-2 mb-sm-0" id="username" placeholder="User name">
+    <button class="btn btn-primary" (click)="addAuthName()">Add</button>
+  </form>
+</div>
