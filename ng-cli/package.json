@@ -29,7 +29,7 @@
     "@creditkarma/thrift-typescript": "^2.0.5",
     "angular5-data-table": "^1.0.3",
     "angular-tree-component": "^5.2.1",
-    "bootstrap": "^4.0.0-beta.2",
+    "bootstrap": "^4.1.3",
     "codemirror": "^5.32.0",
     "core-js": "^2.5.3",
     "font-awesome": "^4.7.0",
