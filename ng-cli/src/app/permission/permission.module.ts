@@ -9,6 +9,7 @@ import {
 
 import { AuthenticationService } from '../shared';
 import { SharedModule } from '../shared/shared.module';
+import { GlobalPermissionComponent } from './global-permission.component';
 import { GroupPermissionComponent } from './group-permission.component';
 import { PermissionComponent } from './permission.component';
 import { UserPermissionComponent } from './user-permission.component';
@@ -21,6 +22,7 @@ import { UserPermissionComponent } from './user-permission.component';
     SharedModule
   ],
   declarations: [
+    GlobalPermissionComponent,
     GroupPermissionComponent,
     PermissionComponent,
     UserPermissionComponent

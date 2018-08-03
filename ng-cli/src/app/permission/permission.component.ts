@@ -12,17 +12,16 @@ import { AuthenticationService, ProductService } from '../shared';
 import { GroupPermissionComponent } from './group-permission.component';
 import { UserPermissionComponent } from './user-permission.component';
 
-
 @Component({
   selector: 'permission',
   templateUrl: './permission.component.html',
   styleUrls: ['./permission.component.scss']
 })
 export class PermissionComponent implements OnInit {
-  private permissions: Permission[] = null;
-  private userRights: {[key: string]: Permission[]} = {};
-  private groupRights: {[key: string]: Permission[]} = {};
-  private extraParamsJSON: string = null;
+  protected permissions: Permission[] = null;
+  protected userRights: {[key: string]: Permission[]} = {};
+  protected groupRights: {[key: string]: Permission[]} = {};
+  protected extraParamsJSON: string = null;
 
   @ViewChild(UserPermissionComponent)
     userPermissionComponent: UserPermissionComponent;
@@ -69,7 +68,7 @@ export class PermissionComponent implements OnInit {
     });
   }
 
-  private getAuthorizationRights(
+  protected getAuthorizationRights(
     permissions: Permission[],
     extraParamsJSON: string
   ) {

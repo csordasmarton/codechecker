@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './_guards';
 import { BugComponent } from './bug';
 import { LoginComponent } from './login';
-import { PermissionComponent } from './permission';
+import { GlobalPermissionComponent, PermissionComponent } from './permission';
 import {
   ProductComponent,
   ProductDetailComponent,
@@ -27,6 +27,11 @@ export const ROUTES: Routes = [
   {
     path: 'products/new',
     component: ProductNewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'products/permission',
+    component: GlobalPermissionComponent,
     canActivate: [AuthGuard]
   },
   {
