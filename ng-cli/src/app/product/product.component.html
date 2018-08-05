@@ -1,23 +1,92 @@
-<div class="container-fluid">
-  <a [routerLink]="['products', 'new']">New product</a>
-  <a [routerLink]="['products', 'permission']">Global permissions</a>
-  <div id="products">
-    <div class="item" *ngFor="let product of products">
-      <div class="avatar"></div>
-      <div class="meta">
-        <div class="name">
-          <a [routerLink]="[product.endpoint]">{{ product.displayedName_b64 | atou }}</a>
-        </div>
-        <div class="description">
-          {{ product.description_b64 | atou }}
-        </div>
-        <div>
-          <a [routerLink]="['products', 'edit', product.endpoint]">Edit</a>
-          <a [routerLink]="['products', 'permission', product.endpoint]">Permissions</a>
-          <!--<a [routerLink]="['']" [queryParams]="{endpoint: product.endpoint}" queryParamsHandling="merge">Edit</a>
-          <button (click)="edit()">Edit</button>-->
-        </div>
-      </div>
+<div class="container px-2">
+  <form>
+    <div class="form-group pull-right mx-2">
+      <a class="btn btn-primary" [routerLink]="['products', 'new']">New product</a>
+      <a class="btn btn-primary" [routerLink]="['products', 'permission']">Global permissions</a>
     </div>
-  </div>
+  </form>
+
+  <form class="form-inline">
+    <div class="form-group has-search mx-2">
+      <span class="fa fa-search form-control-feedback"></span>
+      <input type="text" class="form-control" placeholder="Search for products...">
+    </div>
+  </form>
+
+  <data-table id="product-list"
+    [title]="'Products'"
+    [class]="'clearfix'"
+    [items]="products"
+    [itemCount]="productCount"
+    [indexColumn]="false"
+    [pagination]="false"
+    [header]="false"
+    (reload)="reloadItems($event)">
+
+    <data-table-column
+      [header]="'Product name'"
+      [property]="'productName'"
+      [sortable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <div class="d-flex align-items-center">
+          <div class="mr-3">
+            <div class="product-icon rounded-circle" [style.background-color]="item.endpoint | strToColor">
+              <div class="align-middle text-center">{{ (item.displayedName_b64 | atou).charAt(0) }}</div>
+            </div>
+          </div>
+          <div>
+            <a [routerLink]="[item.endpoint]" class="text-default font-weight-semibold">
+              {{ item.displayedName_b64 | atou }}
+            </a>
+            <div class="text-muted font-size-sm">
+              <small>{{ item.description_b64 | atou }}</small>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Admins'"
+      [property]="'admins'"
+      [sortable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <ul>
+          <li *ngFor="let admin of item.admins">{{admin}}</li>
+        </ul>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Run count'"
+      [property]="'runCount'"
+      [sortable]="true"
+      [width]="'12%'">
+      <ng-template #dataTableCell let-item="item">
+        <span class="text-center">{{item.runCount}}</span>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Latest store to product'"
+      [property]="'latestStoreToProduct'"
+      [sortable]="true">
+      <ng-template #dataTableCell let-item="item">
+        {{item.latestStoreToProduct | date:'yyyy-MM-dd HH:mm:ss'}}
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'&nbsp;'"
+      [width]="'6%'">
+      <ng-template #dataTableCell let-item="item">
+        <div>
+          <a [routerLink]="['products', 'edit', item.endpoint]">
+            <i class="cc-icon edit"></i>
+          </a>
+          <i class="cc-icon clean"></i>
+        </div>
+      </ng-template>
+    </data-table-column>
+  </data-table>
 </div>

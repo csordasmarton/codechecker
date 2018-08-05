@@ -41,6 +41,10 @@
     content: "\e01e";
   }
 
+  &.edit::before {
+    content: "\e012";
+  }
+
   &.clean::before {
     content: "\e013";
   }

@@ -1,9 +1,7 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-  ActivatedRouteSnapshot,
   RouterModule,
-  RouterStateSnapshot
 } from '@angular/router';
 
 import { DataTableModule } from 'angular5-data-table';

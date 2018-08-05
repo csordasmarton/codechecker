@@ -1,26 +1,37 @@
 #header {
-  height: 50px;
+  min-height: 50px;
   z-index: 1000;
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-  font-size: 14px;
-  -webkit-font-smoothing: initial;
-  -moz-osx-font-smoothing: auto;
-  transition: background-color 0.1s ease-out;
-  -webkit-transition: background-color 0.1s ease-out;
-  -ms-transition: background-color 0.1s ease-out;
-  -moz-transition: background-color 0.1s ease-out;
-  -o-transition: background-color 0.1s ease-out;
-}
+  background-color: #1e88e5;
+  -webkit-box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5);
 
-.navbar-inverse .navbar-brand,
-.navbar-inverse .navbar-toggler {
-  color: #fff;
-}
+  #logo {
+    height: 45px;
+  }
 
-.navbar-brand {
-  padding: 0px;
-}
-.navbar-brand > img {
-  height: 45px;
+  .navbar-inverse {
+    .navbar-brand, .navbar-toggler {
+      color: #fff;
+    }
+  }
+
+  .navbar-brand {
+    padding: 0px;
+  }
+
+  .nav-item {
+    .nav-link {
+      color: white;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      font-size: .75rem;
+      font-weight: 700;
+      display: inline-block;
+
+      &:hover {
+        /*color: rgba(255, 255, 255, 0.8);*/
+        background-color: #2496f9;
+      }
+    }
+  }
 }

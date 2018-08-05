@@ -5,8 +5,57 @@ html {
 
 body {
   padding-top: 4.5rem;
+  background-color: #f5f5f5;
 }
 
 html, body {
   height:100%;
+}
+
+.has-search {
+  .form-control {
+    padding-left: 2rem;
+  }
+
+  .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+  }
+}
+
+.data-table-wrapper {
+  table {
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .1875rem;
+
+    .data-table-row.row-odd {
+      background-color: inherit;
+    }
+
+    td, th {
+      border-top: 1px solid #f3f1f1;
+      border-right: 1px solid #f3f1f1;
+    }
+
+    thead {
+      th {
+        font-size: .9rem;
+        font-weight: 600;
+        color: #333;
+        background: #f9f9f9;
+        border-bottom: 2px double #dee2e6;
+      }
+    }
+  }
 }

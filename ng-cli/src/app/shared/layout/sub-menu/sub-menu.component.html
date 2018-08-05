@@ -1,13 +1,22 @@
 <nav class="underline-menu">
   <ul>
     <li>
-      <a [routerLink]="['runs']">Runs</a>
+      <a [routerLink]="['runs']" routerLinkActive="active-link">
+        <i class="fa fa-lg fa-play"></i>
+        Runs
+      </a>
     </li>
     <li>
-      <a [routerLink]="['statistics']">Checker statistics</a>
+      <a [routerLink]="['statistics']" routerLinkActive="active-link">
+        <i class="fa fa-lg fa-line-chart"></i>
+        Checker statistics
+      </a>
     </li>
     <li>
-      <a [routerLink]="['reports']">Reports</a>
+      <a [routerLink]="['reports']" routerLinkActive="active-link">
+        <i class="fa fa-lg fa-list"></i>
+        Reports
+      </a>
     </li>
   </ul>
 </nav>

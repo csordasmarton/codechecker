@@ -1,10 +1,8 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-  ActivatedRouteSnapshot,
   RouterModule,
-  RouterStateSnapshot
 } from '@angular/router';
 
 import { AuthenticationService } from '../shared';

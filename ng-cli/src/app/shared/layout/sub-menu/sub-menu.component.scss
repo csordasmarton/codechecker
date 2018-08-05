@@ -29,17 +29,17 @@
         left: 0;
         height: 3px;
         width: 100%;
-        background-color: #000;
+        background-color: #1e88e5;
         transform-origin: right top;
         transform: scale(0, 1);
         transition: color 0.1s,transform 0.2s ease-out;
       }
 
       &:active::before {
-        background-color: #000;
+        background-color: #1e88e5;
       }
 
-      &:hover::before, &:focus::before {
+      &:hover::before, &:focus::before, &.active-link::before {
         transform-origin: left top;
         transform: scale(1, 1);
       }
@@ -47,6 +47,14 @@
       &:hover, &:focus, &:active {
         color: #999;
         text-decoration: none;
+      }
+
+      &.active-link {
+        color: #1e88e5;
+      }
+
+      &.active-link:hover, &.active-link:focus, &.active-link:active {
+        color: #70b6f3;
       }
     }
   }

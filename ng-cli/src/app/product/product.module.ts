@@ -1,7 +1,9 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+
+import { DataTableModule } from 'angular5-data-table';
 
 import { ProductService } from '../shared/index';
 import { SharedModule } from '../shared/shared.module';
@@ -13,6 +15,7 @@ import { ProductComponent } from './product.component';
 @NgModule({
   imports: [
     BrowserModule,
+    DataTableModule.forRoot(),
     FormsModule,
     RouterModule,
     SharedModule

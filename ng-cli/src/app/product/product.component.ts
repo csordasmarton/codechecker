@@ -11,7 +11,8 @@ import { ProductService } from '../shared';
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent {
-  products: any[];
+  products: any[] = [];
+  productCount = 0;
 
   constructor(
     private router: Router,
@@ -21,6 +22,23 @@ export class ProductComponent {
     this.productService.getClient().getProducts('', '').then(
     (products: Product[]) => {
       this.products = products;
+      this.productCount = products.length;
+    });
+  }
+
+  // TODO: implement it.
+  public reloadItems(param: any) {
+    this.products.sort((a: any, b: any) => {
+      const sortByA = a[param['sortBy']];
+      const sortByB = b[param['sortBy']];
+
+      if (sortByA > sortByB) {
+        return param.sortAsc ? -1 : 1;
+      } else if (sortByA < sortByB) {
+        return param.sortAsc ? 1 : -1;
+      } else {
+        return 0;
+      }
     });
   }
 

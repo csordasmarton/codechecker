@@ -1,4 +1,4 @@
-  <div class="container-fluid">
+<div class="px-2">
   <ul id="runs">
     <li class="item" *ngFor="let run of runs">
       <a [routerLink]="['../reports']" [queryParams]="{run: run.name}"class="name">{{run.name}}</a>
@@ -9,7 +9,7 @@
         </li>
         <li class="item">
           <i class="cc-icon date"></i>
-          <span class="date">{{run.runDate | date:'yyyy-MM-dd hh:mm:ss'}}</span>
+          <span class="date">{{run.runDate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
         </li>
         <li class="item">
           <i class="cc-icon duration"></i>
