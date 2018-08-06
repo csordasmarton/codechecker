@@ -1,3 +1,5 @@
+@import 'variables';
+
 html {
   position: relative;
   min-height: 100%;
@@ -50,12 +52,69 @@ html, body {
 
     thead {
       th {
-        font-size: .9rem;
         font-weight: 600;
-        color: #333;
-        background: #f9f9f9;
-        border-bottom: 2px double #dee2e6;
+        color: #67757c;
+        font-size: 0.9rem;
       }
+    }
+  }
+}
+.checkbox, .radio {
+  label {
+    input[type="checkbox"],
+    input[type="radio"] {
+      display: none;
+
+      & + .cr > .cr-icon {
+        transform: scale(3) rotateZ(-20deg);
+        opacity: 0;
+        transition: all .3s ease-in;
+      }
+
+      &:checked + .cr > .cr-icon {
+        transform: scale(1) rotateZ(0deg);
+        opacity: 1;
+      }
+
+      &:disabled + .cr {
+        opacity: .5;
+      }
+    }
+
+    &:after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  }
+
+  .cr {
+    position: relative;
+    display: inline-block;
+    border-radius: .25em;
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: .5em;
+
+    border: 2px solid $cc-secondary;
+    color: $cc-secondary;
+
+    .cr-icon {
+      position: absolute;
+      font-size: .8em;
+      line-height: 0;
+      top: 50%;
+      left: 20%;
+    }
+  }
+}
+
+.radio {
+  .cr {
+    border-radius: 50%;
+
+    .cr-icon {
+      margin-left: 0.04em;
     }
   }
 }

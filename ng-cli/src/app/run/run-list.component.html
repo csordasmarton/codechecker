@@ -1,4 +1,18 @@
 <div class="px-2">
+  <form>
+    <div class="form-group pull-right mx-2">
+      <button class="btn btn-primary">Diff</button>
+      <button class="btn btn-primary">Delete</button>
+    </div>
+  </form>
+
+  <form class="form-inline m-2">
+    <div class="form-group has-search">
+      <span class="fa fa-search form-control-feedback"></span>
+      <input type="text" class="form-control" placeholder="Search for run names...">
+    </div>
+  </form>
+
   <data-table id="runs"
     [title]="'List of runs'"
     [items]="runs"
@@ -9,10 +23,25 @@
     (reload)="reloadItems($event)">
 
     <data-table-column
-      [header]="'Diff'">
+      [header]="'Diff'"
+      [width]="'7em'">
       <ng-template #dataTableCell let-item="item">
-        <input type="radio" name="baseline"/>
-        <input type="radio" name="newcheck"/>
+          <span class="radio">
+            <label>
+              <input type="radio" name="baseline" value="">
+              <span class="cr">
+                <i class="cr-icon fa fa-circle"></i>
+              </span>
+            </label>
+          </span>
+          <span class="radio">
+            <label>
+              <input type="radio" name="newcheck" value="">
+              <span class="cr">
+                <i class="cr-icon fa fa-circle"></i>
+              </span>
+            </label>
+          </span>
       </ng-template>
     </data-table-column>
 
@@ -78,9 +107,17 @@
     </data-table-column>
 
     <data-table-column
-      [header]="'Delete'">
+      [header]="'Delete'"
+      [width]="'5em'">
       <ng-template #dataTableCell let-item="item">
-        <input type="checkbox" name="delete-run"/>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="">
+            <span class="cr">
+              <i class="cr-icon fa fa-check"></i>
+            </span>
+          </label>
+        </div>
       </ng-template>
     </data-table-column>
 
