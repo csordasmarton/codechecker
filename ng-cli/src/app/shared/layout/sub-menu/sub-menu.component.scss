@@ -1,3 +1,5 @@
+@import 'variables';
+
 .underline-menu ul {
   padding: 0;
 
@@ -29,14 +31,14 @@
         left: 0;
         height: 3px;
         width: 100%;
-        background-color: #1e88e5;
+        background-color: $cc-primary;
         transform-origin: right top;
         transform: scale(0, 1);
         transition: color 0.1s,transform 0.2s ease-out;
       }
 
       &:active::before {
-        background-color: #1e88e5;
+        background-color: $cc-primary;
       }
 
       &:hover::before, &:focus::before, &.active-link::before {
@@ -50,11 +52,11 @@
       }
 
       &.active-link {
-        color: #1e88e5;
+        color: $cc-primary;
       }
 
       &.active-link:hover, &.active-link:focus, &.active-link:active {
-        color: #70b6f3;
+        color: $cc-primary-hover;
       }
     }
   }

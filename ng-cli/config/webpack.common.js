@@ -68,7 +68,18 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['to-string-loader', 'style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+        use: [
+          'to-string-loader',
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: [helpers.root('src')]
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,

@@ -1,7 +1,9 @@
+@import "variables";
+
 #header {
   min-height: 50px;
   z-index: 1000;
-  background-color: #1e88e5;
+  background-color: $cc-primary;
   -webkit-box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5);
   box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5);
 
@@ -29,8 +31,7 @@
       display: inline-block;
 
       &:hover {
-        /*color: rgba(255, 255, 255, 0.8);*/
-        background-color: #2496f9;
+        background-color: $cc-primary-hover-bg;
       }
     }
   }
