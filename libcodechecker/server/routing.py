@@ -20,6 +20,7 @@ from libcodechecker.version import SUPPORTED_VERSIONS
 NON_PRODUCT_ENDPOINTS = ['index.html',
                          'login.html',
                          'products.html',
+                         'assets',
                          'fonts',
                          'images',
                          'scripts',

@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
@@ -45,8 +46,8 @@ module.exports = {
         use: 'html-loader'
       },
       {
-        test: /\.(png|jpe?g|gif)$/,
-        use: 'file-loader?name=assets/[name].[ext]'
+        test: /\.(png|jpe?g|gif|ico)$/,
+        use: 'url-loader?name=assets/images/[name].[ext]'
       },
       /*
       * Bootstrap 4 loader
@@ -116,6 +117,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html'
     }),
+
+    new CopyWebpackPlugin([
+      { from: 'src/assets/images', to: 'assets/images' }
+    ]),
 
     new webpack.ProvidePlugin({
       $: "jquery",
