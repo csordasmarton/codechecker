@@ -17,11 +17,17 @@ export class RunListComponent implements OnInit {
     private dbService: DbService
   ) {}
 
+  // TODO: implement it.
+  public reloadItems(param: any) {
+
+  }
+
   public ngOnInit() {
     const runFilter = new RunFilter();
     this.dbService.getClient().getRunData(runFilter).then(
     (runData: RunData[]) => {
       this.runs = runData;
+      console.log(runData);
     });
   }
 }

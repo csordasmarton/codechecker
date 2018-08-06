@@ -1,41 +1,88 @@
 <div class="px-2">
-  <ul id="runs">
-    <li class="item" *ngFor="let run of runs">
-      <a [routerLink]="['../reports']" [queryParams]="{run: run.name}"class="name">{{run.name}}</a>
-      <ul class="meta">
-        <li class="item">
-          <i class="cc-icon bug"></i>
-          <span class="num-of-bugs">{{run.resultCount}}</span>
-        </li>
-        <li class="item">
-          <i class="cc-icon date"></i>
-          <span class="date">{{run.runDate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
-        </li>
-        <li class="item">
-          <i class="cc-icon duration"></i>
-          <span class="duration">{{run.duration | duration}}</span>
-        </li>
-        <li class="item">
-          <a>Check command</a>
-        </li>
-        <li class="item">
-          <span class="version-tag"
-            *ngIf="run.versionTag"
-            [style.background-color]="run.name | strToColor">
-            <i class="cc-icon tag" ></i>
-            <span class="name">{{run.versionTag}}</span>
-          </span>
-        </li>
-        <li class="item">
-          <a>Detection statuses:</a>
-          <ul class="detection-status-counts">
-            <li *ngFor="let detectionStatusCode of (run.detectionStatusCount | keys)">
-              <i class="cc-icon detection-status-{{detectionStatusCode | detectionStatusToString | lowercase}}"></i>
-              ({{run.detectionStatusCount[detectionStatusCode]}})
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
+  <data-table id="runs"
+    [title]="'List of runs'"
+    [items]="runs"
+    [itemCount]="runCount"
+    [indexColumn]="false"
+    [pagination]="false"
+    [header]="false"
+    (reload)="reloadItems($event)">
+
+    <data-table-column
+      [header]="'Diff'">
+      <ng-template #dataTableCell let-item="item">
+        <input type="radio" name="baseline"/>
+        <input type="radio" name="newcheck"/>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Name'"
+      [property]="'name'"
+      [sortable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <a [routerLink]="['../reports']" [queryParams]="{run: item.name}"class="name">{{item.name}}</a>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Number of unresolved reports'"
+      [property]="'resultCount'"
+      [sortable]="true">
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Storage date'"
+      [property]="'runDate'"
+      [sortable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <span class="date">{{item.runDate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Analysis duration'"
+      [property]="'duration'"
+      [sortable]="true">
+      <ng-template #dataTableCell let-item="item">
+        {{item.duration | duration}}
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Detection status'"
+      [property]="'detectionStatus'"
+      [sortable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <ul class="detection-status-counts">
+          <li *ngFor="let detectionStatusCode of (item.detectionStatusCount | mapKeys)">
+            <i class="cc-icon detection-status-{{detectionStatusCode | detectionStatusToString | lowercase}}"></i>
+            ({{item.detectionStatusCount.get(detectionStatusCode)}})
+          </li>
+        </ul>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Latest version tag'"
+      [property]="'versionTag'"
+      [sortable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <span class="version-tag"
+          *ngIf="item.versionTag"
+          [style.background-color]="item.name | strToColor">
+          <i class="cc-icon tag" ></i>
+          <span class="name">{{item.versionTag}}</span>
+        </span>
+      </ng-template>
+    </data-table-column>
+
+    <data-table-column
+      [header]="'Delete'">
+      <ng-template #dataTableCell let-item="item">
+        <input type="checkbox" name="delete-run"/>
+      </ng-template>
+    </data-table-column>
+
+  </data-table>
 </div>
