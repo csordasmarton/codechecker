@@ -33,9 +33,10 @@ module.exports = webpackMerge(commonConfig, {
     new ExtractTextPlugin('[name].css'),
 
     new webpack.DefinePlugin({
-      'SERVER_HOST': METADATA.SERVER_HOST,
-      'SERVER_PORT': METADATA.SERVER_PORT,
-      'ENV': JSON.stringify(ENV),
+      'process.env': {
+        'SERVER_HOST': METADATA.SERVER_HOST,
+        'SERVER_PORT': METADATA.SERVER_PORT
+      }
     }),
   ],
 

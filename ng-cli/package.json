@@ -13,7 +13,8 @@
     "build:watch": "tsc -p src/ -w",
     "build:upgrade": "tsc",
     "lint": "tslint -p ./tslint.json",
-    "serve:upgrade": "http-server"
+    "serve:upgrade": "http-server",
+    "test": "karma start --single-run"
   },
   "license": "University of Illinois/NCSA Open Source License",
   "dependencies": {
@@ -45,6 +46,7 @@
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
     "@types/codemirror": "^0.0.50",
+    "@types/jasmine": "^2.8.8",
     "@types/jsplumb": "^1.3.31",
     "@types/node": "^8.5.1",
     "@types/thrift": "^0.10.7",
@@ -60,7 +62,13 @@
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.16.1",
+    "jasmine-core": "~2.8.0",
     "jquery": "^3.2.1",
+    "karma": "~2.0.4",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-jasmine": "^1.1.2",
+    "karma-webpack": "^3.0.0",
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.0.9",
     "raw-loader": "^0.5.1",

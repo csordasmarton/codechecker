@@ -27,13 +27,15 @@ export class BaseService<T> {
       ? router.routerState.snapshot.root.children[0].params['product']
       : null;
 
-    const host = SERVER_HOST || window.location.hostname;
-    const port = SERVER_PORT || parseInt(window.location.port, 10);
+    const host = process.env.SERVER_HOST || window.location.hostname;
+    const port = parseInt(process.env.SERVER_PORT, 10) || parseInt(window.location.port, 10);
+    const api = process.env.API_VERSION;
+    console.log(host, port, api);
 
     const connection = createXHRConnection(host, port, {
       transport: TBufferedTransport,
       protocol: TJSONProtocol,
-      path: `${product ? '/' + product : '' }/v${API_VERSION}/${endpoint}`
+      path: `${product ? '/' + product : '' }/v${api}/${endpoint}`
     });
 
     // Override parameters of the request object.
