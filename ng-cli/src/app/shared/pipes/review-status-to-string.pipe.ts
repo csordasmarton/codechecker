@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { ReviewStatus } from '@cc/db-access';
+
 import { UtilService } from '..';
 
 /*
@@ -12,7 +14,7 @@ import { UtilService } from '..';
 export class ReviewStatusToStringPipe implements PipeTransform {
   constructor(private util: UtilService) {}
 
-  transform(status: number): string {
+  transform(status: ReviewStatus): string {
     return this.util.reviewStatusFromCodeToString(status);
   }
 }

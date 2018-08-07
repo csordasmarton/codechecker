@@ -31,8 +31,7 @@ export class UtilService {
       case Severity.CRITICAL:
         return 'Critical';
       default:
-        console.warn('Non existing severity status code: ', severity);
-        return 'N/A';
+        return '';
     }
   }
 
@@ -111,8 +110,7 @@ export class UtilService {
       case ReviewStatus.INTENTIONAL:
         return 'Intentional';
       default:
-        console.warn('Non existing review status code: ', reviewCode);
-        return 'N/A';
+        return '';
     }
   }
 

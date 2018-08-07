@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { Severity } from '@cc/db-access';
+
 import { UtilService } from '..';
 
 /*
@@ -12,7 +14,7 @@ import { UtilService } from '..';
 export class SeverityToStringPipe implements PipeTransform {
   constructor(private util: UtilService) {}
 
-  transform(severity: number): string {
+  transform(severity: Severity): string {
     return this.util.severityFromCodeToString(severity);
   }
 }
