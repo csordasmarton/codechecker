@@ -21,15 +21,21 @@
     <div class="form-group row">
       <label for="endpoint" class="col-sm-2 col-form-label">Database engine*</label>
       <div class="col-sm-10">
-        <div class="form-check">
-          <input type="radio" name="db-engine" value="postgresql" class="form-check-input" [(ngModel)]="product.connection.engine">
-          <label class="form-check-label" for="db-engine">
+        <div class="radio">
+          <label>
+            <input type="radio" name="db-engine" value="postgresql" [(ngModel)]="product.connection.engine">
+            <span class="cr">
+              <i class="cr-icon fa fa-circle"></i>
+            </span>
             PostgreSQL
           </label>
         </div>
-        <div class="form-check">
-          <input type="radio" name="db-engine" value="sqlite" class="form-check-input" [(ngModel)]="product.connection.engine">
-          <label class="form-check-label" for="db-engine">
+        <div class="radio">
+          <label>
+            <input type="radio" name="db-engine" value="sqlite" [(ngModel)]="product.connection.engine">
+            <span class="cr">
+              <i class="cr-icon fa fa-circle"></i>
+            </span>
             SQLite
           </label>
         </div>

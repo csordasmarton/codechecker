@@ -14,7 +14,14 @@
       <tr *ngFor="let username of (authRights | keys)">
         <td>{{username}}</td>
         <td *ngFor="let permission of permissions">
-          <input type="checkbox" (change)="changeAuthPermission(username, permission)" [checked]="authRights[username].indexOf(permission) !== -1" />
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="" (change)="changeAuthPermission(username, permission)" [checked]="authRights[username].indexOf(permission) !== -1">
+              <span class="cr">
+                <i class="cr-icon fa fa-check"></i>
+              </span>
+            </label>
+          </div>
         </td>
       </tr>
     </tbody>

@@ -14,7 +14,14 @@
       <tr *ngFor="let group of (authRights | keys)">
         <td>{{group}}</td>
         <td *ngFor="let permission of permissions">
-          <input type="checkbox" (change)="changeAuthPermission(group, permission)" [checked]="authRights[group].indexOf(permission) !== -1" />
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="" (change)="changeAuthPermission(group, permission)" [checked]="authRights[group].indexOf(permission) !== -1">
+              <span class="cr">
+                <i class="cr-icon fa fa-check"></i>
+              </span>
+            </label>
+          </div>
         </td>
       </tr>
     </tbody>
