@@ -2,7 +2,7 @@
   <form>
     <div class="form-group pull-right mx-2">
       <button class="btn btn-primary">Diff</button>
-      <button class="btn btn-primary">Delete</button>
+      <button class="btn btn-primary" (click)="removeSelectedItems($event)" [attr.disabled]="itemsToRemove.length ? null : ''">Delete</button>
     </div>
   </form>
 
@@ -111,7 +111,7 @@
       <ng-template #dataTableCell let-item="item">
         <div class="checkbox">
           <label>
-            <input type="checkbox" value="">
+            <input type="checkbox" value="" (change)="toggleDeleteItem(item)">
             <span class="cr">
               <i class="cr-icon fa fa-check"></i>
             </span>

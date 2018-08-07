@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import Int64 = require('node-int64');
+
 import { RunData, RunFilter } from '@cc/db-access';
 
 import { DbService } from '../shared';
@@ -13,6 +15,8 @@ import { DbService } from '../shared';
 export class RunListComponent implements OnInit {
   runs: RunData[] = [];
   runCount = 0;
+
+  itemsToRemove: Int64[] = [];
 
   constructor(
     private dbService: DbService
@@ -41,12 +45,11 @@ export class RunListComponent implements OnInit {
     });
   }
 
-  public reloadItems(param: any) {
+  reloadItems(param: any) {
     this.runs.sort((a: any, b: any) => {
       const sortByA = a[param['sortBy']];
       const sortByB = b[param['sortBy']];
 
-      console.log(sortByA, sortByB);
       if (sortByA > sortByB) {
         return param.sortAsc ? -1 : 1;
       } else if (sortByA < sortByB) {
@@ -55,5 +58,34 @@ export class RunListComponent implements OnInit {
         return 0;
       }
     });
+  }
+
+  removeSelectedItems(event: Event) {
+    event.preventDefault();
+
+    this.dbService.getClient().removeRunResults(this.itemsToRemove).then(
+    (ret) => {
+      this.itemsToRemove.forEach((runId) => {
+        const ind = this.runs.findIndex((run) => {
+          return run.runId === runId;
+        });
+
+        if (ind !== -1) {
+          this.runs.splice(ind, 1);
+        }
+      });
+      this.itemsToRemove = [];
+    });
+  }
+
+  toggleDeleteItem(run: RunData) {
+    const runId = run.runId;
+
+    const ind = this.itemsToRemove.indexOf(runId);
+    if (ind === -1) {
+      this.itemsToRemove.push(runId);
+    } else {
+      this.itemsToRemove.splice(this.itemsToRemove.indexOf(runId), 1);
+    }
   }
 }

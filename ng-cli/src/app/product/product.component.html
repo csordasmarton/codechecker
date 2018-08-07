@@ -28,7 +28,7 @@
       [property]="'displayedName_b64'"
       [sortable]="true">
       <ng-template #dataTableCell let-item="item">
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-left">
           <div class="mr-3">
             <div class="product-icon rounded-circle" [style.background-color]="item.endpoint | strToColor">
               <div class="align-middle text-center">{{ (item.displayedName_b64 | atou | uppercase).charAt(0) }}</div>
