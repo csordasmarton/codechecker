@@ -3,7 +3,7 @@ import { ReviewStatus } from '@cc/db-access';
 import { UtilService } from '..';
 import { ReviewStatusToStringPipe } from './review-status-to-string.pipe';
 
-describe('Pipe: ReviewStatusToString', () => {
+describe('Pipe: ReviewStatusToStringPipe', () => {
   let pipe: ReviewStatusToStringPipe;
 
   beforeEach(() => {

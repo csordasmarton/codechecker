@@ -22,6 +22,6 @@ export class DurationPipe implements PipeTransform {
       return prettyDurHours + ':' + prettyDurMins + ':' + prettyDurSecs;
     }
 
-    return '-';
+    return '';
   }
 }

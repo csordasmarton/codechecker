@@ -3,7 +3,7 @@ import { Severity } from '@cc/db-access';
 import { UtilService } from '..';
 import { SeverityToStringPipe } from './severity-to-string.pipe';
 
-describe('Pipe: SeverityToString', () => {
+describe('Pipe: SeverityToStringPipe', () => {
   let pipe: SeverityToStringPipe;
 
   beforeEach(() => {

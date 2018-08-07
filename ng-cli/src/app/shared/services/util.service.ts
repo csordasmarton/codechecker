@@ -13,7 +13,7 @@ export class UtilService {
   /**
    * Converts a Thrift API severity id to human readable string.
    *
-   * @param {String|Number} severity Thrift API Severity id
+   * @param {Severity} severity Thrift API Severity id
    * @return Human readable severity string.
    */
   severityFromCodeToString(severity: Severity): string {
@@ -50,7 +50,6 @@ export class UtilService {
       case 'critical':
         return Severity.CRITICAL;
       default:
-        console.warn('Non existing severity: ', severity);
         return -1;
     }
   }
@@ -58,7 +57,7 @@ export class UtilService {
   /**
    * Converts a Thrift API detection status id to human readable string.
    *
-   * @param {String|Number} reviewCode Thrift API DetectionStatus id.
+   * @param {DetectionStatus} detectionStatus Thrift API DetectionStatus id.
    * @return Human readable review status string.
    */
   detectionStatusFromCodeToString(detectionStatus: DetectionStatus): string {
@@ -72,8 +71,7 @@ export class UtilService {
       case DetectionStatus.REOPENED:
         return 'Reopened';
       default:
-        console.warn('Non existing detection status code: ', detectionStatus);
-        return 'N/A';
+        return '';
     }
   }
 
@@ -88,7 +86,6 @@ export class UtilService {
       case 'reopened':
         return DetectionStatus.REOPENED;
       default:
-        console.warn('Non existing detection status: ', status);
         return -1;
     }
   }
@@ -96,7 +93,7 @@ export class UtilService {
   /**
    * Converts a Thrift API review status id to human readable string.
    *
-   * @param {String|Number} reviewCode Thrift API ReviewStatus id.
+   * @param {ReviewStatus} reviewCode Thrift API ReviewStatus id.
    * @return Human readable review status string.
    */
   reviewStatusFromCodeToString(reviewCode: ReviewStatus): string {
@@ -125,7 +122,6 @@ export class UtilService {
       case 'intentional':
         return ReviewStatus.INTENTIONAL;
       default:
-        console.warn('Non existing review status: ', status);
         return -1;
     }
   }
@@ -133,11 +129,11 @@ export class UtilService {
   /**
    * Converts a Thrift API permission id to human readable string.
    *
-   * @param {String|Number} permissionId Thrift API Permission id.
+   * @param {Permission} permissionCode Thrift API Permission id.
    * @return Human readable permission string.
    */
-  permissionFromCodeToString(permissionId: any) {
-    switch (parseInt(permissionId, 10)) {
+  permissionFromCodeToString(permissionCode: Permission) {
+    switch (permissionCode) {
       case Permission.SUPERUSER:
         return 'Superuser';
       case Permission.PRODUCT_ADMIN:
@@ -147,8 +143,7 @@ export class UtilService {
       case Permission.PRODUCT_STORE:
         return 'Product store';
       default:
-        console.warn('Non existing permission code: ', permissionId);
-        return 'N/A';
+        return '';
     }
   }
 
