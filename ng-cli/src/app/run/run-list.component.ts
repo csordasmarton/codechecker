@@ -12,22 +12,48 @@ import { DbService } from '../shared';
 })
 export class RunListComponent implements OnInit {
   runs: RunData[] = [];
+  runCount = 0;
 
   constructor(
     private dbService: DbService
   ) {}
 
-  // TODO: implement it.
-  public reloadItems(param: any) {
-
+  ngOnInit() {
+    this.loadRuns();
   }
 
-  public ngOnInit() {
+  search(runNameQuery: string) {
+    setTimeout(() => {
+      this.loadRuns(runNameQuery + '*');
+    }, 200);
+  }
+
+  loadRuns(runNameQuery: string = null) {
     const runFilter = new RunFilter();
+    if (runNameQuery) {
+      runFilter.names = [ runNameQuery ];
+    }
+
     this.dbService.getClient().getRunData(runFilter).then(
-    (runData: RunData[]) => {
-      this.runs = runData;
-      console.log(runData);
+    (runs: RunData[]) => {
+      this.runs = runs;
+      this.runCount = runs.length;
+    });
+  }
+
+  public reloadItems(param: any) {
+    this.runs.sort((a: any, b: any) => {
+      const sortByA = a[param['sortBy']];
+      const sortByB = b[param['sortBy']];
+
+      console.log(sortByA, sortByB);
+      if (sortByA > sortByB) {
+        return param.sortAsc ? -1 : 1;
+      } else if (sortByA < sortByB) {
+        return param.sortAsc ? 1 : -1;
+      } else {
+        return 0;
+      }
     });
   }
 }

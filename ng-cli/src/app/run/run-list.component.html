@@ -9,7 +9,7 @@
   <form class="form-inline m-2">
     <div class="form-group has-search">
       <span class="fa fa-search form-control-feedback"></span>
-      <input type="text" class="form-control" placeholder="Search for run names...">
+      <input type="text" (keyup)="search($event.target.value)" class="form-control" placeholder="Search for run names...">
     </div>
   </form>
 
@@ -80,8 +80,7 @@
 
     <data-table-column
       [header]="'Detection status'"
-      [property]="'detectionStatus'"
-      [sortable]="true">
+      [property]="'detectionStatus'">
       <ng-template #dataTableCell let-item="item">
         <ul class="detection-status-counts">
           <li *ngFor="let detectionStatusCode of (item.detectionStatusCount | mapKeys)">
