@@ -30,7 +30,6 @@ export class BaseService<T> {
     const host = process.env.SERVER_HOST || window.location.hostname;
     const port = parseInt(process.env.SERVER_PORT, 10) || parseInt(window.location.port, 10);
     const api = process.env.API_VERSION;
-    console.log(host, port, api);
 
     const connection = createXHRConnection(host, port, {
       transport: TBufferedTransport,

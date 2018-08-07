@@ -19,18 +19,32 @@ export class ProductComponent {
     private route: ActivatedRoute,
     private productService: ProductService
   ) {
-    this.productService.getClient().getProducts('', '').then(
-    (products: Product[]) => {
-      this.products = products;
-      this.productCount = products.length;
-    });
+    this.loadProducts();
   }
 
-  // TODO: implement it.
+  search(query: string) {
+    setTimeout(() => {
+      this.loadProducts(query + '*');
+    }, 200);
+  }
+
+  loadProducts(productNameFilter: string = '') {
+    this.productService.getClient().getProducts('', productNameFilter).then(
+      (products: Product[]) => {
+        this.products = products;
+        this.productCount = products.length;
+      });
+  }
+
   public reloadItems(param: any) {
     this.products.sort((a: any, b: any) => {
-      const sortByA = a[param['sortBy']];
-      const sortByB = b[param['sortBy']];
+      let sortByA = a[param['sortBy']];
+      let sortByB = b[param['sortBy']];
+
+      if (param['sortBy'] === 'displayedName_b64') {
+        sortByA = window.atob(sortByA).toLowerCase();
+        sortByB = window.atob(sortByB).toLowerCase();
+      }
 
       if (sortByA > sortByB) {
         return param.sortAsc ? -1 : 1;

@@ -9,7 +9,7 @@
   <form class="form-inline">
     <div class="form-group has-search mx-2">
       <span class="fa fa-search form-control-feedback"></span>
-      <input type="text" class="form-control" placeholder="Search for products...">
+      <input type="text" (keyup)="search($event.target.value)" class="form-control" placeholder="Search for products...">
     </div>
   </form>
 
@@ -25,13 +25,13 @@
 
     <data-table-column
       [header]="'Product name'"
-      [property]="'productName'"
+      [property]="'displayedName_b64'"
       [sortable]="true">
       <ng-template #dataTableCell let-item="item">
         <div class="d-flex align-items-center">
           <div class="mr-3">
             <div class="product-icon rounded-circle" [style.background-color]="item.endpoint | strToColor">
-              <div class="align-middle text-center">{{ (item.displayedName_b64 | atou).charAt(0) }}</div>
+              <div class="align-middle text-center">{{ (item.displayedName_b64 | atou | uppercase).charAt(0) }}</div>
             </div>
           </div>
           <div>
@@ -48,12 +48,9 @@
 
     <data-table-column
       [header]="'Admins'"
-      [property]="'admins'"
-      [sortable]="true">
+      [property]="'admins'">
       <ng-template #dataTableCell let-item="item">
-        <ul>
-          <li *ngFor="let admin of item.admins">{{admin}}</li>
-        </ul>
+        {{item.admins.join(', ')}}
       </ng-template>
     </data-table-column>
 
