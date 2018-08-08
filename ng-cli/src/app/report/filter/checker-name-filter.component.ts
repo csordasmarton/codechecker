@@ -25,8 +25,8 @@ export class CheckerNameFilterComponent extends SelectFilterBase {
     super('checker-name', 'Checker name', route, router, shared, util);
   }
 
-  updateReportFilter(value: any) {
-    this.shared.reportFilter.checkerId = value;
+  updateReportFilter(checkerNames: string[]) {
+    this.shared.reportFilter.checkerId = checkerNames;
   }
 
   public notify() {
@@ -38,16 +38,16 @@ export class CheckerNameFilterComponent extends SelectFilterBase {
       (checkerCounts: CheckerCounts) => {
         this.items = checkerCounts.map((checkerCount) => {
           const name = checkerCount.name;
-        const item = {
-          label: name,
-          count: checkerCount.count.toNumber()
-        };
+          const item = {
+            label: name,
+            count: checkerCount.count.toNumber()
+          };
 
-        if (this.selectedItems[name] === null) {
-          this.selectedItems[name] = item;
-        }
+          if (this.selectedItems[name] === null) {
+            this.selectedItems[name] = item;
+          }
 
-        return item;
+          return item;
         });
       });
   }

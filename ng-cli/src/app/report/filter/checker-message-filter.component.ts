@@ -23,8 +23,8 @@ export class CheckerMessageFilterComponent extends SelectFilterBase {
     super('checker-message', 'Checker message', route, router, shared, util);
   }
 
-  updateReportFilter(value: any) {
-    this.shared.reportFilter.checkerMsg = value;
+  updateReportFilter(checkerMessages: string[]) {
+    this.shared.reportFilter.checkerMsg = checkerMessages;
   }
 
   public notify() {

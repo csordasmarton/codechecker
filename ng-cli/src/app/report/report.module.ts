@@ -53,6 +53,21 @@ import {
     SeverityFilterComponent,
     UniqueReportsFilterComponent
   ],
+  exports: [
+    ClearAllReportsComponent,
+    CheckerMessageFilterComponent,
+    CheckerNameFilterComponent,
+    DetectionStatusFilterComponent,
+    ReportCountComponent,
+    FileFilterComponent,
+    ReportComponent,
+    ReportFilterComponent,
+    ReviewStatusFilterComponent,
+    RunFilterComponent,
+    RunTagFilterComponent,
+    SeverityFilterComponent,
+    UniqueReportsFilterComponent
+  ],
   providers: [ SharedService ]
 })
 export class ReportModule {}

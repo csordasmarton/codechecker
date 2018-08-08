@@ -81,8 +81,8 @@ export class RunTagFilterComponent extends SelectFilterBase {
     });
   }
 
-  updateReportFilter(value: any) {
-    this.shared.reportFilter.runHistoryTag = value;
+  updateReportFilter(tags: string[]) {
+    this.shared.reportFilter.runHistoryTag = tags;
   }
 
   public notify() {

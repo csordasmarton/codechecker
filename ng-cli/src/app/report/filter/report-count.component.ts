@@ -18,19 +18,15 @@ export class ReportCountComponent implements Filter {
     this.shared.register(this);
   }
 
-  getUrlState() {
-    return {};
-  }
-
   initByUrl(queryParam: any) {}
+  getUrlState() { return {}; }
+  clear() {}
 
   notify() {
     this.dbService.getClient().getRunResultCount(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData).then(
     (reportCount: Int64) => {
-      this.shared.reportCount = reportCount.toNumber();
+      this.shared.reportCount = reportCount;
     });
   }
-
-  clear() {}
 }

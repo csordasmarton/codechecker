@@ -73,13 +73,27 @@ export abstract class SelectFilterBase implements Filter {
   // Selects a filter item.
   select(item: any) {
     this.selectedItems[item.label] = item;
-    this.updateUrl();
+
+    this.getSelectedItemValues().then(value => {
+      this.updateReportFilter(value.length ? value : null);
+      this.updateUrl();
+
+      // TODO: notify others only once after tooltip is closed.
+      this.shared.notifyAll([this]);
+    });
   }
 
   // Deselects a filter item by it's name.
   deselect(key: any) {
     delete this.selectedItems[key];
-    this.updateUrl();
+
+    this.getSelectedItemValues().then(value => {
+      this.updateReportFilter(value.length ? value : null);
+      this.updateUrl();
+
+      // TODO: notify others only once after tooltip is closed.
+      this.shared.notifyAll([this]);
+    });
   }
 
   // Clears out the filter state.
@@ -87,6 +101,7 @@ export abstract class SelectFilterBase implements Filter {
     for (const key of Object.keys(this.selectedItems)) {
       delete this.selectedItems[key];
     }
+    this.updateReportFilter(null);
   }
 
   // Encodes the given value.

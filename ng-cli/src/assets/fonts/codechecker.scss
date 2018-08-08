@@ -19,6 +19,7 @@
   -moz-osx-font-smoothing: grayscale;
   width: 16px;
   height: 16px;
+  line-height: 16px;
   text-align: center;
 
   &.tag:before {
@@ -56,11 +57,15 @@
   /* Severity icons */
 
   &[class*="severity-"] {
-    line-height: normal;
     text-transform: capitalize;
-    font-size: 0.8em;
     font-weight: bold;
     color: white;
+
+    &:before {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: normal;
+    }
   }
 
   &.severity-low {

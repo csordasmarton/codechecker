@@ -1,3 +1,9 @@
-<input type="checkbox" name="isUnique"
-  [(ngModel)]="isUnique"
-  (change)="onChange($event)"/> <b>Unique reports</b>
+<div class="checkbox">
+  <label>
+    <input type="checkbox" value="" name="isUnique" (change)="onChange($event)" [(ngModel)]="isUnique">
+    <span class="cr">
+      <i class="cr-icon fa fa-check"></i>
+    </span>
+    <b>Unique reports</b>
+  </label>
+</div>

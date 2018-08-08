@@ -3,7 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import Int64 = require('node-int64');
 
-import { ReportFilter, RunReportCount, RunReportCounts } from '@cc/db-access';
+import {
+  MAX_QUERY_SIZE,
+  ReportFilter,
+  RunReportCount,
+  RunReportCounts
+} from '@cc/db-access';
 
 import { SharedService } from '..';
 import { DbService, UtilService } from '../../shared';
@@ -26,14 +31,14 @@ export class RunFilterComponent extends SelectFilterBase {
   }
 
   getSelectedItemValues() {
-    let values: any[] = [];
-    const unknownRunNames: any[] = [];
-    for (const key of Object.keys(this.selectedItems)) {
-      const item = this.selectedItems[key];
+    let values: Int64[] = [];
+    const unknownRunNames: string[] = [];
+    for (const runName of Object.keys(this.selectedItems)) {
+      const item = this.selectedItems[runName];
       if (item) {
-        values.push(item.value);
+        values.push(item.values);
       } else {
-        unknownRunNames.push(key);
+        unknownRunNames.push(runName);
       }
     }
 
@@ -43,7 +48,6 @@ export class RunFilterComponent extends SelectFilterBase {
       for (let i = 0; i < unknownRunNames.length; ++i) {
         const runName = unknownRunNames[i];
         const reportCount = runReportCounts[i];
-        console.log(reportCount);
         if (!this.selectedItems[runName]) {
           this.selectedItems[runName] = {
             label: runName,
@@ -63,26 +67,25 @@ export class RunFilterComponent extends SelectFilterBase {
       Object.assign(reportFilter, this.shared.reportFilter);
       reportFilter.runName = [runName];
 
-      const limit: Int64 = new Int64(500);
-      const offset: Int64 = new Int64(500);
+      const limit = MAX_QUERY_SIZE;
+      const offset: Int64 = new Int64(0);
 
       this.dbService.getClient().getRunReportCounts([], reportFilter, limit,
       offset).then((res: RunReportCount[]) => {
-          const runIds = res.map((reportCount: any) => {
-            return reportCount.runId.toNumber();
-          });
-
-          resolve({
-            runIds: runIds,
-            reportCount: res.length === 1 ? res[0].reportCount : 'N/A'
-            // TODO: Get report count of regex search.
-          });
+        const runIds = res.map((reportCount: any) => {
+          return reportCount.runId;
         });
+
+        resolve({
+          runIds: runIds,
+          reportCount: res.length === 1 ? res[0].reportCount : 'N/A'
+        });
+      });
     });
   }
 
-  updateReportFilter(value: any) {
-    this.shared.reportFilter.run = value;
+  updateReportFilter(runIds: Int64[]) {
+    this.shared.runIds = runIds ? runIds : [];
   }
 
   public notify() {

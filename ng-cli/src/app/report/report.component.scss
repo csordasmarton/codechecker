@@ -4,4 +4,19 @@
   th {
     word-wrap: break-word;
   }
+
+  .column-detectionStatus,
+  .column-status,
+  .column-bugPathLength,
+  .column-severity {
+    text-align: center
+  }
+
+  .text-truncate {
+    display: block;
+  }
+
+  .bug-path-length {
+    display: block;
+  }
 }

@@ -16,7 +16,7 @@ export class SharedService {
   runIds: Int64[] = [];
   reportFilter: any = new ReportFilter();
   cmpData: any = new CompareData();
-  reportCount = 0;
+  reportCount: Int64 = new Int64(0);
 
   private filters: Filter[] = [];
 
@@ -60,9 +60,11 @@ export class SharedService {
   }
 
   // Notify all filter module on filter change.
-  notifyAll() {
+  notifyAll(except: any[] = null) {
     this.filters.forEach(filter => {
-      filter.notify(); // TODO: create an interface, and all class has to be implement this.
+      if (!except || except.indexOf(filter) === -1) {
+        filter.notify(); // TODO: create an interface, and all class has to be implement this.
+      }
     });
   }
 

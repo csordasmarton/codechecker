@@ -26,16 +26,17 @@ export class SeverityFilterComponent extends SelectFilterBase {
     super('severity', 'Severity', route, router, shared, util);
   }
 
-  updateReportFilter(value: any) {
-    this.shared.reportFilter.severity = value;
+  updateReportFilter(severities: Severity[]) {
+    this.shared.reportFilter.severity = severities;
   }
 
   public notify() {
     this.dbService.getClient().getSeverityCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData).then(
     (severityCounts: Map<Severity, Int64>) => {
-      this.items = Object.keys(Severity)
-      .sort((a: any , b: any) => {
+      this.items = Object.keys(Severity).filter(k => {
+        return typeof Severity[k] === 'number';
+      }).sort((a: string , b: string) => {
         if (Severity[a] > Severity[b]) {
           return -1;
         }
@@ -43,14 +44,13 @@ export class SeverityFilterComponent extends SelectFilterBase {
           return 1;
         }
         return 0;
-      }).map((key: any) => {
-        // TODO: FIX THIS.
-        const value: any = Severity[key];
+      }).map((key: string) => {
+        const value: Severity = Severity[key];
         const label = this.stateEncoder(value);
         const item = {
           label: label,
-          count: severityCounts[value] !== undefined
-               ? severityCounts[value].toNumber()
+          count: severityCounts.get(value) !== undefined
+               ? severityCounts.get(value).toNumber()
                : 0,
           icon: 'severity-' + label.toLowerCase()
         };

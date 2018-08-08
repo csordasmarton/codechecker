@@ -17,12 +17,13 @@
     <data-table-column
       [header]="'Report hash'"
       [property]="'bugHash'"
+      [width]="'10rem'"
       [sortable]="true"
       [resizable]="true">
       <ng-template #dataTableCell let-item="item">
-        <a [routerLink]="['../bug']"
-          [queryParams]="{reportHash: item.bugHash}"
-          queryParamsHandling="merge" class="item">{{item.bugHash}}</a>
+        <span class="text-truncate" title="{{item.bugHash}}">
+          {{item.bugHash}}
+        </span>
       </ng-template>
     </data-table-column>
 
@@ -31,6 +32,11 @@
       [property]="'checkedFile'"
       [sortable]="true"
       [resizable]="true">
+      <ng-template #dataTableCell let-item="item">
+        <a [routerLink]="['../bug']"
+          [queryParams]="{reportHash: item.bugHash}"
+          queryParamsHandling="merge" class="item">{{item.checkedFile}}</a>
+      </ng-template>
     </data-table-column>
 
     <data-table-column
@@ -43,6 +49,7 @@
     <data-table-column
       [header]="'Checker name'"
       [property]="'checkerId'"
+      [width]="'15rem'"
       [sortable]="true"
       [resizable]="true">
     </data-table-column>
@@ -50,6 +57,7 @@
     <data-table-column
       [header]="'Severity'"
       [property]="'severity'"
+      [width]="'7rem'"
       [sortable]="true"
       [resizable]="true">
       <ng-template #dataTableCell let-item="item">
@@ -60,10 +68,11 @@
     <data-table-column
       [header]="'Bug path length'"
       [property]="'bugPathLength'"
+      [width]="'6rem'"
       [sortable]="true"
       [resizable]="true">
       <ng-template #dataTableCell let-item="item">
-        <span
+        <span class="bug-path-length"
           [style.background-color]="item.bugPathLength | colorizeBugPathLength">
           {{item.bugPathLength}}
         </span>
@@ -73,6 +82,7 @@
     <data-table-column
       [header]="'Review status'"
       [property]="'status'"
+      [width]="'6rem'"
       [sortable]="true"
       [resizable]="true">
       <ng-template #dataTableCell let-item="item">
@@ -83,6 +93,7 @@
     <data-table-column
       [header]="'Detection status'"
       [property]="'detectionStatus'"
+      [width]="'6rem'"
       [sortable]="true"
       [resizable]="true">
       <ng-template #dataTableCell let-item="item">

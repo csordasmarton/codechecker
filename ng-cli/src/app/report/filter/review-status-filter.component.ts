@@ -25,8 +25,8 @@ export class ReviewStatusFilterComponent extends SelectFilterBase {
     super('review-status', 'Review status', route, router, shared, util);
   }
 
-  updateReportFilter(value: any) {
-    this.shared.reportFilter.detectionStatus = value;
+  updateReportFilter(statuses: ReviewStatus[]) {
+    this.shared.reportFilter.reviewStatus = statuses;
   }
 
   public notify() {
@@ -36,11 +36,24 @@ export class ReviewStatusFilterComponent extends SelectFilterBase {
     this.dbService.getClient().getReviewStatusCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData).then(
     (reviewStatusCounts: Map<ReviewStatus, Int64>) => {
-      this.items = Array.from(reviewStatusCounts).map(([key, value]) => {
-        const label = this.stateEncoder(key);
+      this.items = Object.keys(ReviewStatus).filter(k => {
+        return typeof ReviewStatus[k] === 'number';
+      }).sort((a: string , b: string) => {
+        if (ReviewStatus[a] > ReviewStatus[b]) {
+          return -1;
+        }
+        if (ReviewStatus[a] < ReviewStatus[b]) {
+          return 1;
+        }
+        return 0;
+      }).map((key: string) => {
+        const value: ReviewStatus = ReviewStatus[key];
+        const label = this.stateEncoder(value);
         const item = {
           label: label,
-          count: value !== undefined ? value.toNumber() : 0,
+          count: reviewStatusCounts.get(value) !== undefined
+               ? reviewStatusCounts.get(value).toNumber()
+               : 0,
           icon: 'review-status-' + label.toLowerCase().split(' ').join('-')
         };
 

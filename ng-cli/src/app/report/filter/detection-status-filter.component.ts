@@ -36,11 +36,24 @@ export class DetectionStatusFilterComponent extends SelectFilterBase {
     this.dbService.getClient().getDetectionStatusCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData).then(
     (detectionStatusCounts: Map<DetectionStatus, Int64>) => {
-      this.items = Array.from(detectionStatusCounts).map(([key, value]) => {
-        const label = this.stateEncoder(key);
+      this.items = Object.keys(DetectionStatus).filter(k => {
+        return typeof DetectionStatus[k] === 'number';
+      }).sort((a: string , b: string) => {
+        if (DetectionStatus[a] > DetectionStatus[b]) {
+          return -1;
+        }
+        if (DetectionStatus[a] < DetectionStatus[b]) {
+          return 1;
+        }
+        return 0;
+      }).map((key: string) => {
+        const value: DetectionStatus = DetectionStatus[key];
+        const label = this.stateEncoder(value);
         const item = {
           label: label,
-          count: value !== undefined ? value.toNumber() : 0,
+          count: detectionStatusCounts.get(value) !== undefined
+               ? detectionStatusCounts.get(value).toNumber()
+               : 0,
           icon: 'detection-status-' + label.toLowerCase()
         };
 

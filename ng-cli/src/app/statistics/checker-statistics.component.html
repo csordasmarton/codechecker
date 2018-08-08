@@ -1,10 +1,11 @@
+<h1>Checker statistics</h1>
 <data-table id="checker-statistics"
   [title]="'Checker statistics'"
   [items]="items"
   [itemCount]="itemCount"
   [indexColumn]="false"
   [pagination]="false"
-  [header]="true"
+  [header]="false"
   (reload)="reloadItems($event)">
 
   <data-table-column
@@ -35,6 +36,9 @@
     [header]="'Resolved'"
     [property]="'resolved'"
     [sortable]="true">
+    <ng-template #dataTableHeader let-item="item">
+      <i class="cc-icon detection-status-resolved">Resolved</i>
+    </ng-template>
     <ng-template #dataTableCell let-item="item">
       {{item.resolved ? item.resolved : ''}}
     </ng-template>

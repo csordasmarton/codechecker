@@ -23,8 +23,8 @@ export class FileFilterComponent extends SelectFilterBase {
     super('file', 'File', route, router, shared, util);
   }
 
-  updateReportFilter(value: any) {
-    this.shared.reportFilter.filepath = value;
+  updateReportFilter(filePaths: string[]) {
+    this.shared.reportFilter.filepath = filePaths;
   }
 
   public notify() {
