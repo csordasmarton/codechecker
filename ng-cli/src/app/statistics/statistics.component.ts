@@ -5,7 +5,8 @@ import { DbService } from '../shared';
 
 @Component({
     selector: 'statistics',
-    templateUrl: './statistics.component.html'
+    templateUrl: './statistics.component.html',
+    styleUrls: ['./statistics.component.scss']
 })
 export class StatisticsComponent implements OnInit {
   constructor(

@@ -1,0 +1,17 @@
+<div class="report-filter {{id}}">
+  <div class="header">
+    <div class="title">Report hash</div>
+    <div class="options">
+      <i class="cc-icon clean"></i>
+    </div>
+  </div>
+  <form>
+    <input type="text"
+           id="report-hash"
+           class="form-control form-control-sm"
+           placeholder="Search for report hash (min 5 characters)..."
+           name="reportHash"
+           [(ngModel)]="reportHash"
+           (keyup)="onKeyUp()" />
+  </form>
+</div>

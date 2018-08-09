@@ -1,10 +1,8 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-  ActivatedRouteSnapshot,
   RouterModule,
-  RouterStateSnapshot
 } from '@angular/router';
 
 import { DataTableModule } from 'angular5-data-table';
@@ -22,10 +20,12 @@ import {
   FileFilterComponent,
   ReportCountComponent,
   ReportFilterComponent,
+  ReportHashFilterComponent,
   ReviewStatusFilterComponent,
   RunFilterComponent,
   RunTagFilterComponent,
   SeverityFilterComponent,
+  SourceComponentComponent,
   UniqueReportsFilterComponent
 } from './filter';
 
@@ -47,10 +47,12 @@ import {
     FileFilterComponent,
     ReportComponent,
     ReportFilterComponent,
+    ReportHashFilterComponent,
     ReviewStatusFilterComponent,
     RunFilterComponent,
     RunTagFilterComponent,
     SeverityFilterComponent,
+    SourceComponentComponent,
     UniqueReportsFilterComponent
   ],
   exports: [
@@ -62,10 +64,12 @@ import {
     FileFilterComponent,
     ReportComponent,
     ReportFilterComponent,
+    ReportHashFilterComponent,
     ReviewStatusFilterComponent,
     RunFilterComponent,
     RunTagFilterComponent,
     SeverityFilterComponent,
+    SourceComponentComponent,
     UniqueReportsFilterComponent
   ],
   providers: [ SharedService ]
