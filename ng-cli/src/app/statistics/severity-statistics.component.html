@@ -11,7 +11,7 @@
   <data-table-column
     [header]="'Severity'"
     [property]="'severity'"
-    [width]="'15%'"
+    [width]="'20%'"
     [sortable]="true">
     <ng-template #dataTableCell let-item="item">
       <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
@@ -19,10 +19,13 @@
   </data-table-column>
 
   <data-table-column
-    [header]="'All reports'"
     [property]="'reports'"
     [width]="'20%'"
     [sortable]="true">
+    <ng-template #dataTableHeader let-item="item">
+      <i class="cc-icon detection-status-unresolved"></i>
+      All reports
+    </ng-template>
     <ng-template #dataTableCell let-item="item">
       {{item.reports}}
     </ng-template>

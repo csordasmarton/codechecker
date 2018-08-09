@@ -16,6 +16,7 @@
 
   <data-table-column
     [header]="'Severity'"
+    [width]="'8rem'"
     [property]="'severity'"
     [sortable]="true">
     <ng-template #dataTableCell let-item="item">
@@ -24,20 +25,25 @@
   </data-table-column>
 
   <data-table-column
-    [header]="'All reports'"
     [property]="'reports'"
+    [width]="'10rem'"
     [sortable]="true">
+    <ng-template #dataTableHeader let-item="item">
+      <i class="cc-icon detection-status-unresolved"></i>
+      All reports
+    </ng-template>
     <ng-template #dataTableCell let-item="item">
       {{item.reports}}
     </ng-template>
   </data-table-column>
 
   <data-table-column
-    [header]="'Resolved'"
     [property]="'resolved'"
+    [width]="'10rem'"
     [sortable]="true">
     <ng-template #dataTableHeader let-item="item">
-      <i class="cc-icon detection-status-resolved">Resolved</i>
+      <i class="cc-icon detection-status-resolved"></i>
+      Resolved
     </ng-template>
     <ng-template #dataTableCell let-item="item">
       {{item.resolved ? item.resolved : ''}}
@@ -45,36 +51,52 @@
   </data-table-column>
 
   <data-table-column
-    [header]="'Unreviewed'"
     [property]="'unreviewed'"
+    [width]="'10rem'"
     [sortable]="true">
+    <ng-template #dataTableHeader let-item="item">
+      <i class="cc-icon review-status-unreviewed"></i>
+      Unreviewed
+    </ng-template>
     <ng-template #dataTableCell let-item="item">
       {{item.unreviewed ? item.unreviewed : ''}}
     </ng-template>
   </data-table-column>
 
   <data-table-column
-    [header]="'Confirmed bug'"
     [property]="'confirmed'"
+    [width]="'12rem'"
     [sortable]="true">
+    <ng-template #dataTableHeader let-item="item">
+      <i class="cc-icon review-status-confirmed-bug"></i>
+      Confirmed bug
+    </ng-template>
     <ng-template #dataTableCell let-item="item">
       {{item.confirmed ? item.confirmed : ''}}
     </ng-template>
   </data-table-column>
 
   <data-table-column
-    [header]="'False positive'"
     [property]="'falsePositive'"
+    [width]="'10rem'"
     [sortable]="true">
+    <ng-template #dataTableHeader let-item="item">
+      <i class="cc-icon review-status-false-positive"></i>
+      False positive
+    </ng-template>
     <ng-template #dataTableCell let-item="item">
       {{item.falsePositive ? item.falsePositive : ''}}
     </ng-template>
   </data-table-column>
 
   <data-table-column
-    [header]="'Intentional'"
     [property]="'intentional'"
+    [width]="'10rem'"
     [sortable]="true">
+    <ng-template #dataTableHeader let-item="item">
+      <i class="cc-icon review-status-intentional"></i>
+      Intentional
+    </ng-template>
     <ng-template #dataTableCell let-item="item">
       {{item.intentional ? item.intentional : ''}}
     </ng-template>
