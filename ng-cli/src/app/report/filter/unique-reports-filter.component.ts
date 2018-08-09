@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { SharedService } from '..';
@@ -9,10 +9,10 @@ import { Filter } from './Filter';
   templateUrl: './unique-reports-filter.html',
   styleUrls: ['./unique-reports-filter.scss']
 })
-export class UniqueReportsFilterComponent implements Filter {
+export class UniqueReportsFilterComponent implements Filter, OnInit {
   private id = 'is-unique';
-  private defaultUniqueValue = false; // Disable uniqueing by default.
-  private isUnique = this.defaultUniqueValue;
+  @Input() private defaultValue = false; // Disable uniqueing by default.
+  private isUnique: boolean = null;
 
   constructor(
     protected route: ActivatedRoute,
@@ -22,8 +22,23 @@ export class UniqueReportsFilterComponent implements Filter {
     shared.register(this);
   }
 
+  ngOnInit() {
+    this.isUnique = this.defaultValue;
+  }
+
+  notify() {}
+
   getUrlState() {
-    return {[this.id] : this.isUnique ? ['on'] : null};
+    return {[this.id] : this.getUrlValue()};
+  }
+
+  getUrlValue(): string | any[] {
+    if (this.defaultValue && !this.isUnique) {
+      return 'off';
+    } else if (!this.defaultValue && this.isUnique) {
+      return 'on';
+    }
+    return [];
   }
 
   initByUrl(queryParam: any) {
@@ -35,10 +50,8 @@ export class UniqueReportsFilterComponent implements Filter {
     this.shared.reportFilter.isUnique = this.isUnique;
   }
 
-  notify() {}
-
   clear() {
-    this.isUnique = this.defaultUniqueValue;
+    this.isUnique = this.defaultValue;
     this.updateReportFilter();
   }
 
@@ -51,7 +64,7 @@ export class UniqueReportsFilterComponent implements Filter {
   updateUrl() {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { [this.id]: this.isUnique ? 'on' : [] },
+      queryParams: { [this.id]: this.getUrlValue() },
       queryParamsHandling: 'merge'
     });
   }
