@@ -34,7 +34,7 @@
       [resizable]="true">
       <ng-template #dataTableCell let-item="item">
         <a [routerLink]="['../bug']"
-          [queryParams]="{reportHash: item.bugHash}"
+          [queryParams]="{reportHash: item.bugHash, report: item.reportId}"
           queryParamsHandling="merge" class="item">{{item.checkedFile}}</a>
       </ng-template>
     </data-table-column>

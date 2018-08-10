@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import {
   ITreeOptions,
+  TREE_ACTIONS,
   TreeComponent,
   TreeModel,
   TreeModule,
@@ -45,7 +46,16 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
     animateExpand: true,
     animateSpeed: 30,
     animateAcceleration: 1.2,
-    getChildren: this.getChildren.bind(this)
+    getChildren: this.getChildren.bind(this),
+    actionMapping: {
+      mouse: {
+        click: (tree: TreeModel, node: TreeNode, $event: any) => {
+          if (node.hasChildren) {
+            TREE_ACTIONS.TOGGLE_EXPANDED(tree, node, $event);
+          }
+        }
+      }
+    },
   };
 
   constructor(
