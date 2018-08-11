@@ -98,7 +98,7 @@
       <ng-template #dataTableCell let-item="item">
         <span class="version-tag"
           *ngIf="item.versionTag"
-          [style.background-color]="item.name | strToColor">
+          [style.background-color]="item.name + ':' + item.versionTag | strToColor">
           <i class="cc-icon tag" ></i>
           <span class="name">{{item.versionTag}}</span>
         </span>
