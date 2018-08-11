@@ -5,8 +5,10 @@ import Int64 = require('node-int64');
 
 import {
   CompareData,
+  MAX_QUERY_SIZE,
   ReportFilter,
-  RunTagCount,
+  RunHistoryDataList,
+  RunHistoryFilter,
   RunTagCounts
 } from '@cc/db-access';
 
@@ -30,77 +32,98 @@ export class RunTagFilterComponent extends SelectFilterBase {
     super('Run tag', route, router, shared, util);
   }
 
+  getRunIds() {
+    return this.shared.runIds ? Object.assign([], this.shared.runIds) : null;
+  }
+
+  getReportFilter() {
+    const reportFilter = new ReportFilter();
+    Object.assign(reportFilter, this.shared.reportFilter);
+    return reportFilter;
+  }
+
+  getCompareData() {
+    const cmpData = new CompareData();
+    Object.assign(cmpData, this.shared.cmpData);
+    return cmpData;
+  }
+
   getSelectedItemValues() {
-    const values: any[] = [];
-    const unknownRunTag: any[] = [];
-    for (const key of Object.keys(this.selectedItems)) {
-      const item = this.selectedItems[key];
+    let values: Int64[] = [];
+    const unknownRunTags: string[] = [];
+    for (const tag of Object.keys(this.selectedItems)) {
+      const item = this.selectedItems[tag];
       if (item) {
-        values.push(item.value);
+        values.push(item.values);
       } else {
-        unknownRunTag.push(key);
+        if (tag.indexOf(':') === -1) {
+          console.warn(`Invalid version tag format: ${tag}`);
+          continue;
+        }
+        unknownRunTags.push(tag);
       }
     }
 
-    return Promise.all(unknownRunTag.map(runTag => {
-      return this.getRunTagCountByName(runTag);
-    })).then((runTagCounts: any[]) => {
-      for (let i = 0; i < unknownRunTag.length; ++i) {
-        const runTag = unknownRunTag[i];
-        const tagCount = runTagCounts[i];
-        if (!this.selectedItems[runTag]) {
-          this.selectedItems[runTag] = {
-            label: runTag,
-            value: tagCount.value,
+    return Promise.all(unknownRunTags.map(tag => {
+      const ind = tag.indexOf(':');
+
+      const runName = tag.substring(0, ind);
+      const tagName = tag.substring(ind + 1);
+
+      return this.getRunReportCountsByTagName(runName, tagName);
+    })).then((runTagIds: any[]) => {
+      for (let i = 0; i < unknownRunTags.length; ++i) {
+        const tag = unknownRunTags[i];
+        const tagIds = runTagIds[i];
+        if (!this.selectedItems[tag]) {
+          this.selectedItems[tag] = {
+            label: tag,
+            values: tagIds,
             count: 'N/A'
           };
         }
-        values.push(tagCount.value);
+        values = values.concat(tagIds);
       }
       return values;
     });
   }
 
-  getRunTagCountByName(tagName: string) {
+  getRunReportCountsByTagName(runName: string, tagName: string) {
     return new Promise((resolve, reject) => {
-      const reportFilter = new ReportFilter();
-      Object.assign(reportFilter, this.shared.reportFilter);
+      this.dbService.getRunIds([runName]).then((runIds) => {
+        const tagFilter = new RunHistoryFilter();
+        tagFilter.tagNames = [tagName];
 
-      const cmpData = new CompareData();
-
-      this.dbService.getClient().getRunHistoryTagCounts(
-      this.shared.runIds, reportFilter, cmpData).then(
-      (runTagCounts: RunTagCounts) => {
-        const tagCount = runTagCounts.filter((runTagCount: any) => {
-          return runTagCount.name === tagName;
-        });
-
-        resolve({
-          value: tagCount.length ? tagCount[0].time : null,
-          count: tagCount.length ? tagCount[0].count.toNumber() : 'N/A'
+        const offset = new Int64(0);
+        this.dbService.getClient().getRunHistory(
+          runIds,
+          MAX_QUERY_SIZE,
+          offset,
+          tagFilter
+        ).then((runHistoryData: RunHistoryDataList) => {
+          resolve(runHistoryData.map(history => history.id));
         });
       });
     });
   }
 
-  updateReportFilter(runTagIds: Int64[]) {
-    // this.shared.reportFilter.runHistoryTag = runTagIds;
+  updateReportFilter(tagIds: Int64[]) {
+    this.shared.reportFilter.runTag = tagIds ? tagIds : [];
   }
 
   public notify() {
-    this.dbService.getClient().getRunHistoryTagCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData).then(
+    this.dbService.getClient().getRunHistoryTagCounts(this.getRunIds(),
+    this.getReportFilter(), this.getCompareData()).then(
     (runTagCounts: RunTagCounts) => {
       this.items = runTagCounts.map((runTagCount) => {
-        const label = runTagCount.name;
+        const label = runTagCount.runName + ':' + runTagCount.name;
         const item = {
           label: label,
-          value: runTagCount.time,
-          count: runTagCount.count,
-          icon: 'tag'
+          values: runTagCount.id,
+          count: runTagCount.count
         };
 
-        if (this.selectedItems[label] !== undefined) {
+        if (this.selectedItems[label] === null) {
           this.selectedItems[label] = item;
         }
 
