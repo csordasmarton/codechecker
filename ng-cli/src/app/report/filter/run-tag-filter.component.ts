@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import Int64 = require('node-int64');
+
 import {
   CompareData,
   ReportFilter,
@@ -81,8 +83,8 @@ export class RunTagFilterComponent extends SelectFilterBase {
     });
   }
 
-  updateReportFilter(tags: string[]) {
-    this.shared.reportFilter.runHistoryTag = tags;
+  updateReportFilter(runTagIds: Int64[]) {
+    // this.shared.reportFilter.runHistoryTag = runTagIds;
   }
 
   public notify() {

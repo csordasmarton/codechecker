@@ -28,6 +28,7 @@ import {
   RunFilterComponent,
   RunNewcheckFilterComponent,
   RunTagFilterComponent,
+  RunTagNewcheckFilterComponent,
   SeverityFilterComponent,
   SourceComponentComponent,
   UniqueReportsFilterComponent
@@ -59,6 +60,7 @@ import {
     RunFilterComponent,
     RunNewcheckFilterComponent,
     RunTagFilterComponent,
+    RunTagNewcheckFilterComponent,
     SeverityFilterComponent,
     SourceComponentComponent,
     UniqueReportsFilterComponent

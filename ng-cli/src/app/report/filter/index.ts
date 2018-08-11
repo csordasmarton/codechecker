@@ -13,6 +13,7 @@ export * from './review-status-filter.component';
 export * from './run-filter.component';
 export * from './run-newcheck-filter.component';
 export * from './run-tag-filter.component';
+export * from './run-tag-newcheck-filter.component';
 export * from './severity-filter.component';
 export * from './source-component-filter.component';
 export * from './unique-reports-filter.component';
