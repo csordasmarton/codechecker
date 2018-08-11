@@ -22,7 +22,7 @@ export class CheckerNameFilterComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('checker-name', 'Checker name', route, router, shared, util);
+    super('Checker name', route, router, shared, util);
   }
 
   updateReportFilter(checkerNames: string[]) {

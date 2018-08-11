@@ -10,7 +10,7 @@ import { Filter } from './Filter';
   styleUrls: ['./unique-reports-filter.scss']
 })
 export class UniqueReportsFilterComponent implements Filter, OnInit {
-  private id = 'is-unique';
+  @Input() private id = 'is-unique';
   @Input() private defaultValue = false; // Disable uniqueing by default.
   private isUnique: boolean = null;
 

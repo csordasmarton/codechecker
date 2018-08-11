@@ -20,7 +20,7 @@ export class CheckerMessageFilterComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('checker-message', 'Checker message', route, router, shared, util);
+    super('Checker message', route, router, shared, util);
   }
 
   updateReportFilter(checkerMessages: string[]) {

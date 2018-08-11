@@ -1,4 +1,5 @@
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { SharedService } from '..';
 import { UtilService } from '../../shared';
@@ -8,8 +9,9 @@ export abstract class SelectFilterBase implements Filter {
   protected items: any[];
   protected selectedItems: any = {};
 
+  @Input() protected id: string;
+
   constructor(
-    protected id: string,
     protected title: string,
     protected route: ActivatedRoute,
     protected router: Router,

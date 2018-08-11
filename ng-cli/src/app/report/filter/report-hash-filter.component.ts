@@ -1,4 +1,4 @@
-import { Component, } from '@angular/core';
+import { Component, Input, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { SharedService } from '..';
@@ -10,7 +10,8 @@ import { Filter } from './Filter';
   styleUrls: ['./report-hash-filter.component.scss']
 })
 export class ReportHashFilterComponent implements Filter {
-  private id = 'report-hash';
+  @Input() private id: string;
+
   private reportHash: string = null;
 
   constructor(

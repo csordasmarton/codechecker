@@ -21,7 +21,7 @@ export class SourceComponentComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('source-component', 'Source component', route, router, shared, util);
+    super('Source component', route, router, shared, util);
   }
 
   updateReportFilter(componentNames: string[]) {

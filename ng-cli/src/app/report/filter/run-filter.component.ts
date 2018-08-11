@@ -27,7 +27,7 @@ export class RunFilterComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('run', 'Run name', route, router, shared, util);
+    super('Run name', route, router, shared, util);
   }
 
   getSelectedItemValues() {

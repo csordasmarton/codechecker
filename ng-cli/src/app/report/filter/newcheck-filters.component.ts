@@ -12,7 +12,9 @@ export class NewcheckFiltersComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    if (!this.route.snapshot.queryParams['newcheck']) {
+    if (!this.route.snapshot.queryParams['newcheck'] &&
+        !this.route.snapshot.queryParams['run-tag-newcheck']
+    ) {
       this.collapsed = true;
     }
   }

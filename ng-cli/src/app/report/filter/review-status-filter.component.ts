@@ -22,7 +22,7 @@ export class ReviewStatusFilterComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('review-status', 'Review status', route, router, shared, util);
+    super('Review status', route, router, shared, util);
   }
 
   updateReportFilter(statuses: ReviewStatus[]) {

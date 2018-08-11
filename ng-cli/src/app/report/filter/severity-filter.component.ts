@@ -23,7 +23,7 @@ export class SeverityFilterComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('severity', 'Severity', route, router, shared, util);
+    super('Severity', route, router, shared, util);
   }
 
   updateReportFilter(severities: Severity[]) {

@@ -28,7 +28,9 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
   }
 
   public ngOnInit() {
-    this.shared.init();
+    setTimeout(() => {
+      this.shared.init();
+    });
   }
 
   public ngOnDestroy() {

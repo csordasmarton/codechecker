@@ -20,7 +20,7 @@ export class FileFilterComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('file', 'File', route, router, shared, util);
+    super('File', route, router, shared, util);
   }
 
   updateReportFilter(filePaths: string[]) {

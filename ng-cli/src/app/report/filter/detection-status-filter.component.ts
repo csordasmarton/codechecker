@@ -22,7 +22,7 @@ export class DetectionStatusFilterComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('detection-status', 'Detection status', route, router, shared, util);
+    super('Detection status', route, router, shared, util);
   }
 
   updateReportFilter(value: any) {
