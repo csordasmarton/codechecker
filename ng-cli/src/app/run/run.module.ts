@@ -1,9 +1,8 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-  ActivatedRouteSnapshot,
   RouterModule,
-  RouterStateSnapshot
 } from '@angular/router';
 
 import { DataTableModule } from 'angular5-data-table';
@@ -16,6 +15,7 @@ import { RunListComponent } from './run-list.component';
   imports: [
     BrowserModule,
     DataTableModule.forRoot(),
+    FormsModule,
     RouterModule,
     SharedModule
   ],

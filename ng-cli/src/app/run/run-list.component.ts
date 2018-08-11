@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import Int64 = require('node-int64');
 
@@ -16,10 +17,15 @@ export class RunListComponent implements OnInit {
   runs: RunData[] = [];
   runCount = 0;
 
+  private baseline: string = null;
+  private newcheck: string = null;
+
   itemsToRemove: Int64[] = [];
 
   constructor(
-    private dbService: DbService
+    private dbService: DbService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -56,6 +62,18 @@ export class RunListComponent implements OnInit {
         return param.sortAsc ? 1 : -1;
       } else {
         return 0;
+      }
+    });
+  }
+
+  diffSelectedRuns(event: Event) {
+    event.preventDefault();
+
+    this.router.navigate(['../reports'], {
+      relativeTo: this.route,
+      queryParams: {
+        run: this.baseline,
+        newcheck: this.newcheck
       }
     });
   }

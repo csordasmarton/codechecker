@@ -1,7 +1,7 @@
 <div class="px-2">
   <form>
     <div class="form-group pull-right mx-2">
-      <button class="btn btn-primary">Diff</button>
+      <button class="btn btn-primary" (click)="diffSelectedRuns($event)" [attr.disabled]="baseline && newcheck ? null : ''">Diff</button>
       <button class="btn btn-primary" (click)="removeSelectedItems($event)" [attr.disabled]="itemsToRemove.length ? null : ''">Delete</button>
     </div>
   </form>
@@ -28,7 +28,7 @@
       <ng-template #dataTableCell let-item="item">
         <span class="radio">
           <label>
-            <input type="radio" name="baseline" value="">
+            <input type="radio" name="baseline" value="{{item.name}}" [(ngModel)]="baseline">
             <span class="cr">
               <i class="cr-icon fa fa-circle"></i>
             </span>
@@ -36,7 +36,7 @@
         </span>
         <span class="radio">
           <label>
-            <input type="radio" name="newcheck" value="">
+            <input type="radio" name="newcheck" value="{{item.name}}" [(ngModel)]="newcheck">
             <span class="cr">
               <i class="cr-icon fa fa-circle"></i>
             </span>

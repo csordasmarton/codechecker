@@ -1,28 +1,30 @@
 <div class="report-filter {{id}}">
   <div class="header">
     <div class="title">{{title}}</div>
-    <div class="options" [popover]="myPopover" popoverPlacement="auto">
+    <div class="options">
       <i class="cc-icon clean"></i>
-      <i class="cc-icon option"></i>
+      <i class="cc-icon option" [popover]="myPopover" popoverPlacement="auto"></i>
+      <popover-content
+        #myPopover
+        [closeOnClickOutside]="true"
+        placement="left-top"
+      >
+        <div class="filter-options">
+          <ul class="items">
+            <li *ngFor="let item of items"
+              class="item"
+              [ngClass]="{ 'selected' : selectedItems[item.label] }"
+              (click)="onTooltipItemClick(item)">
+              {{item.selected}}
+              <i class="cc-icon" [ngClass]="{'selected' : selectedItems[item.label]}"></i>
+              <i *ngIf="item.icon" class="cc-icon {{ item.icon }}"></i>
+              <span>{{ item.label }}</span>
+              <span class="count">{{item.count}}</span>
+            </li>
+          </ul>
+        </div>
+      </popover-content>
     </div>
-    <popover-content #myPopover
-      [closeOnClickOutside]="true"
-      placement="left-top">
-      <div class="filter-options">
-        <ul class="items">
-          <li *ngFor="let item of items"
-            class="item"
-            [ngClass]="{ 'selected' : selectedItems[item.label] }"
-            (click)="onTooltipItemClick(item)">
-            {{item.selected}}
-            <i class="cc-icon" [ngClass]="{'selected' : selectedItems[item.label]}"></i>
-            <i *ngIf="item.icon" class="cc-icon {{ item.icon }}"></i>
-            <span>{{ item.label }}</span>
-            <span class="count">{{item.count}}</span>
-          </li>
-        </ul>
-      </div>
-    </popover-content>
   </div>
   <div class="selected-items">
     <ul>

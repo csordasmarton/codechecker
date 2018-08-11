@@ -159,4 +159,12 @@
     content: "\e01d";
     color: #28a745;
   }
+
+  &.carret-down::before {
+    content: "\f0d7";
+  }
+
+  &.carret-up::before {
+    content: "\f0d8";
+  }
 }

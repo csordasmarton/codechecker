@@ -16,6 +16,21 @@
     }
   }
 
+  .filter-toggle {
+    & > .header {
+      padding-bottom: 5px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #357ea7;
+      letter-spacing: 0.025em;
+      cursor: pointer;
+    }
+
+    &.collapsed > .filters {
+      display: none;
+    }
+  }
+
   > *:not(report-count):not(clear-all-reports):not(:last-child) {
     padding: 5px;
     border-bottom: 1px solid rgba(86, 96, 105, 0.23);

@@ -13,11 +13,14 @@ import { ReportComponent } from './report.component';
 import { SharedService } from './shared.service';
 
 import {
+  BaselineFiltersComponent,
   CheckerMessageFilterComponent,
   CheckerNameFilterComponent,
   ClearAllReportsComponent,
   DetectionStatusFilterComponent,
   FileFilterComponent,
+  FilterToggleDirective,
+  NewcheckFiltersComponent,
   ReportCountComponent,
   ReportFilterComponent,
   ReportHashFilterComponent,
@@ -39,12 +42,15 @@ import {
     PopoverModule
   ],
   declarations: [
+    BaselineFiltersComponent,
     ClearAllReportsComponent,
     CheckerMessageFilterComponent,
     CheckerNameFilterComponent,
     DetectionStatusFilterComponent,
     ReportCountComponent,
     FileFilterComponent,
+    FilterToggleDirective,
+    NewcheckFiltersComponent,
     ReportComponent,
     ReportFilterComponent,
     ReportHashFilterComponent,
@@ -62,6 +68,7 @@ import {
     DetectionStatusFilterComponent,
     ReportCountComponent,
     FileFilterComponent,
+    FilterToggleDirective,
     ReportComponent,
     ReportFilterComponent,
     ReportHashFilterComponent,
