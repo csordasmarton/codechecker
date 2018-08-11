@@ -26,29 +26,39 @@ export class CheckerNameFilterComponent extends SelectFilterBase {
   }
 
   updateReportFilter(checkerNames: string[]) {
-    this.shared.reportFilter.checkerId = checkerNames;
+    this.shared.reportFilter.checkerName = checkerNames;
+  }
+
+  getReportFilter() {
+    const reportFilter = super.getReportFilter();
+    reportFilter.checkerName = null;
+    return reportFilter;
   }
 
   public notify() {
     const limit = new Int64(10);
     const offset = new Int64(0);
 
-    this.dbService.getClient().getCheckerCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData, limit, offset).then(
-      (checkerCounts: CheckerCounts) => {
-        this.items = checkerCounts.map((checkerCount) => {
-          const name = checkerCount.name;
-          const item = {
-            label: name,
-            count: checkerCount.count.toNumber()
-          };
+    this.dbService.getClient().getCheckerCounts(
+      this.getRunIds(),
+      this.getReportFilter(),
+      this.getCompareData(),
+      limit,
+      offset
+    ).then((checkerCounts: CheckerCounts) => {
+      this.items = checkerCounts.map((checkerCount) => {
+        const name = checkerCount.name;
+        const item = {
+          label: name,
+          count: checkerCount.count.toNumber()
+        };
 
-          if (this.selectedItems[name] !== undefined) {
-            this.selectedItems[name] = item;
-          }
+        if (this.selectedItems[name] !== undefined) {
+          this.selectedItems[name] = item;
+        }
 
-          return item;
-        });
+        return item;
       });
+    });
   }
 }

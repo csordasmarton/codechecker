@@ -37,8 +37,8 @@ export class RunTagFilterComponent extends SelectFilterBase {
   }
 
   getReportFilter() {
-    const reportFilter = new ReportFilter();
-    Object.assign(reportFilter, this.shared.reportFilter);
+    const reportFilter = super.getReportFilter();
+    reportFilter.runTag = null;
     return reportFilter;
   }
 
@@ -112,9 +112,11 @@ export class RunTagFilterComponent extends SelectFilterBase {
   }
 
   public notify() {
-    this.dbService.getClient().getRunHistoryTagCounts(this.getRunIds(),
-    this.getReportFilter(), this.getCompareData()).then(
-    (runTagCounts: RunTagCounts) => {
+    this.dbService.getClient().getRunHistoryTagCounts(
+      this.getRunIds(),
+      this.getReportFilter(),
+      this.getCompareData()
+    ).then((runTagCounts: RunTagCounts) => {
       this.items = runTagCounts.map((runTagCount) => {
         const label = runTagCount.runName + ':' + runTagCount.name;
         const item = {

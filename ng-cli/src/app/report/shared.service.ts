@@ -14,8 +14,8 @@ import { Filter } from './filter/Filter';
 @Injectable()
 export class SharedService {
   runIds: Int64[] = [];
-  reportFilter: any = new ReportFilter();
-  cmpData: any = new CompareData();
+  reportFilter: ReportFilter = new ReportFilter();
+  cmpData: CompareData = new CompareData();
   reportCount: Int64 = new Int64(0);
 
   private filters: Filter[] = [];

@@ -29,13 +29,18 @@ export class DetectionStatusFilterComponent extends SelectFilterBase {
     this.shared.reportFilter.detectionStatus = value;
   }
 
-  public notify() {
-    const limit = new Int64(10);
-    const offset = new Int64(0);
+  getReportFilter() {
+    const reportFilter = super.getReportFilter();
+    reportFilter.detectionStatus = null;
+    return reportFilter;
+  }
 
-    this.dbService.getClient().getDetectionStatusCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData).then(
-    (detectionStatusCounts: Map<DetectionStatus, Int64>) => {
+  public notify() {
+    this.dbService.getClient().getDetectionStatusCounts(
+      this.getRunIds(),
+      this.getReportFilter(),
+      this.getCompareData()
+    ).then((detectionStatusCounts: Map<DetectionStatus, Int64>) => {
       this.items = Object.keys(DetectionStatus).filter(k => {
         return typeof DetectionStatus[k] === 'number';
       }).sort((a: string , b: string) => {

@@ -23,9 +23,11 @@ export class ReportCountComponent implements Filter {
   clear() {}
 
   notify() {
-    this.dbService.getClient().getRunResultCount(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData).then(
-    (reportCount: Int64) => {
+    this.dbService.getClient().getRunResultCount(
+      this.shared.runIds,
+      this.shared.reportFilter,
+      this.shared.cmpData
+    ).then((reportCount: Int64) => {
       this.shared.reportCount = reportCount;
     });
   }

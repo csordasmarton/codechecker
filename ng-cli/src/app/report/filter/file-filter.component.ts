@@ -27,13 +27,23 @@ export class FileFilterComponent extends SelectFilterBase {
     this.shared.reportFilter.filepath = filePaths;
   }
 
+  getReportFilter() {
+    const reportFilter = super.getReportFilter();
+    reportFilter.filepath = null;
+    return reportFilter;
+  }
+
   public notify() {
     const limit = new Int64(10);
     const offset = new Int64(0);
 
-    this.dbService.getClient().getFileCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData, limit, offset).then(
-    (fileCounts: Map<string, Int64>) => {
+    this.dbService.getClient().getFileCounts(
+      this.getRunIds(),
+      this.getReportFilter(),
+      this.getCompareData(),
+      limit,
+      offset
+    ).then((fileCounts: Map<string, Int64>) => {
       this.items = Array.from(fileCounts).map(([key, value]) => {
         const item = {
           label: key,

@@ -30,10 +30,18 @@ export class SeverityFilterComponent extends SelectFilterBase {
     this.shared.reportFilter.severity = severities;
   }
 
+  getReportFilter() {
+    const reportFilter = super.getReportFilter();
+    reportFilter.severity = null;
+    return reportFilter;
+  }
+
   public notify() {
-    this.dbService.getClient().getSeverityCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData).then(
-    (severityCounts: Map<Severity, Int64>) => {
+    this.dbService.getClient().getSeverityCounts(
+      this.getRunIds(),
+      this.getReportFilter(),
+      this.getCompareData()
+    ).then((severityCounts: Map<Severity, Int64>) => {
       this.items = Object.keys(Severity).filter(k => {
         return typeof Severity[k] === 'number';
       }).sort((a: string , b: string) => {

@@ -29,10 +29,18 @@ export class ReviewStatusFilterComponent extends SelectFilterBase {
     this.shared.reportFilter.reviewStatus = statuses;
   }
 
+  getReportFilter() {
+    const reportFilter = super.getReportFilter();
+    reportFilter.reviewStatus = null;
+    return reportFilter;
+  }
+
   public notify() {
-    this.dbService.getClient().getReviewStatusCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData).then(
-    (reviewStatusCounts: Map<ReviewStatus, Int64>) => {
+    this.dbService.getClient().getReviewStatusCounts(
+      this.getRunIds(),
+      this.getReportFilter(),
+      this.getCompareData()
+    ).then((reviewStatusCounts: Map<ReviewStatus, Int64>) => {
       this.items = Object.keys(ReviewStatus).filter(k => {
         return typeof ReviewStatus[k] === 'number';
       }).sort((a: string , b: string) => {

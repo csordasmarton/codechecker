@@ -27,13 +27,23 @@ export class CheckerMessageFilterComponent extends SelectFilterBase {
     this.shared.reportFilter.checkerMsg = checkerMessages;
   }
 
+  getReportFilter() {
+    const reportFilter = super.getReportFilter();
+    reportFilter.checkerMsg = null;
+    return reportFilter;
+  }
+
   public notify() {
     const limit = new Int64(10);
     const offset = new Int64(0);
 
-    this.dbService.getClient().getCheckerMsgCounts(this.shared.runIds,
-    this.shared.reportFilter, this.shared.cmpData, limit, offset).then(
-    (checkerMsgCounts: Map<string, Int64>) => {
+    this.dbService.getClient().getCheckerMsgCounts(
+      this.getRunIds(),
+      this.getReportFilter(),
+      this.getCompareData(),
+      limit,
+      offset
+    ).then((checkerMsgCounts: Map<string, Int64>) => {
       this.items = Array.from(checkerMsgCounts).map(([key, value]) => {
         const item = {
           label: key,

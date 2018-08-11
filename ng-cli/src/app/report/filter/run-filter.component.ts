@@ -92,9 +92,12 @@ export class RunFilterComponent extends SelectFilterBase {
     const limit = new Int64(10);
     const offset = new Int64(0);
 
-    this.dbService.getClient().getRunReportCounts([],
-    this.shared.reportFilter, limit, offset).then(
-    (runReportCounts: RunReportCounts) => {
+    this.dbService.getClient().getRunReportCounts(
+      [],
+      this.shared.reportFilter,
+      limit,
+      offset
+    ).then((runReportCounts: RunReportCounts) => {
       this.items = runReportCounts.map((runReport) => {
         const label = runReport.name;
         const item = {

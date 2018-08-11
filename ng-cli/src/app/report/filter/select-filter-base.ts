@@ -1,6 +1,8 @@
 import { Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { CompareData, ReportFilter } from '@cc/db-access';
+
 import { SharedService } from '..';
 import { UtilService } from '../../shared';
 import { Filter } from './Filter';
@@ -63,6 +65,22 @@ export abstract class SelectFilterBase implements Filter {
         resolve(value);
       });
     });
+  }
+
+  getRunIds() {
+    return this.shared.runIds ? Object.assign([], this.shared.runIds) : null;
+  }
+
+  getReportFilter() {
+    const reportFilter = new ReportFilter();
+    Object.assign(reportFilter, this.shared.reportFilter);
+    return reportFilter;
+  }
+
+  getCompareData() {
+    const cmpData = new CompareData();
+    Object.assign(cmpData, this.shared.cmpData);
+    return cmpData;
   }
 
   // Returns the selected filter item values.
