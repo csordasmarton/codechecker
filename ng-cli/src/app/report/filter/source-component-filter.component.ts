@@ -37,7 +37,7 @@ export class SourceComponentComponent extends SelectFilterBase {
           count: 'N/A'
         };
 
-        if (this.selectedItems[component.name] === null) {
+        if (this.selectedItems[component.name] !== undefined) {
           this.selectedItems[component.name] = item;
         }
 

@@ -57,7 +57,7 @@ export class DetectionStatusFilterComponent extends SelectFilterBase {
           icon: 'detection-status-' + label.toLowerCase()
         };
 
-        if (this.selectedItems[label] === null) {
+        if (this.selectedItems[label] !== undefined) {
           this.selectedItems[label] = item;
         }
 

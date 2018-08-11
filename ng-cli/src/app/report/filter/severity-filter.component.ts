@@ -55,7 +55,7 @@ export class SeverityFilterComponent extends SelectFilterBase {
           icon: 'severity-' + label.toLowerCase()
         };
 
-        if (this.selectedItems[label] === null) {
+        if (this.selectedItems[label] !== undefined) {
           this.selectedItems[label] = item;
         }
 

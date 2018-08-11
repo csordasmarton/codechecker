@@ -30,9 +30,6 @@ export class ReviewStatusFilterComponent extends SelectFilterBase {
   }
 
   public notify() {
-    const limit = new Int64(10);
-    const offset = new Int64(0);
-
     this.dbService.getClient().getReviewStatusCounts(this.shared.runIds,
     this.shared.reportFilter, this.shared.cmpData).then(
     (reviewStatusCounts: Map<ReviewStatus, Int64>) => {
@@ -57,7 +54,7 @@ export class ReviewStatusFilterComponent extends SelectFilterBase {
           icon: 'review-status-' + label.toLowerCase().split(' ').join('-')
         };
 
-        if (this.selectedItems[label] === null) {
+        if (this.selectedItems[label] !== undefined) {
           this.selectedItems[label] = item;
         }
 

@@ -40,7 +40,7 @@ export class FileFilterComponent extends SelectFilterBase {
           count: value.toNumber()
         };
 
-        if (this.selectedItems[key] === null) {
+        if (this.selectedItems[key] !== undefined) {
           this.selectedItems[key] = item;
         }
 

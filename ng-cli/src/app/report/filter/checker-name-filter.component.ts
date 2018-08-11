@@ -43,7 +43,7 @@ export class CheckerNameFilterComponent extends SelectFilterBase {
             count: checkerCount.count.toNumber()
           };
 
-          if (this.selectedItems[name] === null) {
+          if (this.selectedItems[name] !== undefined) {
             this.selectedItems[name] = item;
           }
 

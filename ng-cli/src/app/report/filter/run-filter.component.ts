@@ -103,7 +103,7 @@ export class RunFilterComponent extends SelectFilterBase {
           count: runReport.reportCount
         };
 
-        if (this.selectedItems[label] === null) {
+        if (this.selectedItems[label] !== undefined) {
           this.selectedItems[label] = item;
         }
 
