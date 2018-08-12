@@ -21,6 +21,7 @@ import {
 } from '@cc/db-access';
 
 import { DbService } from '../shared';
+import { ReportEventData } from './bug-tree';
 
 @Component({
   selector: 'bug-page',
@@ -105,6 +106,11 @@ export class BugComponent implements OnInit, OnDestroy {
     const fullHeight = this.getFullHeight();
     this.editor.setSize('100%', fullHeight + 'px');
     this.editor.refresh();
+  }
+
+  loadReportEvent(event: ReportEventData) {
+    const report = event.report;
+    this.loadReport(report.reportId, report.bugHash);
   }
 
   loadReport(reportId: Int64, reportHash: string) {

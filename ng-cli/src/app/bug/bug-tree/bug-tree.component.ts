@@ -2,6 +2,8 @@ import {
   AfterContentInit,
   AfterViewInit,
   Component,
+  EventEmitter,
+  Output,
   ViewChild
 } from '@angular/core';
 
@@ -19,14 +21,21 @@ import {
 import Int64 = require('node-int64');
 
 import {
+  BugPathEvent,
   CompareData,
   MAX_QUERY_SIZE,
+  ReportData,
   ReportDataList,
   ReportDetails,
   ReportFilter
 } from '@cc/db-access';
 
 import { DbService, UtilService } from '../../shared';
+
+export interface ReportEventData {
+  report: ReportData;
+  bugPathEvent: BugPathEvent;
+}
 
 @Component({
   selector: 'bug-tree',
@@ -36,6 +45,8 @@ import { DbService, UtilService } from '../../shared';
 export class BugTreeComponent implements AfterContentInit, AfterViewInit {
   @ViewChild('bugTree') treeComponent: TreeComponent;
   nodes: any[] = [];
+
+  @Output() loadReportEvent = new EventEmitter<ReportEventData>();
 
   options: ITreeOptions = {
     displayField: 'name',
@@ -52,6 +63,10 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
         click: (tree: TreeModel, node: TreeNode, $event: any) => {
           if (node.hasChildren) {
             TREE_ACTIONS.TOGGLE_EXPANDED(tree, node, $event);
+          }
+
+          if (node.data.report) {
+            this.loadReport(node.data.report, node.data.step);
           }
         }
       }
@@ -89,6 +104,7 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
     const runNames = this.route.snapshot.queryParams['run'];
 
     this.dbService.getRunIds(runNames).then((runIds) => {
+      console.log(runIds);
       const limit: Int64 = MAX_QUERY_SIZE;
       const offset: Int64 = new Int64(0);
       const reportFilter = new ReportFilter();
@@ -145,18 +161,21 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
 
             children.push({
               id: report.reportId + '_0',
-              name: '<b><u>' + report.checkerMsg + '</u></b>'
+              name: '<b><u>' + report.checkerMsg + '</u></b>',
+              report: report
             });
 
-            if (details.pathEvents.length <= 1) {
+            if (details.pathEvents.length < 1) {
               resolve(children);
               return;
             }
 
-            details.pathEvents.forEach((step: any, index: number) => {
+            details.pathEvents.forEach((step: BugPathEvent, index: number) => {
               children.push({
                 id: report.reportId + '_' + (index + 1),
                 name: step.msg,
+                report: report,
+                step: step
               });
             });
 
@@ -167,5 +186,12 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
     });
 
     severityNode.setField('children', severityNode.children);
+  }
+
+  loadReport(report: ReportData, bugPathEvent: BugPathEvent) {
+    this.loadReportEvent.emit({
+      report: report,
+      bugPathEvent: bugPathEvent
+    });
   }
 }

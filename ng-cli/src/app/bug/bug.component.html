@@ -1,7 +1,7 @@
 <div class="bug-wrapper">
   <div id="left-panel" fill-height>
     <button type="button" (click)="backToReports($event)">Back to reports</button>
-    <bug-tree></bug-tree>
+    <bug-tree (loadReportEvent)="loadReportEvent($event)"></bug-tree>
   </div>
   <div id="editor"></div>
 </div>
