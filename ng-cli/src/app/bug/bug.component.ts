@@ -30,8 +30,8 @@ import { ReportEventData } from './bug-tree';
   styleUrls: ['./bug.component.scss']
 })
 export class BugComponent implements OnInit, OnDestroy {
-  report: any;
-  sourceFile: any;
+  report: ReportData;
+  sourceFile: SourceFileData;
 
   private lineMarks: any[] = [];
   private lineWidgets: any[] = [];
@@ -56,7 +56,7 @@ export class BugComponent implements OnInit, OnDestroy {
       this.queryParams = params;
     });
 
-    const elemet = this.rd.selectRootElement('#editor');
+    const elemet = this.rd.selectRootElement('#editor .content');
     this.editor = CodeMirror(elemet, {
       lineNumbers: true,
       readOnly: true,

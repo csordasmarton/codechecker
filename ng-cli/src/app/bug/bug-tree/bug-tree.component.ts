@@ -104,10 +104,10 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
     const runNames = this.route.snapshot.queryParams['run'];
 
     this.dbService.getRunIds(runNames).then((runIds) => {
-      console.log(runIds);
       const limit: Int64 = MAX_QUERY_SIZE;
       const offset: Int64 = new Int64(0);
       const reportFilter = new ReportFilter();
+      // reportFilter.filepath = []; // TODO: !!! set file path filter !!!
       const cmpData = new CompareData();
 
       this.dbService.getClient().getRunResults(runIds || [], limit, offset, [],
@@ -173,7 +173,7 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
             details.pathEvents.forEach((step: BugPathEvent, index: number) => {
               children.push({
                 id: report.reportId + '_' + (index + 1),
-                name: step.msg,
+                name: index + '. '  + step.msg,
                 report: report,
                 step: step
               });

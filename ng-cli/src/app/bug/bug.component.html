@@ -1,7 +1,35 @@
 <div class="bug-wrapper">
   <div id="left-panel" fill-height>
-    <button type="button" (click)="backToReports($event)">Back to reports</button>
+    <button type="button" class="btn btn-simple" (click)="backToReports($event)">Back to reports</button>
     <bug-tree (loadReportEvent)="loadReportEvent($event)"></bug-tree>
   </div>
-  <div id="editor"></div>
+  <div id="button-pane">
+    <button class="btn btn-outline-primary btn-sm">Show documentation</button>
+    <form form class="form-inline">
+      <select class="form-control form-control-sm" id="review-status">
+        <option>Unreviewed</option>
+      </select>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" value="">
+          <span class="cr">
+            <i class="cr-icon fa fa-check"></i>
+          </span>
+          Show arrows
+        </label>
+      </div>
+    </form>
+  </div>
+  <div id="editor">
+    <div class="header">
+      <div class="file-path">{{sourceFile?.filePath}}</div>
+      <form form class="form-inline">
+        <label for="same-report-selector">Also found in:</label>
+        <select class="form-control form-control-sm" id="same-report-selector">
+          <option>RUN:FILE:LINE [BUG PATH LENGTH]</option>
+        </select>
+      </form>
+    </div>
+    <div class="content"></div>
+  </div>
 </div>
