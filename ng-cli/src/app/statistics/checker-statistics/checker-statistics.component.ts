@@ -12,7 +12,7 @@ import {
   ReviewStatus,
 } from '@cc/db-access';
 
-import { DbService } from '../shared';
+import { DbService } from '../../shared';
 
 @Component({
     selector: 'checker-statistics',

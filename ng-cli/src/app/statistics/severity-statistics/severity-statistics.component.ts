@@ -5,7 +5,7 @@ import Int64 = require('node-int64');
 
 import { CompareData, DiffType, ReportFilter, Severity } from '@cc/db-access';
 
-import { DbService } from '../shared';
+import { DbService } from '../../shared';
 
 @Component({
     selector: 'severity-statistics',
