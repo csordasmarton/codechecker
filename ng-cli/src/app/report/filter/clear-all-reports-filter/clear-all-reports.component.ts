@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { SharedService } from '..';
+import { SharedService } from '../..';
 
 @Component({
   selector: 'clear-all-reports',

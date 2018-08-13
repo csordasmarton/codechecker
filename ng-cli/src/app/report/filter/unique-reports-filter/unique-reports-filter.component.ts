@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SharedService } from '..';
-import { Filter } from './Filter';
+import { SharedService } from '../..';
+import { Filter } from '../Filter';
 
 @Component({
   selector: 'unique-reports-filter',

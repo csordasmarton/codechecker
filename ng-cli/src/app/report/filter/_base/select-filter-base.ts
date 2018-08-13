@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { CompareData, ReportFilter } from '@cc/db-access';
 
-import { SharedService } from '..';
-import { UtilService } from '../../shared';
-import { Filter } from './Filter';
+import { SharedService } from '../..';
+import { UtilService } from '../../../shared';
+import { Filter } from '../Filter';
 
 export abstract class SelectFilterBase implements Filter {
   protected items: any[];

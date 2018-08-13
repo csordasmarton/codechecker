@@ -5,14 +5,14 @@ import Int64 = require('node-int64');
 
 import { CheckerCounts } from '@cc/db-access';
 
-import { SharedService } from '..';
-import { DbService, UtilService } from '../../shared';
-import { SelectFilterBase } from './select-filter-base';
+import { SharedService } from '../..';
+import { DbService, UtilService } from '../../../shared';
+import { SelectFilterBase } from '../_base';
 
 @Component({
   selector: 'checker-name-filter',
-  templateUrl: './select-filter-base.html',
-  styleUrls: ['./select-filter-base.scss']
+  templateUrl: '../_base/select-filter-base.html',
+  styleUrls: ['../_base/select-filter-base.scss']
 })
 export class CheckerNameFilterComponent extends SelectFilterBase {
   constructor(

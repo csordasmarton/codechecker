@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 
 import Int64 = require('node-int64');
 
-import { RunFilterComponent } from './run-filter.component';
+import { RunFilterComponent } from '../run-filter/run-filter.component';
 
 @Component({
   selector: 'run-newcheck-filter',
-  templateUrl: './select-filter-base.html',
-  styleUrls: ['./select-filter-base.scss']
+  templateUrl: '../_base/select-filter-base.html',
+  styleUrls: ['../_base/select-filter-base.scss']
 })
 export class RunNewcheckFilterComponent extends RunFilterComponent {
   updateReportFilter(runIds: Int64[]) {

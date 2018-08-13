@@ -12,14 +12,14 @@ import {
   RunTagCounts
 } from '@cc/db-access';
 
-import { SharedService } from '..';
-import { DbService, UtilService } from '../../shared';
-import { SelectFilterBase } from './select-filter-base';
+import { SharedService } from '../..';
+import { DbService, UtilService } from '../../../shared';
+import { SelectFilterBase } from '../_base';
 
 @Component({
   selector: 'run-tag-filter',
-  templateUrl: './select-filter-base.html',
-  styleUrls: ['./select-filter-base.scss']
+  templateUrl: '../_base/select-filter-base.html',
+  styleUrls: ['../_base/select-filter-base.scss']
 })
 export class RunTagFilterComponent extends SelectFilterBase {
   constructor(

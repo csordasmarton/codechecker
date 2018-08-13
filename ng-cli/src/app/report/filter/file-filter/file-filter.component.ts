@@ -3,16 +3,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import Int64 = require('node-int64');
 
-import { SharedService } from '..';
-import { DbService, UtilService } from '../../shared';
-import { SelectFilterBase } from './select-filter-base';
+import { SharedService } from '../..';
+import { DbService, UtilService } from '../../../shared';
+import { SelectFilterBase } from '../_base';
 
 @Component({
-  selector: 'checker-message-filter',
-  templateUrl: './select-filter-base.html',
-  styleUrls: ['./select-filter-base.scss']
+  selector: 'file-filter',
+  templateUrl: '../_base/select-filter-base.html',
+  styleUrls: ['../_base/select-filter-base.scss']
 })
-export class CheckerMessageFilterComponent extends SelectFilterBase {
+export class FileFilterComponent extends SelectFilterBase {
   constructor(
     protected dbService: DbService,
     protected route: ActivatedRoute,
@@ -20,16 +20,16 @@ export class CheckerMessageFilterComponent extends SelectFilterBase {
     protected shared: SharedService,
     protected util: UtilService
   ) {
-    super('Checker message', route, router, shared, util);
+    super('File', route, router, shared, util);
   }
 
-  updateReportFilter(checkerMessages: string[]) {
-    this.shared.reportFilter.checkerMsg = checkerMessages;
+  updateReportFilter(filePaths: string[]) {
+    this.shared.reportFilter.filepath = filePaths;
   }
 
   getReportFilter() {
     const reportFilter = super.getReportFilter();
-    reportFilter.checkerMsg = null;
+    reportFilter.filepath = null;
     return reportFilter;
   }
 
@@ -37,14 +37,14 @@ export class CheckerMessageFilterComponent extends SelectFilterBase {
     const limit = new Int64(10);
     const offset = new Int64(0);
 
-    this.dbService.getClient().getCheckerMsgCounts(
+    this.dbService.getClient().getFileCounts(
       this.getRunIds(),
       this.getReportFilter(),
       this.getCompareData(),
       limit,
       offset
-    ).then((checkerMsgCounts: Map<string, Int64>) => {
-      this.items = Array.from(checkerMsgCounts).map(([key, value]) => {
+    ).then((fileCounts: Map<string, Int64>) => {
+      this.items = Array.from(fileCounts).map(([key, value]) => {
         const item = {
           label: key,
           count: value.toNumber()

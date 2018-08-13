@@ -3,15 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { SourceComponentDataList } from '@cc/db-access';
 
-import { SharedService } from '..';
-import { DbService, UtilService } from '../../shared';
-import { SelectFilterBase } from './select-filter-base';
+import { SharedService } from '../..';
+import { DbService, UtilService } from '../../../shared';
+import { SelectFilterBase } from '../_base';
 
 
 @Component({
   selector: 'source-component',
-  templateUrl: './select-filter-base.html',
-  styleUrls: ['./select-filter-base.scss']
+  templateUrl: '../_base/select-filter-base.html',
+  styleUrls: ['../_base/select-filter-base.scss']
 })
 export class SourceComponentComponent extends SelectFilterBase {
   constructor(
