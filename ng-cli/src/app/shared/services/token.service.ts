@@ -29,6 +29,7 @@ export class TokenService {
   }
 
   hasToken() {
-    return this.getToken().length !== 0;
+    const token = this.getToken();
+    return token && token.length !== 0;
   }
 }
