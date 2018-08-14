@@ -7,8 +7,8 @@ var helpers = require('./helpers');
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
 const METADATA = webpackMerge(commonConfig.metadata, {
-  'SERVER_HOST': null,
-  'SERVER_PORT': null
+  'SERVER_HOST': process.env.SERVER_HOST || null,
+  'SERVER_PORT': process.env.SERVER_PORT || null
 });
 
 module.exports = webpackMerge(commonConfig, {

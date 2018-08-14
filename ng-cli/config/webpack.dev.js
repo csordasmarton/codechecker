@@ -6,8 +6,8 @@ var helpers = require('./helpers');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
 
-const CC_SERVER_PORT = 8001; // THIS SHOULD BE CONFIGURABLE.
-const CC_SERVER_HOST = 'http://localhost';
+const CC_SERVER_PORT = process.env.SERVER_HOST || 8001;
+const CC_SERVER_HOST = process.env.SERVER_PORT || 'http://localhost';
 
 const SERVICE_ENDPOINTS = ['Authentication', 'Products', 'CodeCheckerService'];
 

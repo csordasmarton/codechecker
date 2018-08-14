@@ -7,8 +7,8 @@ var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
 
 const METADATA =  webpackMerge(commonConfig.metadata, {
-  'SERVER_HOST': null,
-  'SERVER_PORT': null
+  'SERVER_HOST': process.env.SERVER_HOST || null,
+  'SERVER_PORT': process.env.SERVER_PORT || null
 });
 
 module.exports = {
