@@ -4,7 +4,7 @@
   "private": true,
   "description": "CodeChecker viewer.",
   "scripts": {
-    "build:dev": "npm run thrift-api && rimraf dist && webpack --config config/webpack.dev.js --mode development --progress --profile --trace-deprecation",
+    "build:dev": "npm run thrift-api && rimraf dist && webpack --config config/webpack.dev.js --progress --profile",
     "build:prod": "npm run thrift-api && rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "build": "npm run build:dev",
     "clean:dist": "npm run rimraf -- dist",
@@ -12,7 +12,7 @@
     "clean": "npm cache verify && npm run rimraf -- api dist node_modules",
     "postinstall": "npm run webdriver:update",
     "server:prod": "http-server dist -c-1 --cors",
-    "server:dev": "webpack-dev-server --config config/webpack.dev.js --open --progress --profile --watch --content-base src/",
+    "server:dev": "npm run thrift-api && webpack-dev-server --config config/webpack.dev.js --open --progress --profile --watch --content-base src/",
     "server": "npm run server:dev",
     "test": "karma start --single-run",
     "thrift-api": "rimraf ./api && thrift-typescript --rootDir . --sourceDir ../api  --outDir ./api",
