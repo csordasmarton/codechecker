@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var helpers = require('./helpers');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 
@@ -65,7 +65,14 @@ module.exports = {
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: "file-loader?name=assets/fonts/[name].[ext]"
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "assets/fonts/[name].[ext]"
+            }
+          }
+        ]
       },
       {
         test: /\.scss$/,
@@ -85,10 +92,7 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: helpers.root('src', 'app'),
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader?sourceMap'
-        })
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader?sourceMap']
       },
       {
         test: /\.css$/,
@@ -96,6 +100,19 @@ module.exports = {
         use: 'raw-loader'
       }
     ]
+  },
+
+  optimization: {
+    runtimeChunk: "single", // enable "runtime" chunk
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendor",
+          chunks: "all"
+        }
+      }
+    }
   },
 
   plugins: [
@@ -112,9 +129,9 @@ module.exports = {
       {} // a map of your routes
     ),
 
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['app', 'vendor', 'polyfills']
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: ['app', 'vendor', 'polyfills']
+    // }),
 
     new HtmlWebpackPlugin({
       template: 'src/index.html'

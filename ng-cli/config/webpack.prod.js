@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
 
@@ -13,6 +13,7 @@ const METADATA = webpackMerge(commonConfig.metadata, {
 
 module.exports = webpackMerge(commonConfig, {
   devtool: 'source-map',
+  mode: 'production',
 
   output: {
     path: helpers.root('dist'),
@@ -23,18 +24,18 @@ module.exports = webpackMerge(commonConfig, {
 
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
-      mangle: {
-        keep_fnames: true
-      }
+
+    new MiniCssExtractPlugin({
+      filename: '[name].[hash].css'
     }),
-    new ExtractTextPlugin('[name].[hash].css'),
+
     new webpack.DefinePlugin({
       'process.env': {
         'SERVER_HOST': METADATA.SERVER_HOST,
         'SERVER_PORT': METADATA.SERVER_PORT
       }
     }),
+
     new webpack.LoaderOptionsPlugin({
       htmlLoader: {
         minimize: false // workaround for ng2
