@@ -1,14 +1,8 @@
-#reports .data-table-wrapper {
-  padding-left: 350px;
-
-  th {
-    word-wrap: break-word;
-  }
-
-  .column-detectionStatus,
-  .column-status,
-  .column-bugPathLength,
-  .column-severity {
+.ngx-datatable.reports {
+  .detectionStatus,
+  .reviewStatus,
+  .bugPathLength,
+  .severity {
     text-align: center
   }
 

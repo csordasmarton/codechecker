@@ -1,14 +1,14 @@
 <h1>Severity statistics</h1>
 
 <ngx-datatable
-  class="material"
+  class="severity-statistics material"
   [sortType]="'single'"
   [rows]="items"
   [count]="itemCount"
   [rowHeight]="'auto'"
   [columnMode]="'force'">
 
-  <ngx-datatable-column name="Severity" sortable="true">
+  <ngx-datatable-column name="Severity" sortable="true" [cellClass]="'severity'">
     <ng-template let-item="row" ngx-datatable-cell-template>
         <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
     </ng-template>
