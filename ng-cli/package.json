@@ -7,6 +7,10 @@
     "build:dev": "npm run thrift-api && rimraf dist && webpack --config config/webpack.dev.js --progress --profile",
     "build:prod": "npm run thrift-api && rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "build": "npm run build:dev",
+    "bundle-analyzer:dev": "webpack --config config/webpack.dev.js --profile --json > dist/stats.json && npm run bundle-report",
+    "bundle-analyzer:prod": "webpack --config config/webpack.prod.js --profile --json > dist/stats.json && npm run bundle-report",
+    "bundle-analyzer": "npm run bundle-analyzer:dev",
+    "bundle-report": "webpack-bundle-analyzer --port 4200 dist/stats.json",
     "clean:dist": "npm run rimraf -- dist",
     "clean:install": "npm set progress=false && npm install",
     "clean": "npm cache verify && npm run rimraf -- api dist node_modules",
@@ -86,6 +90,7 @@
     "typescript": "^2.7.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.20.2",
+    "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9",
     "webpack-merge": "^4.1.4"
