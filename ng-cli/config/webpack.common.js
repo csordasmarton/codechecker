@@ -110,6 +110,11 @@ module.exports = {
           test: /[\\/]node_modules[\\/]/,
           name: "vendor",
           chunks: "all"
+        },
+        thrift: {
+          test: /[\\/]api[\\/]/,
+          name: "thrift-api",
+          chunks: "all"
         }
       }
     }
