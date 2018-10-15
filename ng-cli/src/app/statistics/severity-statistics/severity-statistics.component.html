@@ -1,33 +1,25 @@
 <h1>Severity statistics</h1>
-<data-table id="severity-statistics"
-  [title]="'Severity statistics'"
-  [items]="items"
-  [itemCount]="itemCount"
-  [indexColumn]="false"
-  [pagination]="false"
-  [header]="false"
-  (reload)="reloadItems($event)">
 
-  <data-table-column
-    [header]="'Severity'"
-    [property]="'severity'"
-    [width]="'20%'"
-    [sortable]="true">
-    <ng-template #dataTableCell let-item="item">
-      <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
-    </ng-template>
-  </data-table-column>
+<ngx-datatable
+  class="material"
+  [sortType]="'single'"
+  [rows]="items"
+  [count]="itemCount"
+  [rowHeight]="'auto'"
+  [columnMode]="'force'">
 
-  <data-table-column
-    [property]="'reports'"
-    [width]="'20%'"
-    [sortable]="true">
-    <ng-template #dataTableHeader let-item="item">
-      <i class="cc-icon detection-status-unresolved"></i>
-      All reports
+  <ngx-datatable-column name="Severity" sortable="true">
+    <ng-template let-item="row" ngx-datatable-cell-template>
+        <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
     </ng-template>
-    <ng-template #dataTableCell let-item="item">
+  </ngx-datatable-column>
+
+  <ngx-datatable-column sortable="true">
+    <ng-template let-column="column" ngx-datatable-header-template>
+        <i class="cc-icon detection-status-unresolved"></i> All reports
+    </ng-template>
+    <ng-template let-item="row" ngx-datatable-cell-template>
       {{item.reports}}
     </ng-template>
-  </data-table-column>
-</data-table>
+  </ngx-datatable-column>
+</ngx-datatable>

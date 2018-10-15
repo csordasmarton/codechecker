@@ -43,7 +43,9 @@ module.exports = webpackMerge(commonConfig, {
 
   devServer: {
     historyApiFallback: true,
-    stats: 'minimal',
+    stats: {
+      warningsFilter: /System.import/ // https://github.com/angular/angular/issues/21560
+    },
     proxy: [{
       context: SERVICE_ENDPOINTS.map(endpoint => `**/${endpoint}`),
       target: CC_SERVER_HOST + ':' + CC_SERVER_PORT,

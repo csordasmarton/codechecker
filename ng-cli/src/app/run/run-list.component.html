@@ -13,19 +13,16 @@
     </div>
   </form>
 
-  <data-table id="runs"
-    [title]="'List of runs'"
-    [items]="runs"
-    [itemCount]="runCount"
-    [indexColumn]="false"
-    [pagination]="false"
-    [header]="false"
-    (reload)="reloadItems($event)">
+  <ngx-datatable
+    class="material"
+    [sortType]="'single'"
+    [rows]="runs"
+    [count]="runCount"
+    [rowHeight]="'auto'"
+    [columnMode]="'force'">
 
-    <data-table-column
-      [header]="'Diff'"
-      [width]="'7em'">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Diff" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <span class="radio">
           <label>
             <input type="radio" name="baseline" value="{{item.name}}" [(ngModel)]="baseline">
@@ -43,45 +40,31 @@
           </label>
         </span>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Name'"
-      [property]="'name'"
-      [sortable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Name" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <a [routerLink]="['../reports']" [queryParams]="{run: item.name}"class="name">{{item.name}}</a>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Number of unresolved reports'"
-      [property]="'resultCount'"
-      [sortable]="true">
-    </data-table-column>
+    <ngx-datatable-column name="Number of unresolved reports" prop="resultCount" sortable="true">
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Storage date'"
-      [property]="'runDate'"
-      [sortable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Storage date" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <span class="date">{{item.runDate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Analysis duration'"
-      [property]="'duration'"
-      [sortable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Analysis duration" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         {{item.duration | duration}}
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Detection status'"
-      [property]="'detectionStatus'">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Detection status" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <ul class="detection-status-counts">
           <li *ngFor="let detectionStatusCode of (item.detectionStatusCount | mapKeys)">
             <i class="cc-icon detection-status-{{detectionStatusCode | detectionStatusToString | lowercase}}"></i>
@@ -89,13 +72,10 @@
           </li>
         </ul>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Latest version tag'"
-      [property]="'versionTag'"
-      [sortable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Latest version tag" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <span class="version-tag"
           *ngIf="item.versionTag"
           [style.background-color]="item.name + ':' + item.versionTag | strToColor">
@@ -103,12 +83,10 @@
           <span class="name">{{item.versionTag}}</span>
         </span>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Delete'"
-      [width]="'5em'">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Delete" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="" (change)="toggleDeleteItem(item)">
@@ -118,7 +96,8 @@
           </label>
         </div>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-  </data-table>
+  </ngx-datatable>
+
 </div>

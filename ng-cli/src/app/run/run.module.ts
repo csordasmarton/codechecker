@@ -5,7 +5,7 @@ import {
   RouterModule,
 } from '@angular/router';
 
-import { DataTableModule } from 'angular5-data-table';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { DbService } from '../shared';
 import { SharedModule } from '../shared/shared.module';
@@ -14,7 +14,7 @@ import { RunListComponent } from './run-list.component';
 @NgModule({
   imports: [
     BrowserModule,
-    DataTableModule.forRoot(),
+    NgxDatatableModule,
     FormsModule,
     RouterModule,
     SharedModule

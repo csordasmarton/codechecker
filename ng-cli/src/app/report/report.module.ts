@@ -5,7 +5,7 @@ import {
   RouterModule,
 } from '@angular/router';
 
-import { DataTableModule } from 'angular5-data-table';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { PopoverModule } from 'ngx-popover';
 
 import { SharedModule } from '../shared/shared.module';
@@ -37,7 +37,7 @@ import {
 @NgModule({
   imports: [
     BrowserModule,
-    DataTableModule,
+    NgxDatatableModule,
     FormsModule,
     RouterModule,
     SharedModule,

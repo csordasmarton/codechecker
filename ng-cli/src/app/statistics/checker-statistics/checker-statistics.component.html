@@ -1,104 +1,74 @@
 <h1>Checker statistics</h1>
-<data-table id="checker-statistics"
-  [title]="'Checker statistics'"
-  [items]="items"
-  [itemCount]="itemCount"
-  [indexColumn]="false"
-  [pagination]="false"
-  [header]="false"
-  (reload)="reloadItems($event)">
 
-  <data-table-column
-    [header]="'Checker name'"
-    [property]="'checker'"
-    [sortable]="true">
-  </data-table-column>
+<ngx-datatable
+    class="material"
+    [sortType]="'single'"
+    [rows]="items"
+    [count]="itemCount"
+    [rowHeight]="'auto'"
+    [columnMode]="'force'">
 
-  <data-table-column
-    [header]="'Severity'"
-    [width]="'8rem'"
-    [property]="'severity'"
-    [sortable]="true">
-    <ng-template #dataTableCell let-item="item">
-      <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
-    </ng-template>
-  </data-table-column>
+    <ngx-datatable-column name="Checker name" prop="checker" sortable="true">
+    </ngx-datatable-column>
 
-  <data-table-column
-    [property]="'reports'"
-    [width]="'10rem'"
-    [sortable]="true">
-    <ng-template #dataTableHeader let-item="item">
-      <i class="cc-icon detection-status-unresolved"></i>
-      All reports
-    </ng-template>
-    <ng-template #dataTableCell let-item="item">
-      {{item.reports}}
-    </ng-template>
-  </data-table-column>
+    <ngx-datatable-column name="Severity" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
+        <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
+      </ng-template>
+    </ngx-datatable-column>
 
-  <data-table-column
-    [property]="'resolved'"
-    [width]="'10rem'"
-    [sortable]="true">
-    <ng-template #dataTableHeader let-item="item">
-      <i class="cc-icon detection-status-resolved"></i>
-      Resolved
-    </ng-template>
-    <ng-template #dataTableCell let-item="item">
-      {{item.resolved ? item.resolved : ''}}
-    </ng-template>
-  </data-table-column>
+    <ngx-datatable-column sortable="true">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        <i class="cc-icon detection-status-unresolved"></i> All reports
+      </ng-template>
+      <ng-template let-item="row" ngx-datatable-cell-template>
+        {{item.reports}}
+      </ng-template>
+    </ngx-datatable-column>
 
-  <data-table-column
-    [property]="'unreviewed'"
-    [width]="'10rem'"
-    [sortable]="true">
-    <ng-template #dataTableHeader let-item="item">
-      <i class="cc-icon review-status-unreviewed"></i>
-      Unreviewed
-    </ng-template>
-    <ng-template #dataTableCell let-item="item">
-      {{item.unreviewed ? item.unreviewed : ''}}
-    </ng-template>
-  </data-table-column>
+    <ngx-datatable-column sortable="true">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        <i class="cc-icon detection-status-resolved"></i> Resolved
+      </ng-template>
+      <ng-template let-item="row" ngx-datatable-cell-template>
+        {{item.resolved ? item.resolved : ''}}
+      </ng-template>
+    </ngx-datatable-column>
 
-  <data-table-column
-    [property]="'confirmed'"
-    [width]="'12rem'"
-    [sortable]="true">
-    <ng-template #dataTableHeader let-item="item">
-      <i class="cc-icon review-status-confirmed-bug"></i>
-      Confirmed bug
-    </ng-template>
-    <ng-template #dataTableCell let-item="item">
-      {{item.confirmed ? item.confirmed : ''}}
-    </ng-template>
-  </data-table-column>
+    <ngx-datatable-column sortable="true">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        <i class="cc-icon review-status-unreviewed"></i> Unreviewed
+      </ng-template>
+      <ng-template let-item="row" ngx-datatable-cell-template>
+        {{item.unreviewed ? item.unreviewed : ''}}
+      </ng-template>
+    </ngx-datatable-column>
 
-  <data-table-column
-    [property]="'falsePositive'"
-    [width]="'10rem'"
-    [sortable]="true">
-    <ng-template #dataTableHeader let-item="item">
-      <i class="cc-icon review-status-false-positive"></i>
-      False positive
-    </ng-template>
-    <ng-template #dataTableCell let-item="item">
-      {{item.falsePositive ? item.falsePositive : ''}}
-    </ng-template>
-  </data-table-column>
+    <ngx-datatable-column sortable="true">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        <i class="cc-icon review-status-confirmed-bug"></i> Confirmed bug
+      </ng-template>
+      <ng-template let-item="row" ngx-datatable-cell-template>
+        {{item.confirmed ? item.confirmed : ''}}
+      </ng-template>
+    </ngx-datatable-column>
 
-  <data-table-column
-    [property]="'intentional'"
-    [width]="'10rem'"
-    [sortable]="true">
-    <ng-template #dataTableHeader let-item="item">
-      <i class="cc-icon review-status-intentional"></i>
-      Intentional
-    </ng-template>
-    <ng-template #dataTableCell let-item="item">
-      {{item.intentional ? item.intentional : ''}}
-    </ng-template>
-  </data-table-column>
-</data-table>
+    <ngx-datatable-column sortable="true">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        <i class="cc-icon review-status-false-positive"></i> False positive
+      </ng-template>
+      <ng-template let-item="row" ngx-datatable-cell-template>
+        {{item.falsePositive ? item.falsePositive : ''}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column sortable="true">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        <i class="cc-icon review-status-intentional"></i> Intentional
+      </ng-template>
+      <ng-template let-item="row" ngx-datatable-cell-template>
+        {{item.intentional ? item.intentional : ''}}
+      </ng-template>
+    </ngx-datatable-column>
+
+</ngx-datatable>

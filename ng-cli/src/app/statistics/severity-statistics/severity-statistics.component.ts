@@ -52,6 +52,7 @@ export class SeverityStatisticsComponent implements OnInit {
           reports: value
         });
       });
+      this.items = [...this.items];
       this.itemCount = this.items.length;
     });
   }

@@ -99,6 +99,7 @@ export class CheckerStatisticsComponent implements OnInit {
           resolved      : res[5][key] !== undefined ? res[5][key].count : 0
         });
       });
+      this.items = [...this.items];
     });
   }
 }

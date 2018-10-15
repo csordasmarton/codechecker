@@ -36,6 +36,11 @@ export class ProductComponent {
       });
   }
 
+  productNameComparator(propA: any, propB: any, rowA: any, rowB: any): void {
+    console.log(propA, propB, rowA, rowB);
+    console.log(propB);
+  }
+
   public reloadItems(param: any) {
     this.products.sort((a: any, b: any) => {
       let sortByA = a[param['sortBy']];

@@ -13,21 +13,20 @@
     </div>
   </form>
 
-  <data-table id="product-list"
-    [title]="'Products'"
-    [class]="'clearfix'"
-    [items]="products"
-    [itemCount]="productCount"
-    [indexColumn]="false"
-    [pagination]="false"
-    [header]="false"
-    (reload)="reloadItems($event)">
+  <h1>Products</h1>
 
-    <data-table-column
-      [header]="'Product name'"
-      [property]="'displayedName_b64'"
-      [sortable]="true">
-      <ng-template #dataTableCell let-item="item">
+  <ngx-datatable
+    class="material"
+    [sortType]="'single'"
+    [rows]="products"
+    [rowHeight]="'auto'"
+    [columnMode]="'force'">
+
+    <ngx-datatable-column name="Product name" [comparator]="productNameComparator">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{column.name}}</span>
+      </ng-template>
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <div class="d-flex align-items-left">
           <div class="mr-3">
             <div class="product-icon rounded-circle" [style.background-color]="item.endpoint | strToColor">
@@ -44,39 +43,31 @@
           </div>
         </div>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Admins'"
-      [property]="'admins'">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Admins" sortable="false">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         {{item.admins.join(', ')}}
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Run count'"
-      [property]="'runCount'"
-      [sortable]="true"
-      [width]="'12%'">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Run count">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <span class="text-center">{{item.runCount}}</span>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Latest store to product'"
-      [property]="'latestStoreToProduct'"
-      [sortable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Latest store to product">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         {{item.latestStoreToProduct | date:'yyyy-MM-dd HH:mm:ss'}}
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'&nbsp;'"
-      [width]="'6%'">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column sortable="false">
+      <ng-template ngx-datatable-header-template>
+        <span>&nbsp;</span>
+      </ng-template>
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <div>
           <a [routerLink]="['products', 'edit', item.endpoint]">
             <i class="cc-icon edit"></i>
@@ -84,6 +75,7 @@
           <i class="cc-icon clean"></i>
         </div>
       </ng-template>
-    </data-table-column>
-  </data-table>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
 </div>

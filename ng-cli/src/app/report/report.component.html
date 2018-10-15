@@ -1,107 +1,66 @@
 <div class="mx-2">
   <report-filter></report-filter>
 
-  <data-table
-    id="reports"
-    [items]="reports"
-    [itemCount]="shared.reportCount"
-    [indexColumn]="false"
-    [pagination]="true"
-    [pageLimits]="pageLimits"
-    [substituteRows]="false"
-    [showReloading]="true"
-    [autoReload]="false"
-    [header]="false"
-    (reload)="reloadItems($event)">
+  <ngx-datatable
+    class="material"
+    [sortType]="'single'"
+    [rows]="reports"
+    [headerHeight]="50"
+    [columnMode]="'force'">
 
-    <data-table-column
-      [header]="'Report hash'"
-      [property]="'bugHash'"
-      [width]="'10rem'"
-      [sortable]="true"
-      [resizable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Report hash" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <span class="text-truncate" title="{{item.bugHash}}">
           {{item.bugHash}}
         </span>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'File'"
-      [property]="'checkedFile'"
-      [sortable]="true"
-      [resizable]="true">
-      <ng-template #dataTableCell let-item="item">
-        <a [routerLink]="['../bug']"
-          [queryParams]="{reportHash: item.bugHash, report: item.reportId}"
-          queryParamsHandling="merge" class="item">{{item.checkedFile}}</a>
+    <ngx-datatable-column name="File" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
+        <span class="text-truncate" title="{{item.bugHash}}">
+          <a [routerLink]="['../bug']"
+            [queryParams]="{reportHash: item.bugHash, report: item.reportId}"
+            queryParamsHandling="merge" class="item">{{item.checkedFile}}</a>
+        </span>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Message'"
-      [property]="'checkerMsg'"
-      [sortable]="true"
-      [resizable]="true">
-    </data-table-column>
+    <ngx-datatable-column name="Message" prop="checkerMsg" sortable="true">
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Checker name'"
-      [property]="'checkerId'"
-      [width]="'15rem'"
-      [sortable]="true"
-      [resizable]="true">
-    </data-table-column>
+    <ngx-datatable-column name="Checker name" prop="checkerId" sortable="true">
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Severity'"
-      [property]="'severity'"
-      [width]="'7rem'"
-      [sortable]="true"
-      [resizable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Severity" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Bug path length'"
-      [property]="'bugPathLength'"
-      [width]="'6rem'"
-      [sortable]="true"
-      [resizable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Bug path length" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <span class="bug-path-length"
           [style.background-color]="item.bugPathLength | colorizeBugPathLength">
           {{item.bugPathLength}}
         </span>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Review status'"
-      [property]="'status'"
-      [width]="'6rem'"
-      [sortable]="true"
-      [resizable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Review status" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <i class="cc-icon review-status-{{item.reviewData?.status | reviewStatusToString | lowercase}}"></i>
       </ng-template>
-    </data-table-column>
+    </ngx-datatable-column>
 
-    <data-table-column
-      [header]="'Detection status'"
-      [property]="'detectionStatus'"
-      [width]="'6rem'"
-      [sortable]="true"
-      [resizable]="true">
-      <ng-template #dataTableCell let-item="item">
+    <ngx-datatable-column name="Detection status" sortable="true">
+      <ng-template let-item="row" ngx-datatable-cell-template>
         <i *ngIf="item.detectionStatus !== undefined"
             class="cc-icon detection-status-{{item.detectionStatus | detectionStatusToString | lowercase}}"></i>
         <span *ngIf="item.detectionStatus === undefined">N/A</span>
       </ng-template>
-    </data-table-column>
-  </data-table>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
 
 </div>

@@ -4,7 +4,7 @@ import {
   RouterModule,
 } from '@angular/router';
 
-import { DataTableModule } from 'angular5-data-table';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { StatisticsComponent } from '.';
 import { ReportModule } from '../report/report.module';
@@ -17,7 +17,7 @@ import { StatisticsFilterComponent } from './statistics-filter';
 @NgModule({
   imports: [
     BrowserModule,
-    DataTableModule.forRoot(),
+    NgxDatatableModule,
     ReportModule,
     RouterModule,
     SharedModule
