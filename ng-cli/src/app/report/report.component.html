@@ -1,4 +1,4 @@
-<div class="mx-2">
+<div class="m-2">
   <report-filter></report-filter>
 
   <ngx-datatable
@@ -33,13 +33,13 @@
     <ngx-datatable-column name="Checker name" prop="checkerId" sortable="true">
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Severity" sortable="true" [cellClass]="'severity'">
+    <ngx-datatable-column name="Severity" sortable="true" [cellClass]="'severity text-center'">
       <ng-template let-item="row" ngx-datatable-cell-template>
         <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Bug path length" sortable="true" [cellClass]="'bugPathLength'">
+    <ngx-datatable-column name="Bug path length" sortable="true" [cellClass]="'bugPathLength text-center'">
       <ng-template let-item="row" ngx-datatable-cell-template>
         <span class="bug-path-length"
           [style.background-color]="item.bugPathLength | colorizeBugPathLength">
@@ -48,13 +48,13 @@
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Review status" sortable="true" [cellClass]="'reviewStatus'">
+    <ngx-datatable-column name="Review status" sortable="true" [cellClass]="'reviewStatus text-center'">
       <ng-template let-item="row" ngx-datatable-cell-template>
         <i class="cc-icon review-status-{{item.reviewData?.status | reviewStatusToString | lowercase}}"></i>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Detection status" sortable="true" [cellClass]="'detectionStatus'">
+    <ngx-datatable-column name="Detection status" sortable="true" [cellClass]="'detectionStatus text-center'">
       <ng-template let-item="row" ngx-datatable-cell-template>
         <i *ngIf="item.detectionStatus !== undefined"
             class="cc-icon detection-status-{{item.detectionStatus | detectionStatusToString | lowercase}}"></i>

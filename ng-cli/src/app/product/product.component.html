@@ -1,25 +1,26 @@
-<div class="px-2">
-  <form>
-    <div class="form-group pull-right mx-2">
-      <a class="btn btn-primary" [routerLink]="['products', 'new']">New product</a>
-      <a class="btn btn-primary" [routerLink]="['products', 'permission']">Global permissions</a>
-    </div>
-  </form>
+<div class="p-2">
+  <div class="table-top">
+    <form>
+      <div class="form-group pull-right mx-2">
+        <a class="btn btn-primary ml-2" [routerLink]="['products', 'new']">New product</a>
+        <a class="btn btn-primary ml-2" [routerLink]="['products', 'permission']">Global permissions</a>
+      </div>
+    </form>
 
-  <form class="form-inline">
-    <div class="form-group has-search mx-2">
-      <span class="fa fa-search form-control-feedback"></span>
-      <input type="text" (keyup)="search($event.target.value)" class="form-control" placeholder="Search for products...">
-    </div>
-  </form>
-
-  <h1>Products</h1>
+    <form class="form-inline">
+      <div class="form-group has-search mx-2">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" (keyup)="search($event.target.value)" class="form-control" placeholder="Search for products...">
+      </div>
+    </form>
+  </div>
 
   <ngx-datatable
     class="product-list material"
     [sortType]="'single'"
     [rows]="products"
     [rowHeight]="'auto'"
+    [headerHeight]="'auto'"
     [columnMode]="'force'">
 
     <ngx-datatable-column name="Product name" [comparator]="productNameComparator">

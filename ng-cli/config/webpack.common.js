@@ -83,7 +83,6 @@ module.exports = {
           'to-string-loader',
           'style-loader',
           'css-loader',
-          'postcss-loader',
           {
             loader: 'sass-loader',
             options: {

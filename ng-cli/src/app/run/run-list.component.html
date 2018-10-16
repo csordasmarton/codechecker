@@ -1,17 +1,19 @@
-<div class="px-2">
-  <form>
-    <div class="form-group pull-right mx-2">
-      <button class="btn btn-primary" (click)="diffSelectedRuns($event)" [attr.disabled]="baseline && newcheck ? null : ''">Diff</button>
-      <button class="btn btn-primary" (click)="removeSelectedItems($event)" [attr.disabled]="itemsToRemove.length ? null : ''">Delete</button>
-    </div>
-  </form>
+<div class="p-2">
+  <div class="table-top">
+    <form>
+      <div class="form-group pull-right mx-2">
+        <button class="btn btn-primary ml-2" (click)="diffSelectedRuns($event)" [attr.disabled]="baseline && newcheck ? null : ''">Diff</button>
+        <button class="btn btn-primary ml-2" (click)="removeSelectedItems($event)" [attr.disabled]="itemsToRemove.length ? null : ''">Delete</button>
+      </div>
+    </form>
 
-  <form class="form-inline m-2">
-    <div class="form-group has-search">
-      <span class="fa fa-search form-control-feedback"></span>
-      <input type="text" (keyup)="search($event.target.value)" class="form-control" placeholder="Search for run names...">
-    </div>
-  </form>
+    <form class="form-inline m-2">
+      <div class="form-group has-search">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" (keyup)="search($event.target.value)" class="form-control" placeholder="Search for run names...">
+      </div>
+    </form>
+  </div>
 
   <ngx-datatable
     class="runs material"
@@ -19,6 +21,7 @@
     [rows]="runs"
     [count]="runCount"
     [rowHeight]="'auto'"
+    [headerHeight]="'auto'"
     [columnMode]="'force'">
 
     <ngx-datatable-column name="Diff" sortable="true">
