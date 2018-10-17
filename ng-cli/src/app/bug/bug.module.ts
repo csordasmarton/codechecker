@@ -12,7 +12,7 @@ import { BugComponent } from './bug.component';
     BrowserModule,
     RouterModule,
     SharedModule,
-    TreeModule
+    TreeModule.forRoot()
   ],
   declarations: [
     BugComponent,

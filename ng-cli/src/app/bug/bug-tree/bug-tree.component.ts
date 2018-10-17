@@ -1,10 +1,11 @@
 import {
-  AfterContentInit,
   AfterViewInit,
+  OnChanges,
   Component,
   EventEmitter,
   Output,
-  ViewChild
+  ViewChild,
+  Input
 } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +15,6 @@ import {
   TREE_ACTIONS,
   TreeComponent,
   TreeModel,
-  TreeModule,
   TreeNode
 } from 'angular-tree-component';
 
@@ -42,9 +42,11 @@ export interface ReportEventData {
   templateUrl: './bug-tree.component.html',
   providers: [ DbService ]
 })
-export class BugTreeComponent implements AfterContentInit, AfterViewInit {
+export class BugTreeComponent implements AfterViewInit, OnChanges {
   @ViewChild('bugTree') treeComponent: TreeComponent;
   nodes: any[] = [];
+
+  @Input() report: ReportData = null;
 
   @Output() loadReportEvent = new EventEmitter<ReportEventData>();
 
@@ -73,13 +75,23 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
     },
   };
 
+  treeModel: TreeModel;
+
   constructor(
     private dbService: DbService,
     private route: ActivatedRoute,
     private util: UtilService) {
   }
 
-  public ngAfterContentInit() {
+  ngOnChanges() {
+    if (this.report) {
+      this.loadTreeItems(this.report);
+    }
+  }
+
+  loadTreeItems(report: ReportData) {
+    this.nodes = [];
+
     [
       { id: 'critical',    name: 'Critical',    icon: 'severity-critical' },
       { id: 'high',        name: 'High',        icon: 'severity-high' },
@@ -94,43 +106,52 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
 
       this.nodes.push(node);
     });
-
-    this.loadTreeItems();
+    this.treeModel.update();
+    this.loadReportData(report);
   }
 
-  loadTreeItems() {
-    const treeModel = this.treeComponent.treeModel;
+  private loadReportData(report: ReportData) {
+    const limit: Int64 = MAX_QUERY_SIZE;
+    const offset: Int64 = new Int64(0);
 
-    const runNames = this.route.snapshot.queryParams['run'];
+    const reportFilter = new ReportFilter();
+    reportFilter.filepath = [report.checkedFile];
 
-    this.dbService.getRunIds(runNames).then((runIds) => {
-      const limit: Int64 = MAX_QUERY_SIZE;
-      const offset: Int64 = new Int64(0);
-      const reportFilter = new ReportFilter();
-      // reportFilter.filepath = []; // TODO: !!! set file path filter !!!
-      const cmpData = new CompareData();
+    const cmpData = new CompareData();
 
-      this.dbService.getClient().getRunResults(runIds || [], limit, offset, [],
-      reportFilter, cmpData).then((reports: ReportDataList) => {
-        // Adding reports to the tree.
-        reports.forEach((report) => {
-          this.addReport(report);
-        });
-
-        // Hide severity items of the tree which doesn't contain any item.
-        treeModel.roots.forEach((node: TreeNode) => {
-          if (!node.getFirstChild()) {
-            node.setIsHidden(true);
-          }
-        });
-
-        // Update the tree.
-        treeModel.update();
+    this.dbService.getClient().getRunResults(
+      [report.runId],
+      limit,
+      offset,
+      [],
+      reportFilter,
+      cmpData
+    ).then((reports: ReportDataList) => {
+      // Adding reports to the tree.
+      reports.forEach((report) => {
+        this.addReport(report);
       });
+
+      // Hide severity items of the tree which don't have any item.
+      this.treeModel.roots.forEach((node: TreeNode) => {
+        if (!node.getFirstChild()) {
+          node.setIsHidden(true);
+        } else {
+          node._initChildren();
+        }
+      });
+
+      // Expand tree node by the current report id.
+      const reportNode = this.treeModel.getNodeById(this.report.reportId);
+      if (reportNode) {
+        reportNode.setActiveAndVisible();
+        reportNode.expand();
+      }
     });
   }
 
   ngAfterViewInit() {
+    this.treeModel = this.treeComponent.treeModel;
   }
 
   getChildren(node: any) {
@@ -142,9 +163,8 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
   private addReport(report: any) {
     const that = this;
 
-    const treeModel = this.treeComponent.treeModel;
     const severity = this.util.severityFromCodeToString(report.severity);
-    const severityNode = treeModel.getNodeById(severity.toLowerCase());
+    const severityNode = this.treeModel.getNodeById(severity.toLowerCase());
     const status =
       this.util.detectionStatusFromCodeToString(report.detectionStatus);
 
@@ -160,7 +180,7 @@ export class BugTreeComponent implements AfterContentInit, AfterViewInit {
             const children: any[] = [];
 
             children.push({
-              id: report.reportId + '_0',
+              id: report.reportId + '_1',
               name: '<b><u>' + report.checkerMsg + '</u></b>',
               report: report
             });
