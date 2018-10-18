@@ -39,6 +39,7 @@ export interface ReportEventData {
 @Component({
   selector: 'bug-tree',
   templateUrl: './bug-tree.component.html',
+  styleUrls: ['./bug-tree.component.scss'],
   providers: [ DbService, BugService ]
 })
 export class BugTreeComponent implements AfterViewInit, OnChanges {
@@ -181,7 +182,8 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
 
             children.push({
               id: report.reportId + '_1',
-              name: '<b><u>' + report.checkerMsg + '</u></b>',
+              class: 'checker-message',
+              name: report.checkerMsg,
               icon: 'assume-msg',
               report: report
             });
@@ -195,9 +197,13 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
               that.bugService.highlighBugPathEvents(details.pathEvents);
 
             details.pathEvents.forEach((step: BugPathEvent, index: number) => {
+              let isResultNode = index == details.pathEvents.length - 1;
               children.push({
                 id: report.reportId + '_' + (index + 1),
-                name: index + '. '  + step.msg,
+                class: 'bug-step' + (isResultNode ? ' last' : ''),
+                name: step.msg,
+                order: index + 1,
+                lastOrder: details.pathEvents.length,
                 report: report,
                 icon: highlightData[index] ? highlightData[index].icon : null,
                 background: highlightData[index]

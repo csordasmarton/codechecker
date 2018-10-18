@@ -49,7 +49,7 @@ export class BugService {
       // Calling is in the caller, return is in the called func, not "outside"
       let highlight: BugPathHighlight = {
         background : stack.background,
-        icon: ''
+        icon: 'msg'
       };
 
       // Highlight the result node.

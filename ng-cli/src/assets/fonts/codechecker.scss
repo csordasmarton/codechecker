@@ -213,4 +213,8 @@
     content: "\e005";
     color: #2125b6;
   }
+
+  &.msg::before {
+    content: "\e00e";
+  }
 }

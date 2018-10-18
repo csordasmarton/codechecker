@@ -1,6 +1,6 @@
 <tree-root #bugTree id="bug-tree" fill-height [nodes]="nodes" [options]="options">
   <ng-template #treeNodeWrapperTemplate let-node let-index="index">
-    <div class="node-wrapper" [style.padding-left]="node.getNodePadding()">
+    <div class="node-wrapper {{node.data.class}}" [style.padding-left]="node.getNodePadding()">
       <tree-node-expander [node]="node"></tree-node-expander>
       <div class="tree-node-expander">
         <span
@@ -22,10 +22,17 @@
         (click)="node.mouseAction('click', $event)"
         (dblclick)="node.mouseAction('dblClick', $event)">
 
-        <div
-          [innerHTML]="node.displayField"
-          [style.background-color]="node.data.background"
-        ></div>
+        <div [style.background-color]="node.data.background">
+          <span class="checker-enum info"
+            *ngIf="node.data.order !== undefined"
+            [ngClass]="{
+              'fixit': node.data.step.msg.indexOf('(fixit)') > -1,
+              'error': node.data.order == node.data.lastOrder
+            }">
+            {{node.data.order}}
+          </span>
+          <span [innerHTML]="node.displayField"></span>
+        </div>
       </div>
     </div>
   </ng-template>
