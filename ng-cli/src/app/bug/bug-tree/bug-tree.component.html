@@ -21,8 +21,11 @@
         [class.node-content-wrapper-focused]="node.isFocused"
         (click)="node.mouseAction('click', $event)"
         (dblclick)="node.mouseAction('dblClick', $event)">
-    
-        <div [innerHTML]="node.displayField"></div>
+
+        <div
+          [innerHTML]="node.displayField"
+          [style.background-color]="node.data.background"
+        ></div>
       </div>
     </div>
   </ng-template>

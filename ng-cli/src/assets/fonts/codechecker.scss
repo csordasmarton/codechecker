@@ -167,4 +167,50 @@
   &.carret-up::before {
     content: "\f0d8";
   }
+
+  &.assume-msg::before {
+    content: "\e00c";
+  }
+
+  &.assume-exclamation::before {
+    content: "\e00d";
+    color: #ff5c11;
+  }
+
+  &.assume-assume-switch::before {
+    content: "\e011";
+    color: #7f410c;
+  }
+
+  &.calling::before {
+    content: "\e006";
+    color: #1855B6;
+  }
+
+  &.entered-call::before {
+    content: "\e007";
+    color: #316ecf;
+  }
+
+  &.loop-enter::before {
+    content: "\e009";
+  }
+
+  &.loop-execute::before {
+    content: "\e00a";
+  }
+
+  &.loop-back::before {
+    content: "\e00b";
+  }
+
+  &.returning::before {
+    content: "\e008";
+    color: #61a2ff;
+  }
+
+  &.result::before {
+    content: "\e005";
+    color: #2125b6;
+  }
 }

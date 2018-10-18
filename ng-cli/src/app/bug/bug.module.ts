@@ -6,6 +6,7 @@ import { TreeModule } from 'angular-tree-component';
 import { SharedModule } from '../shared/shared.module';
 import { BugTreeComponent } from './bug-tree';
 import { BugComponent } from './bug.component';
+import { BugService } from './bug.service';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { BugComponent } from './bug.component';
   declarations: [
     BugComponent,
     BugTreeComponent
-  ]
+  ],
+  providers: [BugService]
 })
 export class BugModule {}

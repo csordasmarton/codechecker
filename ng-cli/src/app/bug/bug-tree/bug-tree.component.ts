@@ -8,8 +8,6 @@ import {
   Input
 } from '@angular/core';
 
-import { ActivatedRoute } from '@angular/router';
-
 import {
   ITreeOptions,
   TREE_ACTIONS,
@@ -31,6 +29,7 @@ import {
 } from '@cc/db-access';
 
 import { DbService, UtilService } from '../../shared';
+import { BugService } from '../bug.service';
 
 export interface ReportEventData {
   report: ReportData;
@@ -40,7 +39,7 @@ export interface ReportEventData {
 @Component({
   selector: 'bug-tree',
   templateUrl: './bug-tree.component.html',
-  providers: [ DbService ]
+  providers: [ DbService, BugService ]
 })
 export class BugTreeComponent implements AfterViewInit, OnChanges {
   @ViewChild('bugTree') treeComponent: TreeComponent;
@@ -78,9 +77,10 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
   treeModel: TreeModel;
 
   constructor(
+    private bugService: BugService,
     private dbService: DbService,
-    private route: ActivatedRoute,
-    private util: UtilService) {
+    private util: UtilService
+  ) {
   }
 
   ngOnChanges() {
@@ -182,6 +182,7 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
             children.push({
               id: report.reportId + '_1',
               name: '<b><u>' + report.checkerMsg + '</u></b>',
+              icon: 'assume-msg',
               report: report
             });
 
@@ -190,11 +191,17 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
               return;
             }
 
+            let highlightData =
+              that.bugService.highlighBugPathEvents(details.pathEvents);
+
             details.pathEvents.forEach((step: BugPathEvent, index: number) => {
               children.push({
                 id: report.reportId + '_' + (index + 1),
                 name: index + '. '  + step.msg,
                 report: report,
+                icon: highlightData[index] ? highlightData[index].icon : null,
+                background: highlightData[index]
+                          ? highlightData[index].background : null,
                 step: step
               });
             });
