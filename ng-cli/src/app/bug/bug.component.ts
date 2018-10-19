@@ -17,7 +17,8 @@ import {
   ReportFilter,
   SortMode,
   SortType,
-  SourceFileData
+  SourceFileData,
+  BugPathEvent
 } from '@cc/db-access';
 
 import { DbService } from '../shared';
@@ -110,14 +111,14 @@ export class BugComponent implements OnInit, OnDestroy {
 
   loadReportEvent(event: ReportEventData) {
     const report = event.report;
-    this.loadReport(report.reportId, report.bugHash);
+    this.loadReport(report.reportId, report.bugHash, event.bugPathEvent);
   }
 
-  loadReport(reportId: Int64, reportHash: string) {
+  loadReport(reportId: Int64, reportHash: string, bugPathEvent?: BugPathEvent) {
     if (reportId !== null && reportId !== undefined) {
       this.dbService.getClient().getReport(reportId).then(
       (reportData: ReportData) => {
-        this.setReport(reportData);
+        this.setReport(reportData, bugPathEvent);
       });
     } else {
       const runIds: Int64[] = []; // We should get this from the URL parameters.
@@ -140,19 +141,43 @@ export class BugComponent implements OnInit, OnDestroy {
       this.dbService.getClient().getRunResults(runIds, limit, offset,
       [sortMode], reportFilter, cmpData).then(
         (reports: ReportDataList) => {
-          this.setReport(reports[0]);
+          this.setReport(reports[0], bugPathEvent);
         });
     }
   }
 
-  setReport(report: any) {
-    this.report = report;
-    this.dbService.getClient().getSourceFileData(report.fileId, true,
-    Encoding.DEFAULT).then((sourceFile: SourceFileData) => {
-      this.setContent(sourceFile);
+  setReport(report: ReportData, bugPathEvent?: BugPathEvent) {
+    const prevReport = this.report;
+    if (!prevReport ||
+         prevReport.reportId.toNumber() !== report.reportId.toNumber()
+    ) {
+      this.report = report;
+    }
+
+    if (!prevReport ||
+         report.checkedFile !== prevReport.checkedFile
+    ) {
+      this.dbService.getClient().getSourceFileData(
+        report.fileId,
+        true,
+        Encoding.DEFAULT
+      ).then((sourceFile: SourceFileData) => {
+        this.setContent(sourceFile);
+        this.drawBugPath();
+        this.jumpTo(report.line.toNumber(), 0);
+      });
+    }
+
+    if (!prevReport || report.reportId.toNumber() !== prevReport.reportId.toNumber()) {
       this.drawBugPath();
-      this.jumpTo(report.line.toNumber(), 0);
-    });
+    }
+
+    // Jump to the correct position.
+    const line = bugPathEvent
+      ? bugPathEvent.startLine.toNumber()
+      : report.line.toNumber();
+
+    this.jumpTo(line, 0);
   }
 
   ngOnDestroy() {
