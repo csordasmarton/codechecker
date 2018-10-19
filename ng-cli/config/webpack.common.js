@@ -3,7 +3,6 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var helpers = require('./helpers');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 
 const METADATA = {
   'SERVER_HOST': null,
@@ -37,7 +36,6 @@ module.exports = {
           {
             loader: 'awesome-typescript-loader',
             options: {
-              silent: true,
               configFileName: helpers.root('src', 'tsconfig.json')
             }
           },
@@ -100,7 +98,8 @@ module.exports = {
         test: /\.css$/,
         include: helpers.root('src', 'app'),
         use: 'raw-loader'
-      }
+      },
+      { test: /\@angular(\\|\/)core(\\|\/)fesm5/, parser: { system: true } },
     ]
   },
 
@@ -131,14 +130,9 @@ module.exports = {
 
     // Workaround for angular/angular#11580
     new webpack.ContextReplacementPlugin(
-      /angular(\\|\/)core/,
+      /\@angular(\\|\/)core/,
       helpers.root('./src'), // location of your src
-      {} // a map of your routes
     ),
-
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: ['app', 'vendor', 'polyfills']
-    // }),
 
     new HtmlWebpackPlugin({
       template: 'src/index.html'
