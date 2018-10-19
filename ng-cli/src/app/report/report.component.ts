@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import Int64 = require('node-int64');
 
@@ -16,62 +16,78 @@ import { SharedService } from './shared.service';
 })
 export class ReportComponent implements OnInit, OnDestroy, Filter {
   private reports: any[] = [];
-  private pageLimits: number[] = [25, 50, 100, 250];
+  private pageLimit = 10;
   private limit: Int64 = null;
   private offset: Int64 = null;
+  private sortModes: SortMode[] = [];
+
+  @ViewChild('reportTable') table: any;
 
   constructor(
     private dbService: DbService,
     private shared: SharedService
   ) {
     shared.register(this);
+
+    // Default sort type.
+    this.sortModes.push(new SortMode({
+      type: SortType.SEVERITY,
+      ord: Order.ASC
+    }));
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     setTimeout(() => {
       this.shared.init();
     });
   }
 
-  public ngOnDestroy() {
+  ngOnDestroy() {
     this.shared.destory();
   }
 
-  public initByUrl() {}
-  public getUrlState() { return {}; }
-  public clear() {}
+  initByUrl() {}
+  getUrlState() { return {}; }
+  clear() {}
 
-  private getSortMode(column: string, sortAsc: boolean) {
-    const sortMode = new SortMode();
+  onSort(sortInfo: any) {
+    this.sortModes = [];
 
-    sortMode.type
-      = column === 'file'
-      ? SortType.FILENAME
-      : column === 'checkerId'
-      ? SortType.CHECKER_NAME
-      : column === 'detectionStatus'
-      ? SortType.DETECTION_STATUS
-      : column === 'reviewStatus'
-      ? SortType.REVIEW_STATUS
-      : column === 'bugPathLength'
-      ? SortType.BUG_PATH_LENGTH
-      : SortType.SEVERITY;
+    sortInfo.sorts.forEach((sort: any) => {
+      const column = sort.prop;
+      const type
+        = column === 'file'
+        ? SortType.FILENAME
+        : column === 'checkerId'
+        ? SortType.CHECKER_NAME
+        : column === 'detectionStatus'
+        ? SortType.DETECTION_STATUS
+        : column === 'reviewStatus'
+        ? SortType.REVIEW_STATUS
+        : column === 'bugPathLength'
+        ? SortType.BUG_PATH_LENGTH
+        : SortType.SEVERITY;
+      const ord = sort.dir == 'desc' ? Order.DESC : Order.ASC;
 
-    sortMode.ord = sortAsc ? Order.DESC : Order.ASC;
-
-    return sortMode;
+      this.sortModes.push(new SortMode({
+        type: type,
+        ord: ord
+      }));
+    });
+    this.loadItems();
   }
 
-  public reloadItems(param: any) {
-    this.limit = new Int64(param.limit ? param.limit : this.pageLimits[0]);
+  loadItems(param?: any) {
+    if (!param) param = {};
+
+    this.limit = new Int64(param.limit ? param.limit : this.pageLimit);
     this.offset = param.offset ? param.offset : 0;
-    const sortMode = this.getSortMode(param.column, param.sortAsc);
 
     this.dbService.getClient().getRunResults(
       this.shared.runIds,
       this.limit,
       this.offset,
-      [ sortMode ],
+      this.sortModes,
       this.shared.reportFilter,
       this.shared.cmpData
     ).then((reports: ReportData[]) => {
@@ -79,7 +95,11 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
     });
   }
 
-  public notify() {
-    this.reloadItems({});
+  setPage(pageInfo: any) {
+    this.loadItems({ offset: pageInfo.offset });
+  }
+
+  notify() {
+    this.loadItems();
   }
 }

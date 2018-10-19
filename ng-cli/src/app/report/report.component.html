@@ -1,46 +1,74 @@
 <div class="m-2">
   <report-filter></report-filter>
 
-  <ngx-datatable
+  <ngx-datatable #reportTable
     class="reports material"
     [sortType]="'single'"
     [rows]="reports"
-    [headerHeight]="50"
+    [headerHeight]="'auto'"
     [rowHeight]="'auto'"
-    [columnMode]="'force'">
+    [footerHeight]="50"
+    [count]="shared.reportCount"
+    [offset]="offset"
+    [externalPaging]="true"
+    [columnMode]="'force'"
+    (page)='setPage($event)'
+    (sort)="onSort($event)">
 
-    <ngx-datatable-column name="Report hash" sortable="true">
-      <ng-template let-item="row" ngx-datatable-cell-template>
-        <span class="text-truncate" title="{{item.bugHash}}">
+    <ngx-datatable-column name="Report hash"
+      sortable="true"
+      [maxWidth]="150">
+      <ng-template let-item="row"
+        ngx-datatable-cell-template>
+        <span class="text-truncate"
+          title="{{item.bugHash}}">
           {{item.bugHash}}
         </span>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="File" sortable="true">
-      <ng-template let-item="row" ngx-datatable-cell-template>
-        <span class="text-truncate" title="{{item.bugHash}}">
+    <ngx-datatable-column name="File"
+      sortable="true">
+      <ng-template let-item="row"
+        ngx-datatable-cell-template>
+        <span class="text-truncate"
+          title="{{item.bugHash}}">
           <a [routerLink]="['../bug']"
             [queryParams]="{reportHash: item.bugHash, report: item.reportId}"
-            queryParamsHandling="merge" class="item">{{item.checkedFile}}</a>
+            queryParamsHandling="merge"
+            class="item">{{item.checkedFile}}</a>
         </span>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Message" prop="checkerMsg" sortable="true">
+    <ngx-datatable-column name="Message"
+      prop="checkerMsg"
+      sortable="true">
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Checker name" prop="checkerId" sortable="true">
+    <ngx-datatable-column name="Checker name"
+      prop="checkerId"
+      sortable="true"
+      [maxWidth]="200">
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Severity" sortable="true" [cellClass]="'severity text-center'">
-      <ng-template let-item="row" ngx-datatable-cell-template>
+    <ngx-datatable-column name="Severity"
+      sortable="true"
+      [cellClass]="'severity text-center'"
+      [maxWidth]="100">
+      <ng-template let-item="row"
+        ngx-datatable-cell-template>
         <i class="cc-icon severity-{{item.severity | severityToString | lowercase}}"></i>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Bug path length" sortable="true" [cellClass]="'bugPathLength text-center'">
-      <ng-template let-item="row" ngx-datatable-cell-template>
+    <ngx-datatable-column name="Bug path length"
+      sortable="true"
+      [headerClass]="'text-center'"
+      [cellClass]="'text-center'"
+      [maxWidth]="100">
+      <ng-template let-item="row"
+        ngx-datatable-cell-template>
         <span class="bug-path-length"
           [style.background-color]="item.bugPathLength | colorizeBugPathLength">
           {{item.bugPathLength}}
@@ -48,19 +76,57 @@
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Review status" sortable="true" [cellClass]="'reviewStatus text-center'">
-      <ng-template let-item="row" ngx-datatable-cell-template>
+    <ngx-datatable-column name="Review status"
+      sortable="true"
+      [headerClass]="'text-center'"
+      [cellClass]="'reviewStatus text-center'"
+      [maxWidth]="100">
+      <ng-template let-item="row"
+        ngx-datatable-cell-template>
         <i class="cc-icon review-status-{{item.reviewData?.status | reviewStatusToString | lowercase}}"></i>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Detection status" sortable="true" [cellClass]="'detectionStatus text-center'">
-      <ng-template let-item="row" ngx-datatable-cell-template>
+    <ngx-datatable-column name="Detection status"
+      sortable="true"
+      [headerClass]="'text-center'"
+      [cellClass]="'detectionStatus text-center'"
+      [maxWidth]="100">
+      <ng-template let-item="row"
+        ngx-datatable-cell-template>
         <i *ngIf="item.detectionStatus !== undefined"
-            class="cc-icon detection-status-{{item.detectionStatus | detectionStatusToString | lowercase}}"></i>
+          class="cc-icon detection-status-{{item.detectionStatus | detectionStatusToString | lowercase}}"></i>
         <span *ngIf="item.detectionStatus === undefined">N/A</span>
       </ng-template>
     </ngx-datatable-column>
+
+
+    <ngx-datatable-footer>
+      <ng-template ngx-datatable-footer-template
+        let-rowCount="rowCount"
+        let-pageSize="pageSize"
+        let-selectedCount="selectedCount"
+        let-curPage="curPage"
+        let-offset="offset"
+        let-isVisible="isVisible">
+        <div class="page-count">
+          <span *ngIf="selectedMessage">
+            {{selectedCount.toLocaleString()}} {{selectedMessage}} /
+          </span>
+          {{rowCount.toLocaleString()}} {{totalMessage}}
+        </div>
+        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+          [pagerRightArrowIcon]="'datatable-icon-right'"
+          [pagerPreviousIcon]="'datatable-icon-prev'"
+          [pagerNextIcon]="'datatable-icon-skip'"
+          [page]="curPage"
+          [size]="pageSize"
+          [count]="rowCount"
+          [hidden]="!((rowCount / pageSize) > 1)"
+          (change)="table.onFooterPage($event)">
+        </datatable-pager>
+      </ng-template>
+    </ngx-datatable-footer>
 
   </ngx-datatable>
 

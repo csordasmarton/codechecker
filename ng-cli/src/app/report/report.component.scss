@@ -1,17 +1,9 @@
 .ngx-datatable.reports {
-  .detectionStatus,
-  .reviewStatus,
-  .bugPathLength,
-  .severity {
-    text-align: center
-  }
-
   .text-truncate {
     display: block;
   }
 
   .bug-path-length {
     display: block;
-    text-align: center;
   }
 }
