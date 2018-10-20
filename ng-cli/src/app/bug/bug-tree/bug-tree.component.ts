@@ -1,11 +1,11 @@
 import {
   AfterViewInit,
-  OnChanges,
   Component,
   EventEmitter,
+  Input,
+  OnChanges,
   Output,
-  ViewChild,
-  Input
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -69,6 +69,7 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
 
           if (node.data.report) {
             this.loadReport(node.data.report, node.data.step);
+            node.setIsActive(true);
           }
         }
       }
@@ -129,8 +130,8 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
       cmpData
     ).then((reports: ReportDataList) => {
       // Adding reports to the tree.
-      reports.forEach((report) => {
-        this.addReport(report);
+      reports.forEach((reportData: ReportData) => {
+        this.addReport(reportData);
       });
 
       // Hide severity items of the tree which don't have any item.
@@ -181,7 +182,7 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
             const children: any[] = [];
 
             children.push({
-              id: report.reportId + '_1',
+              id: report.reportId + '_0',
               class: 'checker-message',
               name: report.checkerMsg,
               icon: 'assume-msg',
@@ -193,11 +194,11 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
               return;
             }
 
-            let highlightData =
+            const highlightData =
               that.bugService.highlighBugPathEvents(details.pathEvents);
 
             details.pathEvents.forEach((step: BugPathEvent, index: number) => {
-              let isResultNode = index == details.pathEvents.length - 1;
+              const isResultNode = index === details.pathEvents.length - 1;
               children.push({
                 id: report.reportId + '_' + (index + 1),
                 class: 'bug-step' + (isResultNode ? ' last' : ''),

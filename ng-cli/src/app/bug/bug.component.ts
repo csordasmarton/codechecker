@@ -146,7 +146,7 @@ export class BugComponent implements OnInit, OnDestroy {
     }
   }
 
-  setReport(report: ReportData, bugPathEvent?: BugPathEvent) {
+  setReport(report: ReportData, bugPathEvent: BugPathEvent) {
     const prevReport = this.report;
     if (!prevReport ||
          prevReport.reportId.toNumber() !== report.reportId.toNumber()
@@ -155,11 +155,14 @@ export class BugComponent implements OnInit, OnDestroy {
     }
 
     new Promise((resolve) => {
-      if (!prevReport ||
-          report.checkedFile !== prevReport.checkedFile
-      ) {
+      const fileId = bugPathEvent
+        ? bugPathEvent.fileId
+        : report.fileId;
+
+      if (!this.sourceFile || !fileId.equals(this.sourceFile.fileId)) {
+
         this.dbService.getClient().getSourceFileData(
-          report.fileId,
+          fileId,
           true,
           Encoding.DEFAULT
         ).then((sourceFile: SourceFileData) => {
@@ -167,12 +170,10 @@ export class BugComponent implements OnInit, OnDestroy {
           resolve(true);
         });
       } else {
-        resolve(true);
+        resolve(false);
       }
-    }).then(_ => {
-      if (!prevReport ||
-           report.reportId.toNumber() !== prevReport.reportId.toNumber()
-      ) {
+    }).then((drawBugPath) => {
+      if (drawBugPath) {
         this.drawBugPath();
       }
 
