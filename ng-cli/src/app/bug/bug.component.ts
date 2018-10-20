@@ -7,6 +7,7 @@ const jsPlumb = require('jsplumb').jsPlumb;
 import Int64 = require('node-int64');
 
 import {
+  BugPathEvent,
   CompareData,
   Encoding,
   MAX_QUERY_SIZE,
@@ -17,8 +18,7 @@ import {
   ReportFilter,
   SortMode,
   SortType,
-  SourceFileData,
-  BugPathEvent
+  SourceFileData
 } from '@cc/db-access';
 
 import { DbService } from '../shared';
@@ -154,30 +154,35 @@ export class BugComponent implements OnInit, OnDestroy {
       this.report = report;
     }
 
-    if (!prevReport ||
-         report.checkedFile !== prevReport.checkedFile
-    ) {
-      this.dbService.getClient().getSourceFileData(
-        report.fileId,
-        true,
-        Encoding.DEFAULT
-      ).then((sourceFile: SourceFileData) => {
-        this.setContent(sourceFile);
+    new Promise((resolve) => {
+      if (!prevReport ||
+          report.checkedFile !== prevReport.checkedFile
+      ) {
+        this.dbService.getClient().getSourceFileData(
+          report.fileId,
+          true,
+          Encoding.DEFAULT
+        ).then((sourceFile: SourceFileData) => {
+          this.setContent(sourceFile);
+          resolve(true);
+        });
+      } else {
+        resolve(true);
+      }
+    }).then(_ => {
+      if (!prevReport ||
+           report.reportId.toNumber() !== prevReport.reportId.toNumber()
+      ) {
         this.drawBugPath();
-        this.jumpTo(report.line.toNumber(), 0);
-      });
-    }
+      }
 
-    if (!prevReport || report.reportId.toNumber() !== prevReport.reportId.toNumber()) {
-      this.drawBugPath();
-    }
+      // Jump to the correct position.
+      const line = bugPathEvent
+        ? bugPathEvent.startLine.toNumber()
+        : report.line.toNumber();
 
-    // Jump to the correct position.
-    const line = bugPathEvent
-      ? bugPathEvent.startLine.toNumber()
-      : report.line.toNumber();
-
-    this.jumpTo(line, 0);
+      this.jumpTo(line, 0);
+    });
   }
 
   ngOnDestroy() {
