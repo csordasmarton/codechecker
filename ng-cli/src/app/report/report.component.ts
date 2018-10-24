@@ -15,10 +15,10 @@ import { SharedService } from './shared.service';
     providers: [ DbService ]
 })
 export class ReportComponent implements OnInit, OnDestroy, Filter {
-  private reports: any[] = [];
+  private reports: ReportData[] = [];
   private pageLimit = 10;
-  private limit: Int64 = null;
-  private offset: Int64 = null;
+  private limit: number = null;
+  private offset: number = null;
   private sortModes: SortMode[] = [];
 
   @ViewChild('reportTable') table: any;
@@ -67,7 +67,7 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
         : column === 'bugPathLength'
         ? SortType.BUG_PATH_LENGTH
         : SortType.SEVERITY;
-      const ord = sort.dir == 'desc' ? Order.DESC : Order.ASC;
+      const ord = sort.dir === 'desc' ? Order.DESC : Order.ASC;
 
       this.sortModes.push(new SortMode({
         type: type,
@@ -75,18 +75,20 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
       }));
     });
     this.loadItems();
+    this.offset = 2;
   }
 
   loadItems(param?: any) {
-    if (!param) param = {};
+    if (!param) { param = {}; }
 
-    this.limit = new Int64(param.limit ? param.limit : this.pageLimit);
-    this.offset = param.offset ? param.offset : 0;
+    this.limit = param.limit ? param.limit : this.pageLimit;
+    this.offset = param.offset ? param.offset : this.offset;
 
+    console.log(this.offset);
     this.dbService.getClient().getRunResults(
       this.shared.runIds,
-      this.limit,
-      this.offset,
+      new Int64(this.limit),
+      new Int64(this.limit * this.offset),
       this.sortModes,
       this.shared.reportFilter,
       this.shared.cmpData
@@ -96,6 +98,7 @@ export class ReportComponent implements OnInit, OnDestroy, Filter {
   }
 
   setPage(pageInfo: any) {
+
     this.loadItems({ offset: pageInfo.offset });
   }
 

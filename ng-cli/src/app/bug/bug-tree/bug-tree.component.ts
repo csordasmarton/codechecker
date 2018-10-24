@@ -94,22 +94,28 @@ export class BugTreeComponent implements AfterViewInit, OnChanges {
   loadTreeItems(report: ReportData) {
     this.nodes = [];
 
-    [
-      { id: 'critical',    name: 'Critical',    icon: 'severity-critical' },
-      { id: 'high',        name: 'High',        icon: 'severity-high' },
-      { id: 'medium',      name: 'Medium',      icon: 'severity-medium' },
-      { id: 'low',         name: 'Low',         icon: 'severity-low' },
-      { id: 'style',       name: 'Style',       icon: 'severity-style' },
-      { id: 'unspecified', name: 'Unspecified', icon: 'severity-unspecified' },
-      { id: 'resolved'   , name: 'Resolved',    icon: 'detection-status-resolved'}
-    ].forEach((node: any) => {
-      node.hasChildren = true;
-      node.children = [];
+    this.treeModel.setFocusedNode(null);
+    this.treeModel.expandedNodeIds = {};
+    this.treeModel.activeNodeIds = {};
 
-      this.nodes.push(node);
-    });
-    this.treeModel.update();
-    this.loadReportData(report);
+    setTimeout(() => {
+      [
+        { id: 'critical',    name: 'Critical',    icon: 'severity-critical' },
+        { id: 'high',        name: 'High',        icon: 'severity-high' },
+        { id: 'medium',      name: 'Medium',      icon: 'severity-medium' },
+        { id: 'low',         name: 'Low',         icon: 'severity-low' },
+        { id: 'style',       name: 'Style',       icon: 'severity-style' },
+        { id: 'unspecified', name: 'Unspecified', icon: 'severity-unspecified' },
+        { id: 'resolved'   , name: 'Resolved',    icon: 'detection-status-resolved'}
+      ].forEach((node: any) => {
+        node.hasChildren = true;
+        node.children = [];
+
+        this.nodes.push(node);
+      });
+      this.treeModel.update();
+      this.loadReportData(report);
+    }, 0);
   }
 
   private loadReportData(report: ReportData) {

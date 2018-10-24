@@ -40,7 +40,6 @@ export class BugComponent implements OnInit, OnDestroy {
   sub: any;
   queryParams: any;
 
-  bug: any;
   editor: CodeMirror.Editor;
   private jsPlumbInstance: any;
 
@@ -115,67 +114,63 @@ export class BugComponent implements OnInit, OnDestroy {
   }
 
   loadReport(reportId: Int64, reportHash: string, bugPathEvent?: BugPathEvent) {
-    if (reportId !== null && reportId !== undefined) {
-      this.dbService.getClient().getReport(reportId).then(
-      (reportData: ReportData) => {
-        this.setReport(reportData, bugPathEvent);
-      });
-    } else {
-      const runIds: Int64[] = []; // We should get this from the URL parameters.
-
-      const limit: Int64 = MAX_QUERY_SIZE;
-      const offset: Int64 = new Int64(0);
-
-      // Get all reports by report hash
-      const reportFilter = new ReportFilter();
-      reportFilter.reportHash = [reportHash];
-      reportFilter.isUnique = false;
-
-      const cmpData = new CompareData();
-
-      // We set a sort option to select a report which has the shortest
-      // bug path length.
-      const sortMode = new SortMode();
-      sortMode.type = SortType.BUG_PATH_LENGTH;
-      sortMode.ord = Order.ASC;
-      this.dbService.getClient().getRunResults(runIds, limit, offset,
-      [sortMode], reportFilter, cmpData).then(
-        (reports: ReportDataList) => {
-          this.setReport(reports[0], bugPathEvent);
+    new Promise((resolve) => {
+      if (reportId !== null && reportId !== undefined) {
+        this.dbService.getClient().getReport(reportId).then(
+        (reportData: ReportData) => {
+          resolve(reportData);
         });
-    }
+      } else {
+        const runIds: Int64[] = []; // We should get this from the URL parameters.
+
+        const limit: Int64 = MAX_QUERY_SIZE;
+        const offset: Int64 = new Int64(0);
+
+        // Get all reports by report hash
+        const reportFilter = new ReportFilter();
+        reportFilter.reportHash = [reportHash];
+        reportFilter.isUnique = false;
+
+        const cmpData = new CompareData();
+
+        // We set a sort option to select a report which has the shortest
+        // bug path length.
+        const sortMode = new SortMode();
+        sortMode.type = SortType.BUG_PATH_LENGTH;
+        sortMode.ord = Order.ASC;
+        this.dbService.getClient().getRunResults(runIds, limit, offset,
+        [sortMode], reportFilter, cmpData).then(
+          (reports: ReportDataList) => {
+            resolve(reports[0]);
+          });
+      }
+    }).then((report: ReportData) => {
+      if (!this.report) {
+        this.report = report;
+      }
+      this.setBugPathEvent(bugPathEvent, report);
+    });
   }
 
-  setReport(report: ReportData, bugPathEvent: BugPathEvent) {
-    const prevReport = this.report;
-    if (!prevReport ||
-         prevReport.reportId.toNumber() !== report.reportId.toNumber()
-    ) {
-      this.report = report;
-    }
-
+  setBugPathEvent(bugPathEvent: BugPathEvent, report: ReportData) {
     new Promise((resolve) => {
       const fileId = bugPathEvent
         ? bugPathEvent.fileId
         : report.fileId;
 
       if (!this.sourceFile || !fileId.equals(this.sourceFile.fileId)) {
-
         this.dbService.getClient().getSourceFileData(
           fileId,
           true,
           Encoding.DEFAULT
         ).then((sourceFile: SourceFileData) => {
           this.setContent(sourceFile);
-          resolve(true);
+          resolve(this.sourceFile);
         });
-      } else {
-        resolve(false);
       }
-    }).then((drawBugPath) => {
-      if (drawBugPath) {
-        this.drawBugPath();
-      }
+      resolve(this.sourceFile);
+    }).then(_ => {
+      this.drawBugPath(report);
 
       // Jump to the correct position.
       const line = bugPathEvent
@@ -190,11 +185,11 @@ export class BugComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  drawBugPath() {
+  drawBugPath(report: ReportData) {
     this.clearBubbles();
     this.clearLines();
 
-    this.dbService.getClient().getReportDetails(this.report.reportId).then(
+    this.dbService.getClient().getReportDetails(report.reportId).then(
     (reportDetail: ReportDetails) => {
       const points = reportDetail.executionPath.filter((path: any) => {
         return path.fileId.toNumber() === this.sourceFile.fileId.toNumber();
