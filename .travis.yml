@@ -18,6 +18,12 @@ matrix:
       language: generic
       env:
         - POSTGRESQL_VERSION=9.6
+    - os: windows
+      name: "Analyzer, web (sqlite, psycopg2, pg8000) and tools test cases."
+      sudo: required
+      python: "2.7"
+#      install:
+#        - choco upgrade mingw -y
 
 before_install:
     # Download macOS specific extra dependencies.
