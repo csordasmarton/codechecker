@@ -4,3 +4,4 @@ portalocker==1.1.0
 psutil==5.2.2
 sqlalchemy==1.3.5
 thrift==0.9.1
+colorlog==4.0.2

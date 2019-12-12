@@ -14,6 +14,7 @@ import json
 import logging
 from logging import config
 import os
+import sys
 
 
 # The logging leaves can be accesses without
@@ -146,6 +147,38 @@ class LOG_CFG_SERVER(object):
             self.log_server.join()
 
 
+def setup_formatter(formatters):
+    """ Setup formatters.
+
+    If the 'colorlog' module is not available it will remove `colorlog`
+    settings from the the config file.
+
+    Disable log colors if the 'CC_LOG_COLOR' environment variable is correctly
+    set.
+    """
+    try:
+        # pylint: disable=unused-variable
+        import colorlog
+
+        if os.environ.get('CC_LOG_COLOR', '').lower() in ['0', 'no']:
+            # Disable all colors.
+            for _, formatter in formatters.items():
+                if 'log_colors' in formatter:
+                    formatter['log_colors'] = {}
+                    formatter['reset'] = False
+    except ImportError:
+        print("Failed to load 'colorlog' module! To get colored logging "
+              "output please reset your venv: make clean_venv_dev venv_dev",
+              file=sys.stderr)
+
+        # Remove colorlog settings from the config file.
+        for _, formatter in formatters.items():
+            if 'colorlog' in formatter.get('()'):
+                del formatter['()']
+                formatter['format'] = \
+                    formatter['format'].replace("%(log_color)s", "")
+
+
 def setup_logger(log_level=None, stream=None):
     """
     Modifies the log configuration.
@@ -156,6 +189,10 @@ def setup_logger(log_level=None, stream=None):
     """
 
     LOG_CONFIG = json.loads(DEFAULT_LOG_CONFIG)
+
+    formatters = LOG_CONFIG.get("formatters", {})
+    setup_formatter(formatters)
+
     if log_level:
         log_level = validate_loglvl(log_level)
 
