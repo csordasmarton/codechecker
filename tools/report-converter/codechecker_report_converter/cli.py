@@ -33,6 +33,8 @@ from codechecker_report_converter.sanitizers.thread.analyzer_result import \
     TSANAnalyzerResult  # noqa
 from codechecker_report_converter.sanitizers.ub.analyzer_result import \
     UBSANAnalyzerResult  # noqa
+from codechecker_report_converter.spotbugs.analyzer_result import \
+    SpotBugsAnalyzerResult  # noqa
 
 
 LOG = logging.getLogger('ReportConverter')
@@ -50,17 +52,9 @@ supported_converters = {
     ASANAnalyzerResult.TOOL_NAME: ASANAnalyzerResult,
     MSANAnalyzerResult.TOOL_NAME: MSANAnalyzerResult,
     TSANAnalyzerResult.TOOL_NAME: TSANAnalyzerResult,
-    UBSANAnalyzerResult.TOOL_NAME: UBSANAnalyzerResult
+    UBSANAnalyzerResult.TOOL_NAME: UBSANAnalyzerResult,
+    SpotBugsAnalyzerResult.TOOL_NAME: SpotBugsAnalyzerResult
 }
-
-
-def supported_converters_help():
-    """ """
-    return '\n'.join(["{0} - {1}, {2}".format(
-        tool_name,
-        supported_converters[tool_name].NAME,
-        supported_converters[tool_name].URL)
-        for tool_name in sorted(supported_converters)])
 
 
 def output_to_plist(analyzer_result, parser_type, output_dir, clean=False):
