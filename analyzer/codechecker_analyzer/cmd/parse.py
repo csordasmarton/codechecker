@@ -393,7 +393,7 @@ def add_arguments_to_parser(parser):
     output_opts.add_argument('-e', '--export',
                              dest="export",
                              required=False,
-                             choices=['html', 'json', 'codeclimate'],
+                             choices=['html', 'json', 'codeclimate', 'gerrit'],
                              help="R|Specify extra output format type.\n"
                                   "'codeclimate' format can be used for "
                                   "Code Climate and for GitLab integration. "
@@ -565,6 +565,8 @@ def convert_reports(input_dirs, out_format, trim_path_prefixes):
                 out = report.to_json()
             elif out_format == "codeclimate":
                 out = report.to_codeclimate()
+            elif out_format == "gerrit":
+                out = report.to_gerrit()
             else:
                 LOG.error("Unsupported output format: %s", out_format)
                 sys.exit(1)
@@ -638,7 +640,7 @@ def main(args):
     trim_path_prefixes = args.trim_path_prefix if \
         'trim_path_prefix' in args else None
 
-    if export in ['json', 'codeclimate']:
+    if export in ['json', 'codeclimate', 'gerrit']:
         res = convert_reports(args.input, export, trim_path_prefixes)
         if 'output_path' in args:
             output_path = os.path.abspath(args.output_path)

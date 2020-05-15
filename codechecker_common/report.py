@@ -121,3 +121,8 @@ class Report(object):
                 }
             }
         }
+
+    def to_gerrit(self):
+        """ Convert to Gerrit format. """
+        # TODO
+        return {}
