@@ -1629,6 +1629,16 @@ class ThriftRequestHandler(object):
                         codechecker_api_shared.ttypes.ErrorCode.UNAUTHORIZED,
                         'Unathorized comment modification!')
                 session.delete(comment)
+
+                system_comment_msg = 'comment_removed {0}'.format(
+                    escape_whitespaces(comment.message.decode('utf-8')))
+
+                system_comment = \
+                    self.__add_comment(comment.bug_hash,
+                                       system_comment_msg,
+                                       CommentKindValue.SYSTEM)
+                session.add(system_comment)
+
                 session.commit()
 
                 LOG.info("Comment '%s...' was removed from bug hash '%s' by "
