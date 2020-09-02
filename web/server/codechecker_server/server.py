@@ -381,7 +381,8 @@ class RequestHandler(SimpleHTTPRequestHandler):
                         auth_handler = AuthHandler_v6(
                             self.server.manager,
                             self.auth_session,
-                            self.server.config_session)
+                            self.server.config_session,
+                            version)
                         processor = AuthAPI_v6.Processor(auth_handler)
                     elif request_endpoint == 'Configuration':
                         conf_handler = ConfigHandler_v6(

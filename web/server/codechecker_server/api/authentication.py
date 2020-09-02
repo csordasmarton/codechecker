@@ -35,10 +35,12 @@ class ThriftAuthHandler(object):
     Handle Thrift authentication requests.
     """
 
-    def __init__(self, manager, auth_session, config_database):
+    def __init__(self, manager, auth_session, config_database,
+                 package_version):
         self.__manager = manager
         self.__auth_session = auth_session
         self.__config_db = config_database
+        self.__package_version = package_version
 
     def __require_privilaged_access(self):
         """
@@ -50,6 +52,10 @@ class ThriftAuthHandler(object):
                 codechecker_api_shared.ttypes.ErrorCode.UNAUTHORIZED,
                 "The server must be start by using privilaged access to "
                 "execute this action.")
+
+    @timeit
+    def getPackageVersion(self):
+        return self.__package_version
 
     @timeit
     def checkAPIVersion(self):

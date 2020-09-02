@@ -2,6 +2,7 @@
 import {
   GET_AUTH_PARAMS,
   GET_LOGGED_IN_USER,
+  GET_PACKAGE_VERSION,
   LOGIN,
   LOGOUT
 } from "../actions.type";
@@ -10,14 +11,16 @@ import {
   PURGE_AUTH,
   SET_AUTH,
   SET_AUTH_PARAMS,
-  SET_LOGGED_IN_USER
+  SET_LOGGED_IN_USER,
+  SET_PACKAGE_VERSION
 } from "../mutations.type";
 import { authService, handleThriftError } from "@cc-api";
 
 const state = {
   currentUser: "",
   isAuthenticated: !!authService.getToken(),
-  authParams: null
+  authParams: null,
+  packageVersion: undefined
 };
 
 const getters = {
@@ -29,6 +32,9 @@ const getters = {
   },
   authParams(state) {
     return state.authParams;
+  },
+  packageVersion(state) {
+    return state.packageVersion;
   }
 };
 
@@ -88,6 +94,18 @@ const actions = {
           reject(err);
         }));
     });
+  },
+
+  [GET_PACKAGE_VERSION]({ commit }) {
+    return new Promise(resolve => {
+      if (state.packageVersion !== undefined)
+        return resolve(state.packageVersion);
+
+      authService.getClient().getPackageVersion(handleThriftError(version => {
+        commit(SET_PACKAGE_VERSION, version);
+        resolve(version);
+      }));
+    });
   }
 };
 
@@ -107,6 +125,9 @@ const mutations = {
     state.isAuthenticated = false;
     state.currentUser = null;
     authService.destroyToken();
+  },
+  [SET_PACKAGE_VERSION](state, version) {
+    state.packageVersion = version;
   }
 };
 

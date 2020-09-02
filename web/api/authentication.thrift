@@ -35,6 +35,9 @@ typedef list<SessionTokenData> SessionTokenDataList
 
 service codeCheckerAuthentication {
 
+  // Returns the CodeChecker version that is running on the server.
+  string getPackageVersion(),
+
   // This method is a dummy stub requiring no permissions. When a server is
   // first accessed, the client should check if the server supports it.
   // This method's call succeeds (and is a no-op), if the server allows the
