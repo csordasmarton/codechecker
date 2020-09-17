@@ -46,63 +46,33 @@
       item-key="name"
     >
       <template v-slot:top>
-        <v-toolbar flat class="mb-4">
-          <v-row>
-            <v-col cols="3">
-              <v-text-field
-                v-model="runNameSearch"
-                class="search-run-name"
-                prepend-inner-icon="mdi-magnify"
-                label="Filter by run name..."
-                clearable
-                single-line
-                hide-details
-                outlined
-                solo
-                flat
-                dense
-              />
-            </v-col>
-            <v-col cols="3">
-              <v-text-field
-                v-model="runTagSearch"
-                class="search-run-tag"
-                prepend-inner-icon="mdi-tag"
-                label="Filter by run tag..."
-                clearable
-                single-line
-                hide-details
-                outlined
-                solo
-                flat
-                dense
-              />
-            </v-col>
-            <v-col align="right">
-              <v-btn
-                color="primary"
-                class="diff-run-history-btn mr-2"
-                outlined
-                :to="diffTargetRoute"
-                :disabled="isDiffBtnDisabled"
-              >
-                <v-icon left>
-                  mdi-select-compare
-                </v-icon>
-                Diff
-              </v-btn>
+        <run-history-filter
+          @on-filter-changed="onFilterChanged"
+        >
+          <v-col align="right" align-self="center" class="text-no-wrap">
+            <v-btn
+              color="primary"
+              class="diff-run-history-btn mr-2"
+              outlined
+              :to="diffTargetRoute"
+              :disabled="isDiffBtnDisabled"
+            >
+              <v-icon left>
+                mdi-select-compare
+              </v-icon>
+              Diff
+            </v-btn>
 
-              <v-btn
-                icon
-                title="Reload run history"
-                color="primary"
-                @click="fetchRunHistories"
-              >
-                <v-icon>mdi-refresh</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-toolbar>
+            <v-btn
+              icon
+              title="Reload run history"
+              color="primary"
+              @click="fetchRunHistories"
+            >
+              <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+          </v-col>
+        </run-history-filter>
       </template>
       <template #item.runName="{ item }">
         <run-name-column
@@ -196,27 +166,28 @@
 </template>
 
 <script>
-import _ from "lodash";
 import { format, max, min, parse } from "date-fns";
-
+import { mapGetters } from "vuex";
 import {
   AnalyzerStatisticsBtn,
   AnalyzerStatisticsDialog,
   RunNameColumn
 } from "@/components/Run";
-import { StrToColorMixin } from "@/mixins";
+import { DateMixin, StrToColorMixin } from "@/mixins";
+import { RunHistoryFilter } from "@/components/RunHistory";
 
 import { ccService, handleThriftError } from "@cc-api";
-import { RunFilter, RunHistoryFilter } from "@cc/report-server-types";
+import { RunFilter } from "@cc/report-server-types";
 
 export default {
   name: "RunHistoryList",
   components: {
     AnalyzerStatisticsBtn,
     AnalyzerStatisticsDialog,
-    RunNameColumn
+    RunNameColumn,
+    RunHistoryFilter
   },
-  mixins: [ StrToColorMixin ],
+  mixins: [ DateMixin, StrToColorMixin ],
 
   data() {
     const itemsPerPageOptions = [ 25, 50, 100 ];
@@ -228,12 +199,7 @@ export default {
     const sortBy = this.$router.currentRoute.query["sort-by"];
     const sortDesc = this.$router.currentRoute.query["sort-desc"];
 
-    const runNameSearch = this.$router.currentRoute.query["run"] || null;
-    const runTagSearch = this.$router.currentRoute.query["run-tag"] || null;
-
     return {
-      runNameSearch: runNameSearch,
-      runTagSearch: runTagSearch,
       showCheckCommandDialog: false,
       analyzerStatisticsDialog: false,
       selectedRunHistoryId: null,
@@ -297,6 +263,11 @@ export default {
   },
 
   computed: {
+    ...mapGetters([
+      "runName",
+      "runHistoryFilter"
+    ]),
+
     formattedRunHistories() {
       return this.histories.map(history => {
         const ccVersion = this.prettifyCCVersion(history.codeCheckerVersion);
@@ -378,50 +349,24 @@ export default {
         this.fetchRunHistories();
       },
       deep: true
-    },
-
-    runNameSearch: {
-      handler: _.debounce(function () {
-        this.$router.replace({
-          query: {
-            ...this.$route.query,
-            "run": this.runNameSearch ? this.runNameSearch : undefined
-          }
-        }).catch(() => {});
-
-        if (this.pagination.page !== 1) {
-          this.pagination.page = 1;
-        } else {
-          this.fetchRunHistories();
-        }
-      }, 500)
-    },
-
-    runTagSearch: {
-      handler: _.debounce(function () {
-        this.$router.replace({
-          query: {
-            ...this.$route.query,
-            "run-tag": this.runTagSearch ? this.runTagSearch : undefined
-          }
-        }).catch(() => {});
-
-        if (this.pagination.page !== 1) {
-          this.pagination.page = 1;
-        } else {
-          this.fetchRunHistories();
-        }
-      }, 500)
-    },
+    }
   },
 
   methods: {
+    onFilterChanged() {
+      if (this.pagination.page !== 1) {
+        this.pagination.page = 1;
+      } else {
+        this.fetchRunHistories();
+      }
+    },
+
     async fetchRunHistories() {
       this.loading = true;
 
       let runIds = null;
-      if (this.runNameSearch) {
-        runIds = await this.getRunIdsByRunName(this.runNameSearch);
+      if (this.runName) {
+        runIds = await this.getRunIdsByRunName(this.runName);
         if (!runIds.length) {
           this.histories = [];
           this.loading = false;
@@ -429,12 +374,8 @@ export default {
         }
       }
 
-      const filter = new RunHistoryFilter({
-        tagNames: this.runTagSearch ? [ `*${this.runTagSearch}*` ] : null
-      });
-
       // Get total item count.
-      ccService.getClient().getRunHistoryCount(runIds, filter,
+      ccService.getClient().getRunHistoryCount(runIds, this.runHistoryFilter,
         (err, totalItems) => {
           this.totalItems = totalItems.toNumber();
         });
@@ -443,8 +384,8 @@ export default {
       const limit = this.pagination.itemsPerPage;
       const offset = limit * (this.pagination.page - 1);
 
-      ccService.getClient().getRunHistory(runIds, limit, offset, filter,
-        handleThriftError(histories => {
+      ccService.getClient().getRunHistory(runIds, limit, offset,
+        this.runHistoryFilter, handleThriftError(histories => {
           this.histories = histories;
           this.loading = false;
         }));
