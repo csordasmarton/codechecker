@@ -7,7 +7,7 @@ export const SET_RUN_IDS = "setRunIds";
 export const SET_REPORT_FILTER = "setReportFilter";
 export const SET_CMP_DATA = "setCmpData";
 
-export const SET_RUN_HISTORY_RUN_NAME = "setRunName";
+export const SET_RUN_HISTORY_RUN_IDS = "setRunIds";
 export const SET_RUN_HISTORY_RUN_TAG = "setRunTag";
 export const SET_RUN_HISTORY_STORED_BEFORE = "setStoredBefore";
 export const SET_RUN_HISTORY_STORED_AFTER = "setStoredAfter";

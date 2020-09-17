@@ -47,6 +47,7 @@
     >
       <template v-slot:top>
         <run-history-filter
+          @initalized="initByUrl"
           @on-filter-changed="onFilterChanged"
         >
           <v-col align="right" align-self="center" class="text-no-wrap">
@@ -177,7 +178,6 @@ import { DateMixin, StrToColorMixin } from "@/mixins";
 import { RunHistoryFilter } from "@/components/RunHistory";
 
 import { ccService, handleThriftError } from "@cc-api";
-import { RunFilter } from "@cc/report-server-types";
 
 export default {
   name: "RunHistoryList",
@@ -263,8 +263,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "runName",
+    ...mapGetters("runHistory", [
+      "runIds",
       "runHistoryFilter"
     ]),
 
@@ -320,39 +320,41 @@ export default {
     },
   },
 
-  watch: {
-    pagination: {
-      handler() {
-        const defaultItemsPerPage = this.footerProps.itemsPerPageOptions[0];
-        const itemsPerPage =
-          this.pagination.itemsPerPage === defaultItemsPerPage
-            ? undefined
-            : this.pagination.itemsPerPage;
-
-        const page = this.pagination.page === 1
-          ? undefined : this.pagination.page;
-        const sortBy = this.pagination.sortBy.length
-          ? this.pagination.sortBy[0] : undefined;
-        const sortDesc = this.pagination.sortDesc.length
-          ? this.pagination.sortDesc[0] : undefined;
-
-        this.$router.replace({
-          query: {
-            ...this.$route.query,
-            "items-per-page": itemsPerPage,
-            "page": page,
-            "sort-by": sortBy,
-            "sort-desc": sortDesc,
-          }
-        }).catch(() => {});
-
-        this.fetchRunHistories();
-      },
-      deep: true
-    }
-  },
-
   methods: {
+    initByUrl() {
+      this.$watch("pagination", this.onPaginationChange, { deep: true });
+
+      // Change the pagination to init and fetch items.
+      this.pagination = { ...this.pagination };
+    },
+
+    onPaginationChange() {
+      const defaultItemsPerPage = this.footerProps.itemsPerPageOptions[0];
+      const itemsPerPage =
+        this.pagination.itemsPerPage === defaultItemsPerPage
+          ? undefined
+          : this.pagination.itemsPerPage;
+
+      const page = this.pagination.page === 1
+        ? undefined : this.pagination.page;
+      const sortBy = this.pagination.sortBy.length
+        ? this.pagination.sortBy[0] : undefined;
+      const sortDesc = this.pagination.sortDesc.length
+        ? this.pagination.sortDesc[0] : undefined;
+
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+          "items-per-page": itemsPerPage,
+          "page": page,
+          "sort-by": sortBy,
+          "sort-desc": sortDesc,
+        }
+      }).catch(() => {});
+
+      this.fetchRunHistories();
+    },
+
     onFilterChanged() {
       if (this.pagination.page !== 1) {
         this.pagination.page = 1;
@@ -364,19 +366,9 @@ export default {
     async fetchRunHistories() {
       this.loading = true;
 
-      let runIds = null;
-      if (this.runName) {
-        runIds = await this.getRunIdsByRunName(this.runName);
-        if (!runIds.length) {
-          this.histories = [];
-          this.loading = false;
-          return;
-        }
-      }
-
       // Get total item count.
-      ccService.getClient().getRunHistoryCount(runIds, this.runHistoryFilter,
-        (err, totalItems) => {
+      ccService.getClient().getRunHistoryCount(this.runIds,
+        this.runHistoryFilter, (err, totalItems) => {
           this.totalItems = totalItems.toNumber();
         });
 
@@ -384,26 +376,11 @@ export default {
       const limit = this.pagination.itemsPerPage;
       const offset = limit * (this.pagination.page - 1);
 
-      ccService.getClient().getRunHistory(runIds, limit, offset,
+      ccService.getClient().getRunHistory(this.runIds, limit, offset,
         this.runHistoryFilter, handleThriftError(histories => {
           this.histories = histories;
           this.loading = false;
         }));
-    },
-
-    // TODO: Same function in the BaselineRunFilter component.
-    async getRunIdsByRunName(runName) {
-      const runFilter = new RunFilter({ names: [ `*${runName}*` ] });
-      const limit = null;
-      const offset = null;
-      const sortMode = null;
-
-      return new Promise(resolve => {
-        ccService.getClient().getRunData(runFilter, limit, offset, sortMode,
-          handleThriftError(runs => {
-            resolve(runs.map(run => run.runId));
-          }));
-      });
     },
 
     openCheckCommandDialog(runHistoryId) {

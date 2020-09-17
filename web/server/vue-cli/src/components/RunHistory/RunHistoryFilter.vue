@@ -1,19 +1,9 @@
 <template>
   <v-row>
     <v-col align-self="center">
-      <v-text-field
-        :value="runName"
-        class="search-run-name"
-        prepend-inner-icon="mdi-magnify"
-        label="Filter by run name..."
-        clearable
-        single-line
-        hide-details
-        outlined
-        solo
-        flat
-        dense
-        @input="setRunName"
+      <run-name-autocomplete
+        @initalized="initByUrl"
+        @on-filter-changed="$emit('on-filter-changed')"
       />
     </v-col>
     <v-col align-self="center">
@@ -67,7 +57,6 @@
 import _ from "lodash";
 import { mapGetters, mapMutations } from "vuex";
 import {
-  SET_RUN_HISTORY_RUN_NAME,
   SET_RUN_HISTORY_RUN_TAG,
   SET_RUN_HISTORY_STORED_AFTER,
   SET_RUN_HISTORY_STORED_BEFORE
@@ -75,16 +64,18 @@ import {
 import { DateMixin } from "@/mixins";
 import DateTimePicker from "@/components/DateTimePicker";
 
+import RunNameAutocomplete from "./RunNameAutocomplete";
+
 export default {
   name: "RunHistoryFilter",
   components: {
-    DateTimePicker
+    DateTimePicker,
+    RunNameAutocomplete
   },
   mixins: [ DateMixin ],
 
   computed: {
-    ...mapGetters([
-      "runName",
+    ...mapGetters("runHistory", [
       "runTag",
       "storedBefore",
       "storedAfter",
@@ -92,12 +83,6 @@ export default {
   },
 
   watch: {
-    runName: {
-      handler: _.debounce(function () {
-        this.onChange("run", this.runName);
-      }, 500)
-    },
-
     runTag: {
       handler: _.debounce(function () {
         this.onChange("run-tag", this.runTag);
@@ -123,13 +108,8 @@ export default {
     }
   },
 
-  created() {
-    this.initByUrl();
-  },
-
   methods: {
-    ...mapMutations([
-      SET_RUN_HISTORY_RUN_NAME,
+    ...mapMutations("runHistory", [
       SET_RUN_HISTORY_RUN_TAG,
       SET_RUN_HISTORY_STORED_BEFORE,
       SET_RUN_HISTORY_STORED_AFTER
@@ -147,10 +127,6 @@ export default {
     },
 
     initByUrl() {
-      const runName = this.$router.currentRoute.query["run"];
-      if (runName)
-        this.setRunName(runName);
-
       const runTag = this.$router.currentRoute.query["run-tag"];
       if (runTag)
         this.setRunTag(runTag);
@@ -162,6 +138,8 @@ export default {
       const storedBefore = this.$router.currentRoute.query["stored-before"];
       if (storedBefore)
         this.setStoredBefore(new Date(storedBefore));
+
+      this.$emit("initalized");
     }
   }
 };

@@ -43,15 +43,23 @@ class CodeCheckerService extends BaseService {
     });
   }
 
-  getRuns(runIds) {
-    const runFilter = new RunFilter({ ids: runIds });
+  getRuns(runIds, runNames, limit=null, offset=0, sortMode=null) {
+    const runFilter = new RunFilter({
+      ids: runIds,
+      names: runNames
+    });
 
     return new Promise(resolve => {
-      this.getClient().getRunData(runFilter, null, 0, null,
+      this.getClient().getRunData(runFilter, limit, offset, sortMode,
         handleThriftError(res => {
           resolve(res);
         }));
     });
+  }
+
+  async getRunIds(runNames, limit=null, offset=null, sortMode=null) {
+    const runs = await this.getRuns(null, runNames, limit, offset, sortMode);
+    return runs.map(r => r.runId.toNumber());
   }
 }
 
