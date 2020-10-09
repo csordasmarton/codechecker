@@ -420,7 +420,8 @@ def process_cmp_data_filter(session, run_ids, report_filter, cmp_data):
     query_base_runs = get_diff_run_id_query(session, run_ids, base_tag_ids)
 
     if is_cmp_data_empty(cmp_data):
-        if not run_ids and (not report_filter or not report_filter.runTag):
+        if not run_ids and (not report_filter or (
+            not report_filter.runTag and not report_filter.openReportsDate)):
             return None
 
         return and_(Report.bug_id.in_(query_base),
