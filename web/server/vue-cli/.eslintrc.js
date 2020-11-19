@@ -30,6 +30,11 @@ module.exports = {
         "allowFirstLine": false
       }
     }],
+    "vue/v-slot-style": "off",
+    "vue/no-mutating-props": "off",
+    "vue/valid-v-slot": "off",
+    "vue/custom-event-name-casing": "off",
+    "vue/no-lone-template": "off",
     "quotes": ["error", "double", {
       "avoidEscape": true
     }]

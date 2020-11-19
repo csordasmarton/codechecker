@@ -17,8 +17,14 @@ const METADATA = {
 function sassLoaderOptions(indentedSyntax=false) {
   return {
     implementation: require('sass'),
-    prependData: `@import "~@/variables.scss"` + (indentedSyntax ? '' : ';'),
+    additionalData: `@import "~@/variables.scss"` + (indentedSyntax ? '' : ';'),
     sassOptions: { indentedSyntax },
+  }
+}
+
+function cssLoaderOptions() {
+  return {
+    esModule: false
   }
 }
 
@@ -89,14 +95,20 @@ module.exports = {
         test: /\.css$/,
         use: [
           'vue-style-loader',
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: cssLoaderOptions()
+          },
         ]
       },
       {
         test:/\.sass$/,
         use: [
           'vue-style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: cssLoaderOptions()
+          },
           {
             loader: 'sass-loader',
             options: sassLoaderOptions(true)
@@ -107,7 +119,10 @@ module.exports = {
         test:/\.scss$/,
         use: [
           'vue-style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: cssLoaderOptions()
+          },
           {
             loader: 'sass-loader',
             options: sassLoaderOptions(false)
