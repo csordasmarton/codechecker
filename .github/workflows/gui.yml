@@ -1,0 +1,49 @@
+name: codechecker-gui
+
+# Triggers the workflow on push or pull request events.
+on: [push, pull_request]
+
+jobs:
+  gui:
+    name: GUI
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        # FIXME: in Chrome the UI test cases run non-deterministically and
+        # sometimes fail. For this reason we will not run GUI test cases
+        # in Chrome.
+        browser: [firefox]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.6'
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      # - name: Update chrome
+      #   run: |
+      #     sudo apt-get update -q
+      #     sudo apt-get install google-chrome-stable
+
+      - name: Install dependencies
+        run: sh .github/workflows/install-deps.sh
+
+      - name: Build the package
+        run: |
+          make pip_dev_deps
+          make package
+
+      - name: Run tests
+        working-directory: web/server/vue-cli
+        env:
+          # CHROME_HEADLESS: 1
+          MOZ_HEADLESS: 1
+          DISPLAY: ":99.0"
+        run: |
+          export PATH="${{ github.workspace }}/build/CodeChecker/bin:$PATH"
+
+          npm run test:lint
+          npm run test:unit
+          npm run test:e2e.${{ matrix.browser }}

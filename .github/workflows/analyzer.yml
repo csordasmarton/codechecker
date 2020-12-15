@@ -1,0 +1,26 @@
+name: codechecker-analyzer
+
+# Triggers the workflow on push or pull request events.
+on: [push, pull_request]
+
+jobs:
+  analyzer:
+    name: Analyzer
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.6'
+
+      - name: Install dependencies
+        run: sh .github/workflows/install-deps.sh
+
+      - name: Build the package
+        run: |
+          make pip_dev_deps
+          BUILD_UI_DIST=NO make package
+
+      - name: Run analyzer tests
+        working-directory: analyzer
+        run: make test_unit test_functional

@@ -1,0 +1,51 @@
+name: codechecker-web
+
+# Triggers the workflow on push or pull request events.
+on: [push, pull_request]
+
+jobs:
+  web:
+    name: Web
+    runs-on: ubuntu-18.04
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        database: [sqlite, psql_pg8000, psql_psycopg2]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.6'
+
+      - name: Install dependencies
+        run: sh .github/workflows/install-deps.sh
+
+      - name: Init .pgpass
+        run: |
+          echo '*:*:*:*:postgres' > $HOME/.pgpass
+          chmod 0600 $HOME/.pgpass
+
+      - name: Run tests
+        env:
+          PGPASSWORD: postgres
+        run: |
+          export PGPASSFILE=$HOME/.pgpass
+
+          make pip_dev_deps
+          BUILD_UI_DIST=NO make package
+
+          make -C web test_matrix_${{ matrix.database }}

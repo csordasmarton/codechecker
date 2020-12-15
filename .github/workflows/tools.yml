@@ -1,0 +1,59 @@
+name: codechecker-tools
+
+# Triggers the workflow on push or pull request events.
+on: [push, pull_request]
+
+jobs:
+  tools:
+    name: Tools (plist-to-html, report-converter, etc.)
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.6'
+      - name: Install common dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install gcc-multilib
+
+      - name: Run build-logger tests
+        working-directory: analyzer/tools/build-logger
+        run: |
+          make -f Makefile.manual
+          make -f Makefile.manual test
+
+      - name: Run merge-clang-extdef-mappings tests
+        working-directory: analyzer/tools/merge_clang_extdef_mappings
+        run: |
+          pip install -r requirements_py/dev/requirements.txt
+          make test
+
+      - name: Run statistics-collector tests
+        working-directory: analyzer/tools/statistics_collector
+        run: |
+          pip install -r requirements_py/dev/requirements.txt
+          make test
+
+      - name: Run codechecker-report-hash tests
+        working-directory: tools/codechecker_report_hash
+        run: |
+          pip install -r requirements_py/dev/requirements.txt
+          make test
+
+      - name: Run plist-to-html tests
+        working-directory: tools/plist_to_html
+        run: |
+          pip install -r requirements_py/dev/requirements.txt
+          make test
+
+      - name: Run report-converter tests
+        working-directory: tools/report-converter
+        run: |
+          pip install -r requirements_py/dev/requirements.txt
+          make package
+          make test
+
+      - name: Run tu-collector tests
+        working-directory: tools/tu_collector
+        run: make test
