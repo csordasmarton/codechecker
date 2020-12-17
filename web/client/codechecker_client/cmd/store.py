@@ -14,6 +14,8 @@ database.
 import argparse
 import base64
 import errno
+from git import Repo
+from git.exc import GitCommandError
 import hashlib
 import json
 import os
@@ -567,6 +569,41 @@ def parse_report_files(report_files):
             missing_source_files)
 
 
+def get_blame_info(repo, file_path):
+    """ Get blame info for the given file in the given git repo """
+    try:
+        blame = repo.blame_incremental("HEAD", file_path)
+
+        res = {
+            'version': 'v1',
+            'commits': {},
+            'blame': []}
+
+        for b in blame:
+            commit = b.commit
+
+            if commit.hexsha not in res['commits']:
+                res['commits'][commit.hexsha] = {
+                    'author': {
+                        'name': commit.author.name,
+                        'email': commit.author.email,
+                    },
+                    'summary': commit.summary,
+                    'message': commit.message,
+                    'committed_datetime': str(commit.committed_datetime) }
+
+            res['blame'].append({
+                'from': b.linenos[0],
+                'to': b.linenos[-1],
+                'commit': commit.hexsha })
+    except GitCommandError as ex:
+        LOG.warning("Failed to get blame information for %s: %s",
+                    file_path, ex)
+        return
+
+    return res
+
+
 def assemble_zip(inputs, zip_file, client):
     """Collect and compress report and source files, together with files
     contanining analysis related information into a zip file which
@@ -648,6 +685,15 @@ def assemble_zip(inputs, zip_file, client):
                 LOG.debug("File contents for '%s' needed by the server", f)
 
                 zipf.write(f, os.path.join('root', f.lstrip('/')))
+
+                # FIXME: optimaze it to not query repository for each source
+                # file.
+                repo = Repo(f, search_parent_directories=True)
+                if repo:
+                    blame_info = get_blame_info(repo, f)
+
+                    zipf.writestr(os.path.join('blame', f.lstrip('/')),
+                                  json.dumps(blame_info))
 
         zipf.writestr('content_hashes.json', json.dumps(file_to_hash))
 

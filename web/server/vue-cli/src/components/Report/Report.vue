@@ -106,6 +106,14 @@
             class="py-0 pr-0"
             align-self="center"
           >
+            <toggle-blame-view-btn v-model="enableBlameView" />
+          </v-col>
+
+          <v-col
+            cols="auto"
+            class="py-0 pr-0"
+            align-self="center"
+          >
             <v-btn
               class="comments-btn mx-2 mr-0"
               color="primary"
@@ -175,7 +183,11 @@
 
             <v-row
               v-fill-height
-              class="editor mx-0"
+              :class="[
+                'editor',
+                'mx-0',
+                enableBlameView ? 'blame' : undefined
+              ]"
             >
               <textarea ref="editor" />
             </v-row>
@@ -234,6 +246,8 @@ import { UserIcon } from "@/components/Icons";
 import ReportTreeKind from "@/components/Report/ReportTree/ReportTreeKind";
 
 import { ReportComments } from "./Comment";
+import GitBlameMixin from "./Git/GitBlame";
+import ToggleBlameViewBtn from "./Git/ToggleBlameViewBtn";
 import SelectReviewStatus from "./SelectReviewStatus";
 import SelectSameReport from "./SelectSameReport";
 import ShowDocumentationButton from "./ShowDocumentationButton";
@@ -241,7 +255,6 @@ import { ReportInfoButton, ShowReportInfoDialog } from "./ReportInfo";
 
 import ReportStepMessage from "./ReportStepMessage";
 const ReportStepMessageClass = Vue.extend(ReportStepMessage);
-
 
 export default {
   name: "Report",
@@ -252,9 +265,11 @@ export default {
     SelectSameReport,
     ShowDocumentationButton,
     ShowReportInfoDialog,
+    ToggleBlameViewBtn,
     UserIcon
   },
   directives: { FillHeight },
+  mixins: [ GitBlameMixin ],
   props: {
     treeItem: { type: Object, default: null }
   },
@@ -274,7 +289,8 @@ export default {
       showComments: false,
       commentCols: 3,
       loading: true,
-      bus: new Vue()
+      bus: new Vue(),
+      enableBlameView: true
     };
   },
 
@@ -304,6 +320,14 @@ export default {
   },
 
   watch: {
+    enableBlameView() {
+      if (this.enableBlameView) {
+        this.loadBlameView(this.editor, this.sourceFile);
+      } else {
+        this.hideBlameView(this.editor);
+      }
+    },
+
     treeItem() {
       this.init(this.treeItem);
     },
@@ -568,6 +592,8 @@ export default {
         const points = reportDetail.executionPath.filter(isSameFile);
         this.addLines(points);
       }
+
+      this.loadBlameView(this.editor, this.sourceFile);
     },
 
     clearBubbles() {
@@ -768,6 +794,10 @@ export default {
     font-size: initial;
     line-height: initial;
 
+    &.blame ::v-deep .CodeMirror {
+      line-height: 21px;
+    }
+
     ::v-deep .cm-matchhighlight:not(.cm-searching) {
       background-color: lightgreen;
     }
@@ -780,6 +810,11 @@ export default {
 
 ::v-deep .checker-step {
   background-color: #eeb;
+}
+
+::v-deep .blame-gutter {
+  width: 400px;
+  background-color: #f7f7f7;
 }
 
 ::v-deep .report-step-msg.current {

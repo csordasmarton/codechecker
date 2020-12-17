@@ -101,7 +101,8 @@ enum CommentKind {
 struct SourceFileData {
   1: i64             fileId,
   2: string          filePath,
-  3: optional string fileContent
+  3: optional string fileContent,
+  4: optional string blameInfo,
 }
 
 struct SortMode {

@@ -506,7 +506,7 @@ def get_file_content(filepath, encoding):
 
 
 def addFileContent(session, filepath, source_file_name, content_hash,
-                   encoding):
+                   blame_info, encoding):
     """
     Add the necessary file contents. If the file is already stored in the
     database then its ID returns. If content_hash in None then this function
@@ -535,7 +535,17 @@ def addFileContent(session, filepath, source_file_name, content_hash,
         try:
             compressed_content = zlib.compress(source_file_content,
                                                zlib.Z_BEST_COMPRESSION)
-            fc = FileContent(content_hash, compressed_content)
+            compressed_blame_info = None
+            if blame_info:
+                if encoding == ttypes.Encoding.BASE64:
+                    blame_info = base64.b64decode(blame_info)
+
+                compressed_blame_info = zlib.compress(blame_info,
+                                                      zlib.Z_BEST_COMPRESSION)
+
+            fc = FileContent(content_hash, compressed_content,
+                             compressed_blame_info)
+
             session.add(fc)
             session.commit()
         except sqlalchemy.exc.IntegrityError:

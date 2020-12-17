@@ -1866,9 +1866,20 @@ class ThriftRequestHandler(object):
                     source = base64.b64encode(source)
 
                 source = source.decode('utf-8', errors='ignore')
+
+                blame_info = None
+                if cont.blame_info:
+                    blame_info = zlib.decompress(cont.blame_info)
+
+                    if encoding == Encoding.BASE64:
+                        blame_info = base64.b64encode(blame_info)
+
+                    blame_info = blame_info.decode('utf-8', errors='ignore')
+
                 return SourceFileData(fileId=sourcefile.id,
                                       filePath=sourcefile.filepath,
-                                      fileContent=source)
+                                      fileContent=source,
+                                      blameInfo=blame_info)
             else:
                 return SourceFileData(fileId=sourcefile.id,
                                       filePath=sourcefile.filepath)
@@ -2594,7 +2605,21 @@ class ThriftRequestHandler(object):
             return list(set(file_hashes) -
                         set([fc.content_hash for fc in q]))
 
-    def __store_source_files(self, source_root, filename_to_hash,
+
+    def __get_blame_info(self, blame_file):
+        """ """
+        if not os.path.isfile(blame_file):
+            return
+
+        try:
+            with open(blame_file, 'rb') as bf:
+                return bf.read()
+        except (IOError, OSError) as err:
+            LOG.error("Failed to read blame file: %s", blame_file)
+            LOG.error(err)
+
+
+    def __store_source_files(self, source_root, blame_root, filename_to_hash,
                              trim_path_prefixes):
         """
         Storing file contents from plist.
@@ -2629,11 +2654,17 @@ class ThriftRequestHandler(object):
                 continue
 
             with DBSession(self.__Session) as session:
+                blame_file = os.path.join(blame_root,
+                                          file_name.strip("/"))
+                blame_file = os.path.realpath(blame_file)
+                blame_info = self.__get_blame_info(blame_file)
+
                 file_path_to_id[trimmed_file_path] = \
                     store_handler.addFileContent(session,
                                                  trimmed_file_path,
                                                  source_file_name,
                                                  file_hash,
+                                                 blame_info,
                                                  None)
 
         return file_path_to_id
@@ -3027,6 +3058,7 @@ class ThriftRequestHandler(object):
                 LOG.debug("Using unzipped folder '%s'", zip_dir)
 
                 source_root = os.path.join(zip_dir, 'root')
+                blame_root = os.path.join(zip_dir, 'blame')
                 report_dir = os.path.join(zip_dir, 'reports')
                 metadata_file = os.path.join(report_dir, 'metadata.json')
                 skip_file = os.path.join(report_dir, 'skip_file')
@@ -3052,6 +3084,7 @@ class ThriftRequestHandler(object):
                                                            {})
 
                 file_path_to_id = self.__store_source_files(source_root,
+                                                            blame_root,
                                                             filename_to_hash,
                                                             trim_path_prefixes)
 

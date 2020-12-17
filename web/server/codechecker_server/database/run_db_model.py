@@ -154,9 +154,11 @@ class FileContent(Base):
 
     content_hash = Column(String, primary_key=True)
     content = Column(Binary)
+    blame_info = Column(Binary, nullable=True)
 
-    def __init__(self, content_hash, content):
-        self.content_hash, self.content = content_hash, content
+    def __init__(self, content_hash, content, blame_info):
+        self.content_hash, self.content, self.blame_info = \
+            content_hash, content, blame_info
 
 
 class File(Base):
