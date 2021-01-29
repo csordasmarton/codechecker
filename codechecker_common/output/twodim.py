@@ -108,6 +108,11 @@ def __to_table(lines, separate_head=True, separate_footer=False):
     # Print the actual data.
     str_parts.append("-" * (sum(widths) + 3 * (len(widths) - 1)))
     for i, line in enumerate(lines):
+        # It is possible that one of the item in the line is None which will
+        # raise an exception when passed to the format function below. For
+        # this reason we will convert None to an empty string here.
+        line = [ln if ln is not None else '' for ln in line]
+
         try:
             str_parts.append(print_string.format(*line))
         except IndexError:
